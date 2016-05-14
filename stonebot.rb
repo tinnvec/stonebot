@@ -6,7 +6,7 @@ require 'yaml'
 
 require_relative 'lib/services/hearthstone_api'
 
-config = YAML.load(File.open 'config.yml')
+config = YAML.load(File.open 'config/config.yml')
 
 bot = Discordrb::Bot.new(
 	token:			config[:discord][:token],
