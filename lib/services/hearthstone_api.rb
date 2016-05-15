@@ -37,7 +37,7 @@ module Services
 			def request_all_card_sets
 				set_names_blacklist = ['Credits', 'Debug', 'Missions', 'System', 'Hero Skins', 'Tavern Brawl']
 				all_card_sets = make_request('/cards')
-				all_card_sets.delete_if { |set_name, cards| set_names_blacklist.include?(set_name) }
+				all_card_sets.reject! { |set_name, cards| set_names_blacklist.include?(set_name) }
 				return all_card_sets
 			end
 
