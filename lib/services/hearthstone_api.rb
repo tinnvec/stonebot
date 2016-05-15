@@ -25,11 +25,12 @@ module Services
 			attr_accessor :locale, :mashape_key, :card_names
 
 			def populate_card_names
+				card_type_blacklist = ['Hero', 'Enchantment', 'Hero Power']
 				@card_names = Array.new
 				sets = request_all_card_sets
 				sets.each do |set_name, cards|
 					cards.each do |card|
-						@card_names << card['name']
+						@card_names << card['name'] unless card_type_blacklist.include? card['type']
 					end
 				end
 			end
@@ -37,7 +38,7 @@ module Services
 			def request_all_card_sets
 				set_names_blacklist = ['Credits', 'Debug', 'Missions', 'System', 'Hero Skins', 'Tavern Brawl']
 				all_card_sets = make_request('/cards')
-				all_card_sets.reject! { |set_name, cards| set_names_blacklist.include?(set_name) }
+				all_card_sets.reject! { |set_name, cards| set_names_blacklist.include? set_name }
 				return all_card_sets
 			end
 
