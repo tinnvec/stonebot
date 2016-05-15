@@ -26,7 +26,7 @@ module Services
 
 			def populate_card_names
 				@card_names = Array.new
-				sets = request_all_collectible_card_sets
+				sets = request_all_card_sets
 				sets.each do |set_name, cards|
 					cards.each do |card|
 						@card_names << card['name']
@@ -34,8 +34,11 @@ module Services
 				end
 			end
 
-			def request_all_collectible_card_sets
-				make_request('/cards', { query: { collectible: 1 } })
+			def request_all_card_sets
+				set_names_blacklist = ['Credits', 'Debug', 'Missions', 'System', 'Hero Skins', 'Tavern Brawl']
+				all_card_sets = make_request('/cards')
+				all_card_sets.delete_if { |set_name, cards| set_names_blacklist.include?(set_name) }
+				return all_card_sets
 			end
 
 			def request_gold_card_image(name)
