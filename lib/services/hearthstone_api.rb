@@ -1,95 +1,103 @@
 require 'httparty'
-require 'fuzzy_match'
 
 module Services
-	class HearthstoneApi
-		include HTTParty
+    class HearthstoneApi
+        include HTTParty
 
-		base_uri 'https://omgvamp-hearthstone-v1.p.mashape.com'
+        base_uri 'https://omgvamp-hearthstone-v1.p.mashape.com'
 
-		def initialize(mashape_key, locale='enUS')
-			@locale = locale
-			@mashape_key = mashape_key
+        def initialize(mashape_key, locale='enUS')
+            @locale = locale
+            @mashape_key = mashape_key
+        end
 
-			populate_card_names
-		end
+        # /info
+        # Returns a list of current patch, classes, sets, types, factions,
+        # qualities, races and locales.
+        def get_info
+            make_request("/info")
+        end
 
-		def find_gold_card(name)
-			found_name = FuzzyMatch.new(@card_names).find(name)
-			return "No card found for \"#{name}\"" if found_name == nil
-			return request_gold_card_image URI.encode(found_name)
-		end
+        # /cards
+        # Returns all available Hearthstone cards including non collectible cards.
+        def get_all_cards
+            make_request("/cards")
+        end
 
-		private
+        # /cards/{name}
+        # Returns card by name or ID. This may return more then one card if they
+        # share the same name. Loatheb returns both the card and the boss.
+        def get_cards_by_name(card_name)
+            make_request("/cards/#{card_name}")
+        end
 
-			attr_accessor :locale, :mashape_key, :card_names
+        # /cards/search/{name}
+        # Returns cards by partial name.
+        def get_cards_by_partial_name(card_name)
+            make_request("/cards/search/#{card_name}")
+        end
 
-			def populate_card_names
-				card_type_blacklist = ['Hero', 'Enchantment', 'Hero Power']
-				@card_names = Array.new
-				sets = request_all_card_sets
-				sets.each do |set_name, cards|
-					cards.each do |card|
-						@card_names << card['name'] unless card_type_blacklist.include? card['type']
-					end
-				end
-			end
+        # /cards/sets/{set}
+        # Returns all cards in a set.
+        # Example values: Blackrock Mountain, Classic.
+        def get_cards_by_set(set_name)
+            make_request("/cards/sets/#{set_name}")
+        end
 
-			def request_all_card_sets
-				set_names_blacklist = ['Credits', 'Debug', 'Missions', 'System', 'Hero Skins', 'Tavern Brawl']
-				all_card_sets = make_request('/cards')
-				all_card_sets.reject! { |set_name, cards| set_names_blacklist.include? set_name }
-				return all_card_sets
-			end
+        # /cards/classes/{class}
+        # Returns all the cards of a class.
+        # Example values: Mage, Paladin.
+        def get_cards_by_class(class_name)
+            make_request("/cards/classes/#{class_name}")
+        end
 
-			def request_gold_card_image(name)
-				response = request_single_card(name)
-				return response['imgGold'] if response.is_a?(Hash)
-				return response
-			end
+        # /cards/races/{race}
+        # Returns all the cards of a certain race.
+        # Example values: Mech, Murloc.
+        def get_cards_by_tribe(tribe_name)
+            make_request("/cards/races/#{tribe_name}")
+        end
 
-			def request_single_card(name)
-				data = make_request("/cards/#{name}")[0]
-				return data
-			end
+        # /cards/qualities/{quality}
+        # Returns all the cards of a certain quality.
+        # Example values: Legendary, Common.
+        def get_cards_by_quality(quality)
+            make_request("/cards/qualities/#{quality}")
+        end
 
-			def make_request(path, options={})
-				options = options.merge({
-					headers: {
-						'X-Mashape-Key': @mashape_key,
-						Accept: 'application/json'
-					}
-				})
-				response = self.class.get(path, options)
-				JSON.parse(response.body)
-			end
-	end
+        # /cards/types/{type}
+        # Returns all the cards of a certain type.
+        # Example values: Spell, Weapon.
+        def get_cards_by_type(type_name)
+            make_request("/cards/types/#{type_name}")
+        end
+
+        # /cards/factions/{faction}
+        # Returns all the cards of a certain faction. Example values: Horde, Neutral.
+        def get_cards_by_faction(faction_name)
+            make_request("/cards/factions/#{faction_name}")
+        end
+
+        # /cardbacks
+        # Returns a list of all the card backs.
+        def get_all_card_backs
+            make_request("/cardbacks")
+        end
+
+        private
+
+            attr_accessor :locale, :mashape_key
+
+            def make_request(path, options={})
+                defaults = {
+                    headers: {
+                        'X-Mashape-Key': @mashape_key,
+                        Accept: 'application/json'
+                    }
+                }
+                options = defaults.merge(options)
+                response = self.class.get(URI.escape(path), options)
+                JSON.parse(response.body)
+            end
+    end
 end
-
-# [
-# 	{
-# 		'mechanics': [
-# 			{
-# 				'name': 'Overload'
-# 			}
-# 		],
-# 		'collectible': True,
-# 		'race': 'Totem',
-# 		'name': 'Totem Golem',
-# 		'img': 'http://wow.zamimg.com/images/hearthstone/cards/enus/original/AT_052.png',
-# 		'artist': u'Steve Prescott',
-# 		'locale': u'enUS',
-# 		u'text': u'<b>Overload: (1)</b>',
-# 		u'rarity': u'Common',
-# 		u'attack': 3,
-# 		u'cost': 2,
-# 		u'health': 4,
-# 		u'cardId': u'AT_052',
-# 		u'imgGold': u'http://wow.zamimg.com/images/hearthstone/cards/enus/animated/AT_052_premium.gif',
-# 		u'flavor': u'What happens when you glue a buncha totems together.',
-# 		u'type': u'Minion',
-# 		u'playerClass': u'Shaman',
-# 		u'cardSet':
-# 		u'The Grand Tournament'
-# 	}
-#]
