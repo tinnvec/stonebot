@@ -34,5 +34,5 @@ Here's the first one:
 [discord-join-link]: https://discord.gg/010huzURFoUPaEBqI
 [discord-join-badge]: https://img.shields.io/badge/Discord-Join%20Chat-7289DA.svg?style=flat-square
 
-[support-tinnvec-badge]: https://img.shields.io/badge/Support-tinnvec-blue.svg
 [support-tinnvec-link]: https://tinnvec.com/support
+[support-tinnvec-badge]: https://img.shields.io/badge/Support-tinnvec-blue.svg?style=flat-square
