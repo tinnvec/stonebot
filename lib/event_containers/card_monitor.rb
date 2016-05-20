@@ -31,16 +31,17 @@ module CardMonitor
 
             if cards.empty?
                 event.respond "Sorry, I couldn't find any cards like '#{card_names.join(', ')}'"
-            elsif cards.count > 1
-                result_card_names = cards.map { |card| card['name'] }
-                event.respond "I found several matches, did you mean one of these?\r\n#{result_card_names.join ', '}"
             else
+                if cards.count > 1
+                    result_card_names = cards.map { |card| card['name'] }
+                    event.respond "I found several matches: #{result_card_names.join ', '}\r\nHere's the first one:"
+                end
                 card = cards.first
                 reply = "#{card['name']} - #{card['cardSet']}"
                 reply += "\n#{card['cost']} Mana"
                 reply += " #{card['attack']}/#{card['health']}" if card['type'] === 'Minion'
                 reply += " #{card['attack']}/#{card['durability']}" if card['type'] === 'Weapon'
-                reply += " #{card['type']}"
+                reply += " #{card['rarity']} #{card['type']}"
                 reply += "\n#{ReverseMarkdown.convert(card['text'])}"
                 # reply += "\n#{card['img']}"
                 event.respond(reply)
