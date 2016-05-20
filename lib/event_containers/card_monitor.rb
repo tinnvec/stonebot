@@ -31,10 +31,11 @@ module CardMonitor
 
             if cards.empty?
                 event.respond "Sorry, I couldn't find any cards like '#{card_names.join(', ')}'"
-            elsif cards.count > 1
-                result_card_names = cards.map { |card| card['name'] }
-                event.respond "I found several matches, did you mean one of these?\r\n#{result_card_names.join ', '}"
             else
+                if cards.count > 1
+                    result_card_names = cards.map { |card| card['name'] }
+                    event.respond "I found several matches: #{result_card_names.join ', '}\r\nHere's the first one:"
+                end
                 card = cards.first
                 reply = "#{card['name']} - #{card['cardSet']}"
                 reply += "\n#{card['cost']} Mana"
