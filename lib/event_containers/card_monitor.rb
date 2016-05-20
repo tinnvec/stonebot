@@ -40,7 +40,7 @@ module CardMonitor
                 reply += "\n#{card['cost']} Mana"
                 reply += " #{card['attack']}/#{card['health']}" if card['type'] === 'Minion'
                 reply += " #{card['attack']}/#{card['durability']}" if card['type'] === 'Weapon'
-                reply += " #{card['type']}"
+                reply += " #{card['rarity']} #{card['type']}"
                 reply += "\n#{ReverseMarkdown.convert(card['text'])}"
                 # reply += "\n#{card['img']}"
                 event.respond(reply)
