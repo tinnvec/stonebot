@@ -1,4 +1,3 @@
-[![Join Discord Chat][discord-join-badge]][discord-join-link]
 [![Add Stonebot to your Server][discord-add-badge]][discord-oauth-link]
 [![Support tinnvec][support-tinnvec-badge]][support-tinnvec-link]
 
@@ -30,9 +29,6 @@ Here's the first one:
 
 [discord-oauth-link]: https://discordapp.com/oauth2/authorize?client_id=181041901225377793&scope=bot&permissions=19456
 [discord-add-badge]: https://img.shields.io/badge/Discord-Add%20Bot-7289DA.svg?style=flat-square
-
-[discord-join-link]: https://discord.gg/010huzURFoUPaEBqI
-[discord-join-badge]: https://img.shields.io/badge/Discord-Join%20Chat-7289DA.svg?style=flat-square
 
 [support-tinnvec-link]: http://tinnvec.com/support
 [support-tinnvec-badge]: https://img.shields.io/badge/Support-tinnvec-blue.svg?style=flat-square
