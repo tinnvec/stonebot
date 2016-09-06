@@ -1,6 +1,7 @@
+# frozen_string_literal: true
 source 'https://rubygems.org'
 
 gem 'discordrb'
-# gem 'fuzzy_match'
-gem 'httparty'
+gem 'hearthstone_json'
+gem 'fuzzy_match'
 gem 'reverse_markdown'
