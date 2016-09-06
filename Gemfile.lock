@@ -1,44 +1,57 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    activesupport (4.2.6)
+    activesupport (5.0.0.1)
+      concurrent-ruby (~> 1.0, >= 1.0.2)
       i18n (~> 0.7)
-      json (~> 1.7, >= 1.7.7)
       minitest (~> 5.1)
-      thread_safe (~> 0.3, >= 0.3.4)
       tzinfo (~> 1.1)
-    discordrb (2.1.1)
+    concurrent-ruby (1.0.2)
+    discordrb (2.1.3)
       activesupport
       opus-ruby
       rbnacl
       rest-client
       websocket-client-simple (>= 0.3.0)
-    domain_name (0.5.20160310)
+    domain_name (0.5.20160826)
       unf (>= 0.0.5, < 1.0.0)
     event_emitter (0.2.5)
-    ffi (1.9.10)
+    ffi (1.9.14-x64-mingw32)
+    fuzzy_match (2.1.0)
+    hearthstone_json (0.1.1)
+      httparty (>= 0.13.7)
     http-cookie (1.0.2)
       domain_name (~> 0.5)
-    httparty (0.13.7)
-      json (~> 1.8)
+    httparty (0.14.0)
       multi_xml (>= 0.5.2)
     i18n (0.7.0)
-    json (1.8.3)
-    mime-types (2.99.1)
-    mini_portile2 (2.0.0)
+    mime-types (3.1)
+      mime-types-data (~> 3.2015)
+    mime-types-data (3.2016.0521)
+    mini_portile2 (2.1.0)
     minitest (5.9.0)
     multi_xml (0.5.5)
     netrc (0.11.0)
-    nokogiri (1.6.7.2)
-      mini_portile2 (~> 2.0.0.rc2)
+    nokogiri (1.6.8)
+      mini_portile2 (~> 2.1.0)
+      pkg-config (~> 1.1.7)
+    nokogiri (1.6.8-x64-mingw32)
+      mini_portile2 (~> 2.1.0)
+      pkg-config (~> 1.1.7)
     opus-ruby (1.0.1)
       ffi
+    pkg-config (1.1.7)
     rbnacl (3.4.0)
       ffi
-    rest-client (1.8.0)
+    rest-client (2.0.0)
       http-cookie (>= 1.0.2, < 2.0)
-      mime-types (>= 1.16, < 3.0)
-      netrc (~> 0.7)
+      mime-types (>= 1.16, < 4.0)
+      netrc (~> 0.8)
+    rest-client (2.0.0-x64-mingw32)
+      ffi (~> 1.9)
+      http-cookie (>= 1.0.2, < 2.0)
+      mime-types (>= 1.16, < 4.0)
+      netrc (~> 0.8)
     reverse_markdown (1.0.3)
       nokogiri
     thread_safe (0.3.5)
@@ -47,6 +60,7 @@ GEM
     unf (0.1.4)
       unf_ext
     unf_ext (0.0.7.2)
+    unf_ext (0.0.7.2-x64-mingw32)
     websocket (1.2.3)
     websocket-client-simple (0.3.0)
       event_emitter
@@ -54,11 +68,13 @@ GEM
 
 PLATFORMS
   ruby
+  x64-mingw32
 
 DEPENDENCIES
   discordrb
-  httparty
+  fuzzy_match
+  hearthstone_json
   reverse_markdown
 
 BUNDLED WITH
-   1.12.3
+   1.12.5
