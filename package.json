@@ -11,7 +11,8 @@
   "author": "Alex Hanna <tinnvec@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "discord.js": "^10.0.1"
+    "discord.js": "^10.0.1",
+    "hearthstonejson": "^0.0.7"
   },
   "devDependencies": {
     "babel-cli": "^6.18.0",
