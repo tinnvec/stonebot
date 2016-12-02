@@ -4,7 +4,7 @@
   "main": "app.js",
   "scripts": {
     "clean": "rm -rf bin",
-    "build": "yarn clean && babel src --out-dir bin",
+    "build": "yarn run clean && babel src --out-dir bin",
     "start": "yarn build && node bin/app.js"
   },
   "repository": "https://github.com/tinnvec/stonebot.git",
