@@ -2,6 +2,11 @@
   "name": "stonebot",
   "version": "0.0.1",
   "main": "app.js",
+  "scripts": {
+    "clean": "rm -rf bin",
+    "build": "yarn clean && babel src --out-dir bin",
+    "start": "yarn build && node bin/app.js"
+  },
   "repository": "https://github.com/tinnvec/stonebot.git",
   "author": "Alex Hanna <tinnvec@gmail.com>",
   "license": "MIT",
