@@ -4,5 +4,9 @@
   "main": "app.js",
   "repository": "https://github.com/tinnvec/stonebot.git",
   "author": "Alex Hanna <tinnvec@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "babel-cli": "^6.18.0",
+    "babel-preset-modern-node": "^3.2.0"
+  }
 }
