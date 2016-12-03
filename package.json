@@ -12,7 +12,9 @@
   "license": "MIT",
   "dependencies": {
     "discord.js": "^10.0.1",
-    "hearthstonejson": "^0.0.7"
+    "fuse.js": "^2.5.0",
+    "hearthstonejson": "^0.0.7",
+    "to-markdown": "^3.0.3"
   },
   "devDependencies": {
     "babel-cli": "^6.18.0",
