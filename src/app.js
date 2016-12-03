@@ -66,7 +66,9 @@ function formatOutput(card, addon) {
 
   result += ` ${card.playerClass.toLowerCase().capitalizeFirstLetter()}`
   result += ` ${card.type.toLowerCase().capitalizeFirstLetter()}`
-  result += `\n${toMarkdown(card.text)}`
+  if (card.text) {
+    result += `\n${toMarkdown(card.text)}`
+  }
   
   if (addon === 'flavor') {
     result += `\n${card.flavor}`
