@@ -1,0 +1,25 @@
+{
+  "name": "stonebot",
+  "version": "1.0.0",
+  "main": "app.js",
+  "scripts": {
+    "clean": "rm -rf bin",
+    "build": "yarn run clean && babel src --out-dir bin",
+    "start": "yarn build && node bin/app.js"
+  },
+  "repository": "https://github.com/tinnvec/stonebot.git",
+  "author": "Alex Hanna <tinnvec@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "discord.js": "^10.0.1",
+    "fuse.js": "^2.5.0",
+    "hearthstonejson": "^0.0.7",
+    "to-markdown": "^3.0.3"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.18.0",
+    "babel-preset-modern-node": "^3.2.0",
+    "jsdom": "^9.8.3",
+    "jsdom-global": "^2.1.0"
+  }
+}
