@@ -25,20 +25,24 @@ client.on('message', message =>  {
   if (matches.length > 0) {
     message.channel.startTyping()
     hsjson.getLatest(cards => {
-      cards = cards.filter(card => { return card.collectible })
-      let fuse = new Fuse(cards, { keys: ['name'] })
+      try {
+        cards = cards.filter(card => { return card.collectible })
+        let fuse = new Fuse(cards, { keys: ['name'] })
 
-      matches.forEach(match => {
-        let foundCards = fuse.search(match[1])
-        let reply
-        if (foundCards.length < 1) {
-          reply = 'Sorry, I couldn\'t find anything'
-        } else {
-          reply = formatOutput(foundCards[0], match[2])
-        }
-        message.channel.stopTyping()
-        message.channel.sendMessage(reply)
-      }, this)
+        matches.forEach(match => {
+          let foundCards = fuse.search(match[1])
+          let reply
+          if (foundCards.length < 1) {
+            reply = 'Sorry, I couldn\'t find anything'
+          } else {
+            reply = formatOutput(foundCards[0], match[2])
+          }
+          message.channel.sendMessage(reply)
+        }, this)
+      } catch (ex) {
+        console.log(ex)
+      }
+      message.channel.stopTyping()
     })
   }
 })
