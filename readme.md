@@ -21,26 +21,26 @@ Deal $3 damage to a character and Freeze it.
 ```
 
 **Addons**  
-Single colon `:` followed by `addon` after `card name`  
+Single question mark `?` followed by `addon` after `card name`  
 Where `addon` is one of `flavor`, `art`, `image`, or `gold`
 ```
-::frostbolt:flavor::
+::frostbolt?flavor::
 
 Frostbolt - 2 Mana Mage Spell
 Deal $3 damage to a character and Freeze it.
 It is customary to yell "Chill out!" or "Freeze!" or "Ice ice, baby!" when you play this card.
 
-::frostbolt:art::
+::frostbolt?art::
 
 Frostbolt - 2 Mana Mage Spell
 Deal $3 damage to a character and Freeze it.
 https://art.hearthstonejson.com/v1/256x/CS2_024.jpg
 
-::frostbolt:image::
+::frostbolt?image::
 
 http://media.services.zam.com/v1/media/byName/hs/cards/enus/CS2_024.png
 
-::frostbolt:gold::
+::frostbolt?gold::
 
 http://media.services.zam.com/v1/media/byName/hs/cards/enus/animated/CS2_024_premium.gif
 ```
