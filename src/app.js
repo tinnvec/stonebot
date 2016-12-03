@@ -15,7 +15,7 @@ client.on('ready', () => {
 })
 
 client.on('message', message =>  {
-  let pattern = /:{2}([^:]+):?([^:]*):{2}/g
+  let pattern = /:{2}([^:\?]+)\??([^:]*):{2}/g
   let matches = []
   let match
   while (match = pattern.exec(message.content)) {
