@@ -23,6 +23,7 @@ client.on('message', message =>  {
   }
 
   if (matches.length > 0) {
+    message.channel.startTyping()
     hsjson.getLatest(cards => {
       cards = cards.filter(card => { return card.collectible })
       let fuse = new Fuse(cards, { keys: ['name'] })
@@ -35,6 +36,7 @@ client.on('message', message =>  {
         } else {
           reply = formatOutput(foundCards[0], match[2])
         }
+        message.channel.stopTyping()
         message.channel.sendMessage(reply)
       }, this)
     })
