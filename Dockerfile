@@ -1,18 +1,17 @@
-FROM ruby:2.3.1-alpine
+FROM node:argon
 
-RUN apk --update add --virtual build-dependencies ruby-dev build-base
-RUN gem install bundler --no-ri --no-rdoc
+# Create app directory
+RUN mkdir -p /usr/src/app
+WORKDIR /usr/src/app
 
-RUN mkdir /usr/stonebot 
-WORKDIR /usr/stonebot
+# Install app dependencies
+COPY package.json /usr/src/app/
+COPY yarn.lock /usr/src/app/
+RUN npm install -g yarn
+RUN yarn
 
-COPY Gemfile Gemfile
-RUN bundle install --without development test
+# Bundle app source
+COPY . /usr/src/app
+RUN yarn build
 
-RUN apk del build-dependencies
-
-COPY startup.rb startup.rb
-COPY lib lib
-COPY config config
-
-CMD bundle exec ruby startup.rb
+CMD yarn start
