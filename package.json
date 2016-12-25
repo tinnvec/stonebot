@@ -3,9 +3,9 @@
   "version": "1.0.3",
   "main": "app.js",
   "scripts": {
-    "clean": "rm -rf bin",
-    "build": "yarn run clean && babel src --out-dir bin",
-    "start": "yarn build && node bin/app.js"
+    "cleanup": "rm -rf bin",
+    "build": "babel src --out-dir bin",
+    "start": "yarn run cleanup && yarn run build && node bin/app.js"
   },
   "repository": "https://github.com/tinnvec/stonebot.git",
   "author": "Alex Hanna <tinnvec@gmail.com>",
