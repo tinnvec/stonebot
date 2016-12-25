@@ -1,5 +1,3 @@
-import 'jsdom-global/register'
-
 import Discord from 'discord.js'
 import Fuse from 'fuse.js'
 import HearthstoneJSON from 'hearthstonejson'

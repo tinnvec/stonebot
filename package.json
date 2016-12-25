@@ -13,13 +13,11 @@
   "dependencies": {
     "discord.js": "^10.0.1",
     "fuse.js": "^2.5.0",
-    "hearthstonejson": "^0.0.7",
+    "hearthstonejson": "^0.2.1",
     "to-markdown": "^3.0.3"
   },
   "devDependencies": {
     "babel-cli": "^6.18.0",
-    "babel-preset-modern-node": "^3.2.0",
-    "jsdom": "^9.8.3",
-    "jsdom-global": "^2.1.0"
+    "babel-preset-modern-node": "^3.2.0"
   }
 }
