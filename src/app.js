@@ -1,5 +1,3 @@
-import 'jsdom-global/register'
-
 import Discord from 'discord.js'
 import Fuse from 'fuse.js'
 import HearthstoneJSON from 'hearthstonejson'
@@ -75,7 +73,7 @@ function formatOutput(card, addon) {
   }
 
   if (addon === 'art') {
-    result += `\nhttps://art.hearthstonejson.com/v1/256x/${card.id}.jpg`
+    result += `\nhttps://art.hearthstonejson.com/v1/512x/${card.id}.jpg`
   }
 
   return result
