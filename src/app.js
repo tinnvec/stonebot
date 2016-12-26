@@ -24,7 +24,7 @@ client.on('message', message =>  {
     message.channel.startTyping()
     hsjson.getLatest(cards => {
       try {
-        cards = cards.filter(card => { return card.collectible })
+        // cards = cards.filter(card => { return card.collectible })
         let fuse = new Fuse(cards, { keys: ['name'] })
 
         matches.forEach(match => {
@@ -75,7 +75,7 @@ function formatOutput(card, addon) {
     result += `\n${toMarkdown(card.text)}`
   }
   
-  if (addon === 'flavor') {
+  if (addon === 'flavor' && card.flavor) {
     result += `\n${card.flavor}`
   }
 
