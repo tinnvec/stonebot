@@ -56,6 +56,10 @@ function formatOutput(card, addon) {
     return `http://media.services.zam.com/v1/media/byName/hs/cards/enus/animated/${card.id}_premium.gif`
   }
 
+  if (addon === 'art') {
+    return `https://art.hearthstonejson.com/v1/512x/${card.id}.jpg`
+  }
+
   let result =`${card.name} - ${card.cost} Mana`
   
   if (card.attack) {
@@ -73,10 +77,6 @@ function formatOutput(card, addon) {
   
   if (addon === 'flavor') {
     result += `\n${card.flavor}`
-  }
-
-  if (addon === 'art') {
-    result += `\nhttps://art.hearthstonejson.com/v1/512x/${card.id}.jpg`
   }
 
   return result
