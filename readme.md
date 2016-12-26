@@ -32,9 +32,7 @@ It is customary to yell "Chill out!" or "Freeze!" or "Ice ice, baby!" when you p
 
 ::frostbolt?art::
 
-Frostbolt - 2 Mana Mage Spell
-Deal $3 damage to a character and Freeze it.
-https://art.hearthstonejson.com/v1/256x/CS2_024.jpg
+https://art.hearthstonejson.com/v1/512x/CS2_024.jpg
 
 ::frostbolt?image::
 

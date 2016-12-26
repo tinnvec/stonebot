@@ -24,7 +24,7 @@ client.on('message', message =>  {
     message.channel.startTyping()
     hsjson.getLatest(cards => {
       try {
-        cards = cards.filter(card => { return card.collectible })
+        // cards = cards.filter(card => { return card.collectible })
         let fuse = new Fuse(cards, { keys: ['name'] })
 
         matches.forEach(match => {
@@ -56,6 +56,10 @@ function formatOutput(card, addon) {
     return `http://media.services.zam.com/v1/media/byName/hs/cards/enus/animated/${card.id}_premium.gif`
   }
 
+  if (addon === 'art') {
+    return `https://art.hearthstonejson.com/v1/512x/${card.id}.jpg`
+  }
+
   let result =`${card.name} - ${card.cost} Mana`
   
   if (card.attack) {
@@ -64,16 +68,15 @@ function formatOutput(card, addon) {
 
   result += ` ${card.playerClass.toLowerCase().capitalizeFirstLetter()}`
   result += ` ${card.type.toLowerCase().capitalizeFirstLetter()}`
-  if (card.text) {
+  
+  if (card.collectionText) {
+    result += `\n${toMarkdown(card.collectionText)}`
+  } else if (card.text) {
     result += `\n${toMarkdown(card.text)}`
   }
   
-  if (addon === 'flavor') {
+  if (addon === 'flavor' && card.flavor) {
     result += `\n${card.flavor}`
-  }
-
-  if (addon === 'art') {
-    result += `\nhttps://art.hearthstonejson.com/v1/512x/${card.id}.jpg`
   }
 
   return result
