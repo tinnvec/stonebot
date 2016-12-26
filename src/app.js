@@ -64,7 +64,10 @@ function formatOutput(card, addon) {
 
   result += ` ${card.playerClass.toLowerCase().capitalizeFirstLetter()}`
   result += ` ${card.type.toLowerCase().capitalizeFirstLetter()}`
-  if (card.text) {
+  
+  if (card.collectionText) {
+    result += `\n${toMarkdown(card.collectionText)}`
+  } else if (card.text) {
     result += `\n${toMarkdown(card.text)}`
   }
   
