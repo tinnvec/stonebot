@@ -1,5 +1,8 @@
 FROM node:latest
 
+# Add FFMPEG
+RUN apt-get update && apt-get install -y libav-tools
+
 # Create app directory
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
