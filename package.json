@@ -1,10 +1,10 @@
 {
   "name": "stonebot",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "main": "app.js",
   "scripts": {
     "cleanup": "rm -rf bin",
-    "build": "babel src --out-dir bin",
+    "build": "babel src --out-dir bin --copy-files",
     "start": "yarn run cleanup && yarn run build && node bin/app.js"
   },
   "repository": "https://github.com/tinnvec/stonebot.git",
@@ -14,10 +14,12 @@
     "discord.js": "^10.0.1",
     "fuse.js": "^2.5.0",
     "hearthstonejson": "^0.2.1",
+    "node-opus": "^0.2.4",
     "to-markdown": "^3.0.3"
   },
   "devDependencies": {
     "babel-cli": "^6.18.0",
-    "babel-preset-modern-node": "^3.2.0"
+    "babel-preset-modern-node": "^3.2.0",
+    "eslint": "^3.12.2"
   }
 }

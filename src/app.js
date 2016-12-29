@@ -9,77 +9,99 @@ const client = new Discord.Client()
 const hsjson = new HearthstoneJSON()
 
 client.on('ready', () => {
-    console.log('Client ready')
+    client.user.setGame('Hearthstone')
 })
 
 client.on('message', message =>  {
-  let pattern = /:{2}([^:\?]+)\??([^:]*):{2}/g
-  let matches = []
-  let match
-  while (match = pattern.exec(message.content)) {
-    matches.push(match)
-  }
+    let pattern = /:{2}([^:\?]+)\??([^:]*):{2}/g
+    let matches = []
+    let match = pattern.exec(message.content)
+    while (match) {
+        matches.push(match)
+        match = pattern.exec(message.content)
+    }
 
-  if (matches.length > 0) {
-    message.channel.startTyping()
-    hsjson.getLatest(cards => {
-      try {
-        // cards = cards.filter(card => { return card.collectible })
-        let fuse = new Fuse(cards, { keys: ['name'] })
-
-        matches.forEach(match => {
-          let foundCards = fuse.search(match[1])
-          let reply
-          if (foundCards.length < 1) {
-            reply = 'Sorry, I couldn\'t find anything'
-          } else {
-            reply = formatOutput(foundCards[0], match[2])
-          }
-          message.channel.sendMessage(reply)
-        }, this)
-      } catch (ex) {
-        console.log(ex)
-      }
-      message.channel.stopTyping()
-    })
-  }
+    if (matches.length > 0) {
+        message.channel.startTyping()
+        hsjson.getLatest(cards => {
+            try {
+                let fuse = new Fuse(cards, { keys: ['name'] })
+                matches.forEach(match => {
+                    let foundCards = fuse.search(match[1])
+                    let reply = 'Sorry, I couldn\'t find anything'
+                    if (foundCards.length > 0) {
+                        reply = formatOutput(foundCards[0], match[2])
+                        switch (foundCards[0].rarity) {
+                        case 'LEGENDARY':
+                            playSound(client, message, `${__dirname}/sounds/VO_ANNOUNCER_LEGENDARY_25.ogg`)
+                            break
+                        case 'EPIC':
+                            playSound(client, message, `${__dirname}/sounds/VO_ANNOUNCER_EPIC_26.ogg`)
+                            break
+                        case 'RARE':
+                            playSound(client, message, `${__dirname}/sounds/VO_ANNOUNCER_RARE_27.ogg`)
+                            break
+                        default:
+                        }
+                    }
+                    message.channel.sendMessage(reply)
+                }, this)
+            } catch (ex) {
+                console.log(ex)
+            }
+            message.channel.stopTyping()
+        })
+    }
 })
 
 client.login(config.token)
 
+function playSound(client, message, file) {
+    let allChannels = message.channel.guild.channels
+    allChannels.forEach(channel => {
+        if (channel instanceof Discord.VoiceChannel) {
+            if (channel.members.find('id', message.author.id)) {
+                channel.join().then(connection => {
+                    connection.playFile(file).on('end', () => { channel.leave() })
+                })
+            }
+        }
+    })
+}
+
 function formatOutput(card, addon) {
-  if (addon === 'image') {
-    return `http://media.services.zam.com/v1/media/byName/hs/cards/enus/${card.id}.png`
-  }
+    if (addon === 'image') {
+        return `http://media.services.zam.com/v1/media/byName/hs/cards/enus/${card.id}.png`
+    }
 
-  if (addon === 'gold') {
-    return `http://media.services.zam.com/v1/media/byName/hs/cards/enus/animated/${card.id}_premium.gif`
-  }
+    if (addon === 'gold') {
+        return `http://media.services.zam.com/v1/media/byName/hs/cards/enus/animated/${card.id}_premium.gif`
+    }
 
-  if (addon === 'art') {
-    return `https://art.hearthstonejson.com/v1/512x/${card.id}.jpg`
-  }
+    if (addon === 'art') {
+        return `https://art.hearthstonejson.com/v1/512x/${card.id}.jpg`
+    }
 
-  let result =`${card.name} - ${card.cost} Mana`
-  
-  if (card.attack) {
-    result += ` ${card.attack}/${card.health || card.durability}`
-  }
+    let result =`${card.name} - ${card.cost} Mana`
+    
+    if (card.attack) {
+        result += ` ${card.attack}/${card.health || card.durability}`
+    }
 
-  result += ` ${card.playerClass.toLowerCase().capitalizeFirstLetter()}`
-  result += ` ${card.type.toLowerCase().capitalizeFirstLetter()}`
-  
-  if (card.collectionText) {
-    result += `\n${toMarkdown(card.collectionText)}`
-  } else if (card.text) {
-    result += `\n${toMarkdown(card.text)}`
-  }
-  
-  if (addon === 'flavor' && card.flavor) {
-    result += `\n${card.flavor}`
-  }
+    result += ` ${card.playerClass.toLowerCase().capitalizeFirstLetter()}`
+    result += ` ${card.type.toLowerCase().capitalizeFirstLetter()}`
+    
+    if (card.collectionText) {
+        result += `\n${toMarkdown(card.collectionText)}`
+    } else if (card.text) {
+        result += `\n${toMarkdown(card.text)}`
+    }
+    
+    if (addon === 'flavor' && card.flavor) {
+        result += `\n${card.flavor}`
+    }
 
-  return result
+    return result
 }
 
 String.prototype.capitalizeFirstLetter = function() {

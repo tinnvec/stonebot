@@ -1,6 +1,4 @@
 [![Add Stonebot to your Server][discord-add-badge]][discord-oauth-link]
-[![Join Chatrealm][discord-chatrealm-badge]][discord-chatrealm-link]
-[![Chatrealm IRC][chatrealm-badge]][chatrealm-link]
 
 # Stonebot
 Reacts to one or more `::card name::` with the card information.
@@ -61,9 +59,3 @@ docker run -d --name stonebot stonebot
 
 [discord-oauth-link]: https://discordapp.com/oauth2/authorize?client_id=181041901225377793&scope=bot&permissions=19456
 [discord-add-badge]: https://img.shields.io/badge/Discord-Invite%20Stonebot-7289DA.svg?style=flat-square
-
-[discord-chatrealm-link]: https://discord.gg/0vQgQWIkKVUryD0z
-[discord-chatrealm-badge]: https://img.shields.io/badge/Discord-Chatrealm-7289DA.svg?style=flat-square
-
-[chatrealm-link]: https://irc.chatrealm.net
-[chatrealm-badge]: https://img.shields.io/badge/IRC-Chatrealm-orange.svg?style=flat-square
