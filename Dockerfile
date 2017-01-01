@@ -1,7 +1,7 @@
 FROM node:latest
 
 # Add FFMPEG
-RUN apt-get update && apt-get install -y libav-tools
+RUN apt-get update && apt-get install -y ffmpeg libavcodec-extra
 
 # Create app directory
 RUN mkdir -p /usr/src/app

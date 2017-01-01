@@ -2,6 +2,9 @@ import Discord from 'discord.js'
 import Fuse from 'fuse.js'
 import HearthstoneJSON from 'hearthstonejson'
 import toMarkdown from 'to-markdown'
+import ffmpeg from 'fluent-ffmpeg'
+
+import cardSounds from './sounds/card-sounds'
 
 import config from './config/config'
 
@@ -21,6 +24,12 @@ client.on('message', message =>  {
                 matches.forEach(match => {
                     let card = searchForCard(cards, match[1])
                     if (card) {
+                        if (match[2].startsWith('sound')) {
+                            let authorVoiceChannel = getMessageAuthorVoiceChannel(message)
+                            if (authorVoiceChannel) {
+                                playSound(authorVoiceChannel, card.id)
+                            }
+                        }
                         message.channel.sendMessage(formatOutput(card, match[2]))
                     }
                 })
@@ -31,6 +40,64 @@ client.on('message', message =>  {
 })
 
 client.login(config.token)
+
+function mergeCardSounds(soundFiles) {
+    return new Promise((resolve, reject) => {
+        let filename = `${__dirname}/sounds/${Math.round(Math.random() * 100)}.ogg`
+        let cmd = ffmpeg()
+        soundFiles.forEach(file => { cmd.input(file) })
+        cmd.complexFilter([{
+            filter: 'amix',
+            options: {
+                inputs: soundFiles.length
+            }
+        }])
+        cmd.on('error', err => {
+            console.log(err)
+            reject(err)
+        })
+        cmd.on('end', () => { resolve(filename) })
+        cmd.audioCodec('libvorbis').save(filename)
+    })
+}
+
+// function concatCardSounds(soundFiles) {
+//     return new Promise((resolve, reject) => {
+//         let filename = `${__dirname}/sounds/${Math.round(Math.random() * 100)}.ogg`
+//         let cmd = ffmpeg()
+//         soundFiles.forEach(file => { cmd.input(file) })
+//         cmd.on('error', err => {
+//             console.log(err)
+//             reject(err)
+//         })
+//         cmd.on('end', () => { resolve(filename) })
+//         cmd.audioCodec('libvorbis').mergeToFile(filename, `${__dirname}/sounds/tmp`)
+//     })
+// }
+
+function playSound(channel, cardId) {
+    if (cardSounds[cardId]) {
+        mergeCardSounds(cardSounds[cardId].play).then(file => {
+            channel.join().then(connection => {
+                connection.playFile(file).on('end', () => {
+                    channel.leave()
+                })
+            }).catch(console.error)
+        })
+    }
+}
+
+function getMessageAuthorVoiceChannel(message) {
+    let allChannels = message.channel.guild.channels
+    let result = null
+    allChannels.forEach(channel => {
+        if (channel instanceof Discord.VoiceChannel
+            && channel.members.find('id', message.author.id)) {
+            result = channel
+        }
+    })
+    return result
+}
 
 function detectCardMentions(message) {
     let pattern = /:{2}([^:\?]+)\??([^:]*):{2}/g
