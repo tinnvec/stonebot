@@ -4,6 +4,8 @@ import HearthstoneJSON from 'hearthstonejson'
 import toMarkdown from 'to-markdown'
 import ffmpeg from 'fluent-ffmpeg'
 
+import cardSounds from './sounds/card-sounds'
+
 import config from './config/config'
 
 const client = new Discord.Client()
