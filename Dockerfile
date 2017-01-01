@@ -1,7 +1,7 @@
 FROM node:wheezy
 
 # Add FFMPEG
-RUN apt-get update && apt-get install -y ffmpeg libavcodec-extra
+RUN apt-get update && apt-get install -y ffmpeg libavcodec-extra-53
 
 # Create app directory
 RUN mkdir -p /usr/src/app
