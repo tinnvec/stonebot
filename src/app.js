@@ -85,21 +85,25 @@ function formatOutput(card, addon) {
         return `https://art.hearthstonejson.com/v1/512x/${card.id}.jpg`
     }
 
-    let result =`${card.name} - ${card.cost} Mana`
-    
+    let result = `${card.name} -`
+
+    if (card.cost) {
+        result += ` ${card.cost} Mana`
+    }
+
     if (card.attack) {
         result += ` ${card.attack}/${card.health || card.durability}`
     }
 
     result += ` ${card.playerClass.toLowerCase().capitalizeFirstLetter()}`
     result += ` ${card.type.toLowerCase().capitalizeFirstLetter()}`
-    
+
     if (card.collectionText) {
         result += `\n${toMarkdown(card.collectionText)}`
     } else if (card.text) {
         result += `\n${toMarkdown(card.text)}`
     }
-    
+
     if (addon === 'flavor' && card.flavor) {
         result += `\n${card.flavor}`
     }
