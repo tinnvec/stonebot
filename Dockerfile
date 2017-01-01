@@ -1,4 +1,4 @@
-FROM node:latest
+FROM node:wheezy
 
 # Add FFMPEG
 RUN apt-get update && apt-get install -y ffmpeg libavcodec-extra
