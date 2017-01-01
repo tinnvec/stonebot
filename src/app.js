@@ -61,50 +61,29 @@ function mergeCardSounds(soundFiles) {
     })
 }
 
-function concatCardSounds(soundFiles) {
-    return new Promise((resolve, reject) => {
-        let filename = `${__dirname}/sounds/${Math.round(Math.random() * 100)}.ogg`
-        let cmd = ffmpeg()
-        soundFiles.forEach(file => { cmd.input(file) })
-        cmd.on('error', err => {
-            console.log(err)
-            reject(err)
-        })
-        cmd.on('end', () => { resolve(filename) })
-        cmd.audioCodec('libvorbis').mergeToFile(filename, `${__dirname}/sounds/tmp`)
-    })
-}
+// function concatCardSounds(soundFiles) {
+//     return new Promise((resolve, reject) => {
+//         let filename = `${__dirname}/sounds/${Math.round(Math.random() * 100)}.ogg`
+//         let cmd = ffmpeg()
+//         soundFiles.forEach(file => { cmd.input(file) })
+//         cmd.on('error', err => {
+//             console.log(err)
+//             reject(err)
+//         })
+//         cmd.on('end', () => { resolve(filename) })
+//         cmd.audioCodec('libvorbis').mergeToFile(filename, `${__dirname}/sounds/tmp`)
+//     })
+// }
 
 function playSound(channel, cardId) {
     if (cardSounds[cardId]) {
-        mergeCardSounds(cardSounds[cardId].play[1]).then(file => {
+        mergeCardSounds(cardSounds[cardId].play).then(file => {
             channel.join().then(connection => {
                 connection.playFile(file).on('end', () => {
                     channel.leave()
                 })
             }).catch(console.error)
         })
-        // if (cardSounds[cardId].play[1]) {
-        //     mergeCardSounds(cardSounds[cardId].play[1]).then(file => {
-        //         let allSounds = cardSounds[cardId].play[0]
-        //         allSounds.push(file)
-        //         concatCardSounds(allSounds).then(file => {
-        //             channel.join().then(connection => {
-        //                 connection.playFile(file).on('end', () => {
-        //                     channel.leave()
-        //                 })
-        //             }).catch(console.error)
-        //         })
-        //     })
-        // } else if (cardSounds[cardId].play[0]) {
-        //     concatCardSounds(cardSounds[cardId].play[0]).then(file => {
-        //         channel.join().then(connection => {
-        //             connection.playFile(file).on('end', () => {
-        //                 channel.leave()
-        //             })
-        //         }).catch(console.error)
-        //     })
-        // }
     }
 }
 
