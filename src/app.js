@@ -32,17 +32,6 @@ client.on('message', message =>  {
                     let reply = 'Sorry, I couldn\'t find anything'
                     if (foundCards.length > 0) {
                         reply = formatOutput(foundCards[0], match[2])
-                        switch (foundCards[0].rarity) {
-                        case 'LEGENDARY':
-                            playSound(client, message, `${__dirname}/sounds/VO_ANNOUNCER_LEGENDARY_25.ogg`)
-                            break
-                        case 'EPIC':
-                            playSound(client, message, `${__dirname}/sounds/VO_ANNOUNCER_EPIC_26.ogg`)
-                            break
-                        case 'RARE':
-                            playSound(client, message, `${__dirname}/sounds/VO_ANNOUNCER_RARE_27.ogg`)
-                            break
-                        default:
                         }
                     }
                     message.channel.sendMessage(reply)
