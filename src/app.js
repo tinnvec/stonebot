@@ -83,7 +83,7 @@ function playSound(channel, cardId) {
                     channel.leave()
                 })
             }).catch(console.error)
-        })
+        }).catch(console.error)
     }
 }
 
@@ -92,7 +92,7 @@ function getMessageAuthorVoiceChannel(message) {
     let result = null
     allChannels.forEach(channel => {
         if (channel instanceof Discord.VoiceChannel
-            && channel.members.find('id', message.author.id)) {
+            && channel.members.get(message.author.id)) {
             result = channel
         }
     })
