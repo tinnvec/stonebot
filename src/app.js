@@ -33,8 +33,13 @@ client.on('message', message =>  {
                     let foundCards = fuse.search(match[1])
                     let reply = 'Sorry, I couldn\'t find anything'
                     if (foundCards.length > 0) {
-                        reply = formatOutput(foundCards[0], match[2])
+                        if (match[2].startsWith('sound')) {
+                            let authorVoiceChannel = getMessageAuthorVoiceChannel(message)
+                            if (authorVoiceChannel) {
+                                playSound(authorVoiceChannel, foundCards[0].id)
+                            }
                         }
+                        reply = formatOutput(foundCards[0], match[2])
                     }
                     message.channel.sendMessage(reply)
                 }, this)
@@ -48,17 +53,83 @@ client.on('message', message =>  {
 
 client.login(config.token)
 
-function playSound(client, message, file) {
-    let allChannels = message.channel.guild.channels
-    allChannels.forEach(channel => {
-        if (channel instanceof Discord.VoiceChannel) {
-            if (channel.members.find('id', message.author.id)) {
-                channel.join().then(connection => {
-                    connection.playFile(file).on('end', () => { channel.leave() })
-                })
+function mergeCardSounds(soundFiles) {
+    return new Promise((resolve, reject) => {
+        let filename = `${__dirname}/sounds/${Math.round(Math.random() * 100)}.ogg`
+        let cmd = ffmpeg()
+        soundFiles.forEach(file => { cmd.input(file) })
+        cmd.complexFilter([{
+            filter: 'amix',
+            options: {
+                inputs: soundFiles.length
             }
+        }])
+        cmd.on('error', err => {
+            console.log(err)
+            reject(err)
+        })
+        cmd.on('end', () => { resolve(filename) })
+        cmd.audioCodec('libvorbis').save(filename)
+    })
+}
+
+function concatCardSounds(soundFiles) {
+    return new Promise((resolve, reject) => {
+        let filename = `${__dirname}/sounds/${Math.round(Math.random() * 100)}.ogg`
+        let cmd = ffmpeg()
+        soundFiles.forEach(file => { cmd.input(file) })
+        cmd.on('error', err => {
+            console.log(err)
+            reject(err)
+        })
+        cmd.on('end', () => { resolve(filename) })
+        cmd.audioCodec('libvorbis').mergeToFile(filename, `${__dirname}/sounds/tmp`)
+    })
+}
+
+function playSound(channel, cardId) {
+    if (cardSounds[cardId]) {
+        mergeCardSounds(cardSounds[cardId].play[1]).then(file => {
+            channel.join().then(connection => {
+                connection.playFile(file).on('end', () => {
+                    channel.leave()
+                })
+            }).catch(console.error)
+        })
+        // if (cardSounds[cardId].play[1]) {
+        //     mergeCardSounds(cardSounds[cardId].play[1]).then(file => {
+        //         let allSounds = cardSounds[cardId].play[0]
+        //         allSounds.push(file)
+        //         concatCardSounds(allSounds).then(file => {
+        //             channel.join().then(connection => {
+        //                 connection.playFile(file).on('end', () => {
+        //                     channel.leave()
+        //                 })
+        //             }).catch(console.error)
+        //         })
+        //     })
+        // } else if (cardSounds[cardId].play[0]) {
+        //     concatCardSounds(cardSounds[cardId].play[0]).then(file => {
+        //         channel.join().then(connection => {
+        //             connection.playFile(file).on('end', () => {
+        //                 channel.leave()
+        //             })
+        //         }).catch(console.error)
+        //     })
+        // }
+    }
+}
+
+function getMessageAuthorVoiceChannel(message) {
+    let allChannels = message.channel.guild.channels
+    let result = null
+    allChannels.forEach(channel => {
+        if (channel instanceof Discord.VoiceChannel
+            && channel.members.find('id', message.author.id)) {
+            result = channel
         }
     })
+    return result
 }
 
 function formatOutput(card, addon) {
@@ -75,20 +146,20 @@ function formatOutput(card, addon) {
     }
 
     let result =`${card.name} - ${card.cost} Mana`
-    
+
     if (card.attack) {
         result += ` ${card.attack}/${card.health || card.durability}`
     }
 
     result += ` ${card.playerClass.toLowerCase().capitalizeFirstLetter()}`
     result += ` ${card.type.toLowerCase().capitalizeFirstLetter()}`
-    
+
     if (card.collectionText) {
         result += `\n${toMarkdown(card.collectionText)}`
     } else if (card.text) {
         result += `\n${toMarkdown(card.text)}`
     }
-    
+
     if (addon === 'flavor' && card.flavor) {
         result += `\n${card.flavor}`
     }
