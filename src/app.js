@@ -2,6 +2,7 @@ import Discord from 'discord.js'
 import Fuse from 'fuse.js'
 import HearthstoneJSON from 'hearthstonejson'
 import toMarkdown from 'to-markdown'
+import ffmpeg from 'fluent-ffmpeg'
 
 import config from './config/config'
 
