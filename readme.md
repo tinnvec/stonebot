@@ -3,14 +3,13 @@
 # Stonebot
 Reacts to one or more `::card name::` with the card information.
 
-Want to add stonebot to your server?  
-I run a public version that you can invite to your server with the button at the top of this readme, or the following url: https://discordapp.com/oauth2/authorize?client_id=181041901225377793&scope=bot&permissions=19456
+Want to add stonebot to your server? I run a public version that you can invite to your server with the button at the top of this readme, or the following url: https://discordapp.com/oauth2/authorize?client_id=181041901225377793&scope=bot&permissions=19456
 
 You can also run your own version with docker, using the information at the end of this readme.
 
 ## Usage
 
-Double colons `::` around `card name` for default output
+Double colons `::` around `card name` for default output. Collectible cards will be favored over uncollectible ones in the results.
 ```
 ::frostbolt::
 
@@ -18,8 +17,15 @@ Frostbolt - 2 Mana Mage Spell
 Deal $3 damage to a character and Freeze it.
 ```
 
-**Addons**  
-Single question mark `?` followed by `addon` after `card name`  
+Using `@` before `card name` will search uncollectible cards only
+```
+::@jaraxxus::
+
+Lord Jaraxxus - Warlock Hero
+```
+
+**Addons**
+Single question mark `?` followed by `addon` after `card name`
 Where `addon` is one of `flavor`, `art`, `image`, or `gold`
 ```
 ::frostbolt?flavor::

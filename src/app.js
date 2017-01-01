@@ -16,36 +16,24 @@ client.on('ready', () => {
 })
 
 client.on('message', message =>  {
-    let pattern = /:{2}([^:\?]+)\??([^:]*):{2}/g
-    let matches = []
-    let match = pattern.exec(message.content)
-    while (match) {
-        matches.push(match)
-        match = pattern.exec(message.content)
-    }
-
+    let matches = detectCardMentions(message)
     if (matches.length > 0) {
         message.channel.startTyping()
         hsjson.getLatest(cards => {
             try {
-                let fuse = new Fuse(cards, { keys: ['name'] })
                 matches.forEach(match => {
-                    let foundCards = fuse.search(match[1])
-                    let reply = 'Sorry, I couldn\'t find anything'
-                    if (foundCards.length > 0) {
+                    let card = searchForCard(cards, match[1])
+                    if (card) {
                         if (match[2].startsWith('sound')) {
                             let authorVoiceChannel = getMessageAuthorVoiceChannel(message)
                             if (authorVoiceChannel) {
-                                playSound(authorVoiceChannel, foundCards[0].id)
+                                playSound(authorVoiceChannel, card.id)
                             }
                         }
-                        reply = formatOutput(foundCards[0], match[2])
+                        message.channel.sendMessage(formatOutput(card, match[2]))
                     }
-                    message.channel.sendMessage(reply)
-                }, this)
-            } catch (ex) {
-                console.log(ex)
-            }
+                })
+            } catch (ex) { console.log(ex) }
             message.channel.stopTyping()
         })
     }
@@ -132,6 +120,46 @@ function getMessageAuthorVoiceChannel(message) {
     return result
 }
 
+function detectCardMentions(message) {
+    let pattern = /:{2}([^:\?]+)\??([^:]*):{2}/g
+    let matches = []
+    let match = pattern.exec(message.content)
+    while (match) {
+        matches.push(match)
+        match = pattern.exec(message.content)
+    }
+    return matches
+}
+
+function searchForCard(allCards, pattern) {
+    let uncollectibleOnly = false
+    if (pattern.startsWith('@')) {
+        pattern = pattern.substring(1)
+        uncollectibleOnly = true
+    }
+
+    let uncollectibleFuse = new Fuse(
+        allCards.filter(card => { return !card.collectible }),
+        { keys: ['name'], include: ['score'] }
+    )
+    let foundUncollectible = uncollectibleFuse.search(pattern)
+
+    if (uncollectibleOnly) {
+        return foundUncollectible[0].item
+    }
+
+    let collectibleFuse = new Fuse(
+        allCards.filter(card => { return card.collectible }),
+        { keys: ['name'], include: ['score'] }
+    )
+    let foundCollectible = collectibleFuse.search(pattern)
+
+    if (foundUncollectible[0].score < foundCollectible[0].score) {
+        return foundUncollectible[0].item
+    }
+    return foundCollectible[0].item
+}
+
 function formatOutput(card, addon) {
     if (addon === 'image') {
         return `http://media.services.zam.com/v1/media/byName/hs/cards/enus/${card.id}.png`
@@ -145,7 +173,11 @@ function formatOutput(card, addon) {
         return `https://art.hearthstonejson.com/v1/512x/${card.id}.jpg`
     }
 
-    let result =`${card.name} - ${card.cost} Mana`
+    let result = `${card.name} -`
+
+    if (card.cost) {
+        result += ` ${card.cost} Mana`
+    }
 
     if (card.attack) {
         result += ` ${card.attack}/${card.health || card.durability}`
