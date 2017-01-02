@@ -25,6 +25,7 @@ Lord Jaraxxus - Warlock Hero
 ```
 
 **Addons**
+
 Single question mark `?` followed by `addon` after `card name`
 Where `addon` is one of `flavor`, `art`, `image`, `gold`, or `sound`*
 ```

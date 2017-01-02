@@ -1,4 +1,6 @@
-const urlBase = 'http://media.services.zam.com/v1/media/byName/hs/sounds/enus'
+// const urlBase = 'http://media.services.zam.com/v1/media/byName/hs/sounds/enus'
+const urlBase = 'http://media-hearth.cursecdn.com/audio/card-sounds/sound'
+
 export default {
     // Classic Legendaries
     'NEW1_030': { // Deathwing
