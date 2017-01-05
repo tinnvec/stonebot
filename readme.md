@@ -27,7 +27,7 @@ Lord Jaraxxus - Warlock Hero
 **Addons**
 
 Single question mark `?` followed by `addon` after `card name`
-Where `addon` is one of `flavor`, `art`, `image`, `gold`, or `sound`*
+Where `addon` is one of `flavor`, `art`, `image`, or `gold`
 ```
 ::frostbolt?flavor::
 
@@ -47,7 +47,15 @@ http://media.services.zam.com/v1/media/byName/hs/cards/enus/CS2_024.png
 
 http://media.services.zam.com/v1/media/byName/hs/cards/enus/animated/CS2_024_premium.gif
 ```
-*Note on `sound`: will display the default output in text. If you are in a voice channel and there is a sound available for the requested card, stonebot will join your voice channel and play the 'play' sound of the card. Currently only legendaries from the classic set are configured for use with `sound`
+
+**Sounds**
+
+There is an additional addon, `?sound`. In addition to printing the default output, if you are in a voice channel, stonebot will join your voice channel and play the requested sound of the card.
+
+There are 3 variations to the sound addon:
+- `?sound` or `?sound-play`: The play sound
+- `?sound-attack`: The attack sound
+- `?sound-death`: The death sound
 
 ## Docker Instructions
 ```bash
