@@ -4,7 +4,7 @@ import HearthstoneJSON from 'hearthstonejson'
 import toMarkdown from 'to-markdown'
 import ffmpeg from 'fluent-ffmpeg'
 
-import cardSounds from './sounds/card-sounds'
+import cardSoundsNames from './sounds/card-sounds-names.json'
 
 import config from './config/config'
 
@@ -17,26 +17,29 @@ client.on('ready', () => {
 
 client.on('message', message =>  {
     let matches = detectCardMentions(message)
-    if (matches.length > 0) {
-        message.channel.startTyping()
-        hsjson.getLatest(cards => {
-            try {
-                matches.forEach(match => {
-                    let card = searchForCard(cards, match[1])
-                    if (card) {
-                        if (match[2].startsWith('sound')) {
-                            let authorVoiceChannel = getMessageAuthorVoiceChannel(message)
-                            if (authorVoiceChannel) {
-                                playSound(authorVoiceChannel, card.id)
-                            }
+    if (matches.length < 1) { return }
+    message.channel.startTyping()
+    hsjson.getLatest(cards => {
+        try {
+            matches.forEach(match => {
+                let card = searchForCard(cards, match[1])
+                if (!card) { return }
+                if (match[2].startsWith('sound')) {
+                    let authorVoiceChannel = getMessageAuthorVoiceChannel(message)
+                    if (authorVoiceChannel) {
+                        let pat = /sound-?([a-zA-Z]+)/g
+                        let m = pat.exec(match[2])
+                        let res = m ? m[1] || 'play' : 'play'
+                        if (['attack', 'death', 'play'].includes(res)) {
+                            playSound(authorVoiceChannel, card.id, res)
                         }
-                        message.channel.sendMessage(formatOutput(card, match[2]))
                     }
-                })
-            } catch (ex) { console.log(ex) }
-            message.channel.stopTyping()
-        })
-    }
+                }
+                message.channel.sendMessage(formatOutput(card, match[2]))
+            })
+        } catch (ex) { console.log(ex) }
+        message.channel.stopTyping()
+    })
 })
 
 client.login(config.token)
@@ -75,16 +78,26 @@ function mergeCardSounds(soundFiles) {
 //     })
 // }
 
-function playSound(channel, cardId) {
-    if (cardSounds[cardId]) {
-        mergeCardSounds(cardSounds[cardId].play).then(file => {
-            channel.join().then(connection => {
-                connection.playFile(file).on('end', () => {
-                    channel.leave()
-                })
-            }).catch(console.error)
+function getSoundUrl(filename) {
+    const urlBase = 'http://media-hearth.cursecdn.com/audio/card-sounds/sound'
+    // alternate: http://media.services.zam.com/v1/media/byName/hs/sounds/enus
+    const extension = 'ogg'
+    return `${urlBase}/${filename}.${extension}`
+}
+
+function playSound(channel, cardId, soundType) {
+    if (!cardSoundsNames[cardId]) { return }
+    let cardSounds = cardSoundsNames[cardId]
+    if (!cardSounds[soundType] || cardSounds[soundType].length < 1) { return }
+    let soundNames = []
+    cardSounds[soundType].forEach(name => { soundNames.push(getSoundUrl(name)) })
+    mergeCardSounds(soundNames).then(file => {
+        channel.join().then(connection => {
+            connection.playFile(file).on('end', () => {
+                channel.leave()
+            })
         }).catch(console.error)
-    }
+    }).catch(console.error)
 }
 
 function getMessageAuthorVoiceChannel(message) {
