@@ -30,7 +30,7 @@ client.on('message', message =>  {
                         let pat = /sound-?([a-zA-Z]+)/g
                         let m = pat.exec(match[2])
                         let res = m ? m[1] || 'play' : 'play'
-                        if (['attack', 'death', 'play'].includes(res)) {
+                        if (['attack', 'death', 'play', 'trigger'].includes(res)) {
                             playSound(authorVoiceChannel, card.id, res)
                         }
                     }
@@ -44,16 +44,17 @@ client.on('message', message =>  {
 
 client.login(config.token)
 
-function mergeCardSounds(soundFiles) {
+function mergeCardSounds(sounds) {
     return new Promise((resolve, reject) => {
         let filename = `${__dirname}/sounds/${Math.round(Math.random() * 100)}.ogg`
         let cmd = ffmpeg()
-        soundFiles.forEach(file => { cmd.input(file) })
+        sounds.forEach(sound => {
+            cmd.input(getSoundUrl(sound.name))
+            cmd.inputOption(`-itsoffset ${sound.delay}`)
+        })
         cmd.complexFilter([{
             filter: 'amix',
-            options: {
-                inputs: soundFiles.length
-            }
+            options: { inputs: sounds.length }
         }])
         cmd.on('error', err => {
             console.log(err)
@@ -89,9 +90,9 @@ function playSound(channel, cardId, soundType) {
     if (!cardSoundsNames[cardId]) { return }
     let cardSounds = cardSoundsNames[cardId]
     if (!cardSounds[soundType] || cardSounds[soundType].length < 1) { return }
-    let soundNames = []
-    cardSounds[soundType].forEach(name => { soundNames.push(getSoundUrl(name)) })
-    mergeCardSounds(soundNames).then(file => {
+    let sounds = []
+    cardSounds[soundType].forEach(sound => { sounds.push(sound) })
+    mergeCardSounds(sounds).then(file => {
         channel.join().then(connection => {
             connection.playFile(file).on('end', () => {
                 channel.leave()
