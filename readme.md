@@ -55,6 +55,7 @@ There is an additional addon, `?sound`. In addition to printing the default outp
 There are 3 variations to the sound addon:
 - `?sound` or `?sound-play`: The play sound
 - `?sound-attack`: The attack sound
+- `?sound-trigger`: The trigger sound
 - `?sound-death`: The death sound
 
 ## Docker Instructions
