@@ -14,9 +14,8 @@ export default async function messageHandler(message) {
         if (match[2].startsWith('sound')) {
             let authorVoiceChannel = DiscordHelper.getMessageAuthorVoiceChannel(message)
             if (authorVoiceChannel) {
-                let pat = /sound-?([a-zA-Z]+)/g
-                let m = pat.exec(match[2])
-                let res = m ? m[1] || 'play' : 'play'
+                let m = /sound-?([a-zA-Z]+)/g.exec(match[2])
+                let res = m && m[1] ? m[1] : 'play'
                 if (['attack', 'death', 'play', 'trigger'].includes(res)) {
                     playSound(authorVoiceChannel, card.id, res)
                 }
