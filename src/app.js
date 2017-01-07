@@ -11,6 +11,10 @@ import config from './config/config'
 const client = new Discord.Client()
 const hsjson = new HearthstoneJSON()
 
+if (config.logLevel > 1) { client.on('debug', console.info) }
+if (config.logLevel > 0) { client.on('warn', console.warn) }
+client.on('error', console.error)
+
 client.on('ready', () => {
     client.user.setGame('Hearthstone')
 })
