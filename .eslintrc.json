@@ -3,8 +3,10 @@
         "es6": true,
         "node": true
     },
+    "parser": "babel-eslint",
     "parserOptions": {
-        "sourceType": "module"
+        "sourceType": "module",
+        "ecmaFeatures": { "esversion": 6 }
     },
     "extends": "eslint:recommended",
     "rules": {
