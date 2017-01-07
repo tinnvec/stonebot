@@ -67,15 +67,3 @@ function getSoundUrl(filename) {
     const extension = 'ogg'
     return `${urlBase}/${filename}.${extension}`
 }
-
-function getMessageAuthorVoiceChannel(message) {
-    let allChannels = message.channel.guild.channels
-    let result = null
-    allChannels.forEach(channel => {
-        if (channel instanceof Discord.VoiceChannel
-            && channel.members.get(message.author.id)) {
-            result = channel
-        }
-    })
-    return result
-}
