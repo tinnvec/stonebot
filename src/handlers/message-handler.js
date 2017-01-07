@@ -21,7 +21,8 @@ export default async function messageHandler(message) {
                 }
             }
         }
-        await message.channel.sendMessage(CardsHelper.formatTextOutput(card, match[2])).catch(console.error)
+        // await message.channel.sendMessage(CardsHelper.getTextOutput(card, match[2])).catch(console.error)
+        await message.channel.sendEmbed(CardsHelper.getEmbedObject(card, match[2])).catch(console.error)
         if (message.channel.typing) { message.channel.stopTyping() }
     }
 }

@@ -1,7 +1,22 @@
+import Discord from 'discord.js'
 import Fuse from 'fuse.js'
 import HearthstoneJSON from 'hearthstonejson'
 
 import toMarkdown from 'to-markdown'
+
+// RGB
+const CLASS_COLORS = {
+    'WARRIOR': [196, 30, 59],
+    'SHAMAN': [0, 122, 222],
+    'ROGUE': [0, 0, 0],
+    'PALADIN': [255, 245, 105],
+    'HUNTER': [171, 212, 115],
+    'DRUID': [199, 156, 110],
+    'WARLOCK': [148, 130, 201],
+    'MAGE': [105, 204, 240],
+    'PRIEST': [255, 255, 255],
+    'NEUTRAL': [128, 128, 128]
+}
 
 export default class CardsHelper {
     static getAll() {
@@ -50,7 +65,7 @@ export default class CardsHelper {
         return foundCollectible[0].item
     }
 
-    static formatTextOutput(card, addon) {
+    static getTextOutput(card, addon) {
         if (addon === 'image') {
             return `http://media.services.zam.com/v1/media/byName/hs/cards/enus/${card.id}.png`
         }
@@ -70,6 +85,32 @@ export default class CardsHelper {
         else if (card.text) { result += `\n${toMarkdown(card.text)}` }
         if (addon === 'flavor' && card.flavor) { result += `\n${card.flavor}` }
         return result
+    }
+
+    static getEmbedObject(card, addon) {
+        let res = new Discord.RichEmbed()
+        if (addon === 'image') {
+            return res.setImage(`http://media.services.zam.com/v1/media/byName/hs/cards/enus/${card.id}.png`)
+        }
+        if (addon === 'gold') {
+            return res.setImage(`http://media.services.zam.com/v1/media/byName/hs/cards/enus/animated/${card.id}_premium.gif`)
+        }
+        if (addon === 'art') { res.setImage(`https://art.hearthstonejson.com/v1/512x/${card.id}.jpg`) }
+
+        res.setTitle(card.name).setColor(CLASS_COLORS[card.playerClass])
+
+        let desc = ''
+        if (card.cost != null) { desc += ` ${card.cost} Mana` }
+        if (card.attack) { desc += ` ${card.attack}/${card.health || card.durability}` }
+        desc += ` ${card.playerClass.toLowerCase().capitalizeFirstLetter()}`
+        desc += ` ${card.type.toLowerCase().capitalizeFirstLetter()}`
+        res.setDescription(desc)
+
+        if (card.collectionText) { res.addField('Text', toMarkdown(card.collectionText)) }
+        else if (card.text) { res.addField('Text', toMarkdown(card.text)) }
+        if (addon === 'flavor' && card.flavor) { res.addField('Flavor', card.flavor) }
+
+        return res
     }
 }
 
