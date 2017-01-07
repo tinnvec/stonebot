@@ -18,6 +18,7 @@
     "hearthstonejson": "^0.2.1",
     "node-opus": "^0.2.4",
     "to-markdown": "^3.0.3",
+    "unique-filename": "^1.1.0",
     "uws": "^0.12.0"
   },
   "devDependencies": {

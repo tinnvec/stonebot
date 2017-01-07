@@ -1,5 +1,4 @@
 import Discord from 'discord.js'
-import ffmpeg from 'fluent-ffmpeg'
 
 import messageHandler from './handlers/message-handler'
 import config from './config/config'
@@ -25,45 +24,3 @@ client.on('ready', () => {
 client.on('message', messageHandler)
 
 client.login(config.token)
-
-function mergeCardSounds(sounds) {
-    return new Promise((resolve, reject) => {
-        let filename = `${__dirname}/sounds/${Math.round(Math.random() * 100)}.ogg`
-        let cmd = ffmpeg()
-        sounds.forEach(sound => {
-            cmd.input(getSoundUrl(sound.name))
-            cmd.inputOption(`-itsoffset ${sound.delay}`)
-        })
-        cmd.complexFilter([{
-            filter: 'amix',
-            options: { inputs: sounds.length }
-        }])
-        cmd.on('error', err => {
-            console.log(err)
-            reject(err)
-        })
-        cmd.on('end', () => { resolve(filename) })
-        cmd.audioCodec('libvorbis').save(filename)
-    })
-}
-
-// function concatCardSounds(soundFiles) {
-//     return new Promise((resolve, reject) => {
-//         let filename = `${__dirname}/sounds/${Math.round(Math.random() * 100)}.ogg`
-//         let cmd = ffmpeg()
-//         soundFiles.forEach(file => { cmd.input(file) })
-//         cmd.on('error', err => {
-//             console.log(err)
-//             reject(err)
-//         })
-//         cmd.on('end', () => { resolve(filename) })
-//         cmd.audioCodec('libvorbis').mergeToFile(filename, `${__dirname}/sounds/tmp`)
-//     })
-// }
-
-function getSoundUrl(filename) {
-    const urlBase = 'http://media-hearth.cursecdn.com/audio/card-sounds/sound'
-    // alternate: http://media.services.zam.com/v1/media/byName/hs/sounds/enus
-    const extension = 'ogg'
-    return `${urlBase}/${filename}.${extension}`
-}
