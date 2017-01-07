@@ -26,17 +26,12 @@ export default async function messageHandler(message) {
     }
 }
 
-function playSound(channel, cardId, soundType) {
+async function playSound(channel, cardId, soundType) {
     if (!cardSoundsNames[cardId]) { return }
-    let cardSounds = cardSoundsNames[cardId]
-    if (!cardSounds[soundType] || cardSounds[soundType].length < 1) { return }
-    let sounds = []
-    cardSounds[soundType].forEach(sound => { sounds.push(sound) })
-    SoundProcessor.mergeSounds(sounds).then(file => {
-        channel.join().then(connection => {
-            connection.playFile(file).on('end', () => {
-                channel.leave()
-            })
-        }).catch(console.error)
-    }).catch(console.error)
+    if (!cardSoundsNames[cardId][soundType]) { return }
+    const sounds = cardSoundsNames[cardId][soundType]
+    if (sounds.length < 1) { return }
+    const file = await SoundProcessor.mergeSounds(sounds).catch(console.error)
+    const voiceConnection = await channel.join().catch(console.error)
+    voiceConnection.playFile(file).on('end', () => { channel.leave() })
 }
