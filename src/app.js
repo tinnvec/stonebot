@@ -4,8 +4,7 @@ import HearthstoneJSON from 'hearthstonejson'
 import toMarkdown from 'to-markdown'
 import ffmpeg from 'fluent-ffmpeg'
 
-import cardSoundsNames from './sounds/card-sounds-names.json'
-
+import messageHandler from './handlers/message-handler'
 import config from './config/config'
 
 const client = new Discord.Client()
@@ -27,32 +26,7 @@ client.on('ready', () => {
     client.user.setGame('Hearthstone')
 })
 
-client.on('message', message =>  {
-    let matches = detectCardMentions(message)
-    if (matches.length < 1) { return }
-    message.channel.startTyping()
-    hsjson.getLatest(cards => {
-        try {
-            matches.forEach(match => {
-                let card = searchForCard(cards, match[1])
-                if (!card) { return }
-                if (match[2].startsWith('sound')) {
-                    let authorVoiceChannel = getMessageAuthorVoiceChannel(message)
-                    if (authorVoiceChannel) {
-                        let pat = /sound-?([a-zA-Z]+)/g
-                        let m = pat.exec(match[2])
-                        let res = m ? m[1] || 'play' : 'play'
-                        if (['attack', 'death', 'play', 'trigger'].includes(res)) {
-                            playSound(authorVoiceChannel, card.id, res)
-                        }
-                    }
-                }
-                message.channel.sendMessage(formatOutput(card, match[2]))
-            })
-        } catch (ex) { console.log(ex) }
-        message.channel.stopTyping()
-    })
-})
+client.on('message', messageHandler)
 
 client.login(config.token)
 
@@ -96,21 +70,6 @@ function getSoundUrl(filename) {
     // alternate: http://media.services.zam.com/v1/media/byName/hs/sounds/enus
     const extension = 'ogg'
     return `${urlBase}/${filename}.${extension}`
-}
-
-function playSound(channel, cardId, soundType) {
-    if (!cardSoundsNames[cardId]) { return }
-    let cardSounds = cardSoundsNames[cardId]
-    if (!cardSounds[soundType] || cardSounds[soundType].length < 1) { return }
-    let sounds = []
-    cardSounds[soundType].forEach(sound => { sounds.push(sound) })
-    mergeCardSounds(sounds).then(file => {
-        channel.join().then(connection => {
-            connection.playFile(file).on('end', () => {
-                channel.leave()
-            })
-        }).catch(console.error)
-    }).catch(console.error)
 }
 
 function getMessageAuthorVoiceChannel(message) {
