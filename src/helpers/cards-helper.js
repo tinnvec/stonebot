@@ -61,6 +61,9 @@ export default class CardsHelper {
             { keys: ['name'], include: ['score'] }
         )
         let foundCollectible = collectibleFuse.search(pattern)
+        
+        if (foundCollectible.length < 1 && foundUncollectible.length > 0) { return foundUncollectible[0].item }
+        if (foundCollectible.length > 0 && foundUncollectible.length < 1) { return foundCollectible[0].item }
         if (foundUncollectible[0].score < foundCollectible[0].score) { return foundUncollectible[0].item }
         return foundCollectible[0].item
     }
