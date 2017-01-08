@@ -79,6 +79,17 @@ Want to add stonebot to your server? I run a public version that you can invite 
 
 You can also run your own version with docker, using the information below.
 
+# [](#make-stonebot-your-friend)Make Stonebot Your Friend
+
+[![Add Stonebot to your Server][discord-add-badge]][discord-oauth-link]
+
+[discord-oauth-link]: https://discordapp.com/oauth2/authorize?client_id=181041901225377793&scope=bot&permissions=19456
+[discord-add-badge]: https://img.shields.io/badge/Discord-Invite%20Stonebot-7289DA.svg?style=flat-square
+
+Want to add stonebot to your server? I run a public version that you can invite to your server with the button at the top of this section, or the following url: [https://discordapp.com/oauth2/authorize?client_id=181041901225377793&scope=bot&permissions=19456](https://discordapp.com/oauth2/authorize?client_id=181041901225377793&scope=bot&permissions=19456)
+
+You can also run your own version with docker, using the information below.
+
 ## Docker Instructions
 
 ```bash
