@@ -1,6 +1,6 @@
 Monitors Text Channels for `::card name::` in messages and responds with the card information.
 
-# [](#usage)Usage
+# Usage
 
 Double colons `::` around `card name` for default output.  
 Collectible cards will be favored over uncollectible ones in the results.
@@ -12,14 +12,14 @@ Collectible cards will be favored over uncollectible ones in the results.
 > **Text**  
 > Deal $3 damage to a character and **Freeze** it.
 
-Using `@` before `card name` will search uncollectible cards only
+Using `@` before `card name` will search uncollectible cards only.
 
 `::@jaraxxus::`
 
 > **Lord Jaraxxus**  
 > Warlock Hero
 
-## [](#add-ons)Add-ons
+## Add-ons
 
 Additional information about cards can be obtained using add-ons.  
 To use an add-on, after the card name, add a question mark `?` followed by the add-on name
@@ -61,14 +61,14 @@ To use an add-on, after the card name, add a question mark `?` followed by the a
 
 In addition to printing the default output, if you are in a voice channel, stonebot will join your voice channel and play the requested sound of the card.
 
-There are 3 variations to the sound addon:
+There are 3 variations to the sound add-on:
 
 * `?sound` or `?sound-play`: The play sound
 * `?sound-attack`: The attack sound
 * `?sound-trigger`: The trigger sound
 * `?sound-death`: The death sound
 
-# [](#make-stonebot-your-friend)Make Stonebot Your Friend
+# Make Stonebot Your Friend
 
 [![Add Stonebot to your Server][discord-add-badge]][discord-oauth-link]
 
