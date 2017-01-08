@@ -62,10 +62,11 @@ To use an add-on, after the card name, add a question mark `?` followed by the a
 In addition to printing the default output, if you are in a voice channel, stonebot will join your voice channel and play the requested sound of the card.
 
 There are 3 variations to the sound addon:
-- `?sound` or `?sound-play`: The play sound
-- `?sound-attack`: The attack sound
-- `?sound-trigger`: The trigger sound
-- `?sound-death`: The death sound
+
+* `?sound` or `?sound-play`: The play sound
+* `?sound-attack`: The attack sound
+* `?sound-trigger`: The trigger sound
+* `?sound-death`: The death sound
 
 # [](#make-stonebot-your-friend)Make Stonebot Your Friend
 
