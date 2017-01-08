@@ -1,9 +1,9 @@
-Monitors Text Channels for `::card name::` in messages and responds with the card information.
+Monitors Text Channels for `::card name::` in messages and responds with the card information.  
+Stonebot uses a fuzzy search when matching `card name` and returns the highest scoring result, favoring collectible cards over uncollectible ones.
 
 # Usage
 
-Double colons `::` around `card name` for default output.  
-Collectible cards will be favored over uncollectible ones in the results.
+Double colons `::` around `card name` for default output.
 
 `::frostbolt::`
 
@@ -22,7 +22,7 @@ Using `@` before `card name` will search uncollectible cards only.
 ## Add-ons
 
 Additional information about cards can be obtained using add-ons.  
-To use an add-on, after the card name, add a question mark `?` followed by the add-on name
+To use an add-on, after the card name, add a question mark `?` followed by the add-on name.
 
 ### Flavor
 
