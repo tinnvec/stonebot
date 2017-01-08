@@ -62,10 +62,22 @@ To use an add-on, after the card name, add a question mark `?` followed by the a
 In addition to printing the default output, if you are in a voice channel, stonebot will join your voice channel and play the requested sound of the card.
 
 There are 3 variations to the sound addon:
-- `?sound` or `?sound-play`: The play sound
-- `?sound-attack`: The attack sound
-- `?sound-trigger`: The trigger sound
-- `?sound-death`: The death sound
+
+* `?sound` or `?sound-play`: The play sound
+* `?sound-attack`: The attack sound
+* `?sound-trigger`: The trigger sound
+* `?sound-death`: The death sound
+
+# [](#make-stonebot-your-friend)Make Stonebot Your Friend
+
+[![Add Stonebot to your Server][discord-add-badge]][discord-oauth-link]
+
+[discord-oauth-link]: https://discordapp.com/oauth2/authorize?client_id=181041901225377793&scope=bot&permissions=19456
+[discord-add-badge]: https://img.shields.io/badge/Discord-Invite%20Stonebot-7289DA.svg?style=flat-square
+
+Want to add stonebot to your server? I run a public version that you can invite to your server with the button at the top of this section, or the following url: [https://discordapp.com/oauth2/authorize?client_id=181041901225377793&scope=bot&permissions=19456](https://discordapp.com/oauth2/authorize?client_id=181041901225377793&scope=bot&permissions=19456)
+
+You can also run your own version with docker, using the information below.
 
 # [](#make-stonebot-your-friend)Make Stonebot Your Friend
 
