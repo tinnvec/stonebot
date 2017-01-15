@@ -1,9 +1,9 @@
 import Discord from 'discord.js'
 
 import messageHandler from './handlers/message-handler'
-import config from './config/config'
 
 const client = new Discord.Client()
+import config from './config.json'
 
 if (config.logLevel > 1) { client.on('debug', console.info) }
 if (config.logLevel > 0) { client.on('warn', console.warn) }
