@@ -1,33 +1,30 @@
-Monitors Text Channels for `::card name::` in messages and responds with the card information.  
-Stonebot uses a fuzzy search when matching `card name` and returns the highest scoring result, favoring collectible cards over uncollectible ones.
+Hearthstone Bot for Discord.
 
-# Usage
+# Commands
 
-Double colons `::` around `card name` for default output.
+## Card Information
 
-`::frostbolt::`
+Stonebot uses a fuzzy search when matching card names and returns the highest scoring result, favoring collectible cards over uncollectible ones. Using `@` before `name` will search uncollectible cards only.
 
+### card:text
+
+Displays card text.  
+
+**Format**: `!text <name>`  
+**Aliases**: `card`, `txt`, `t`, `c`, `🎴`, `🃏`, `📝`, `📜`, `📃`  
+**Example**: `!text frostbolt`
 > **Frostbolt**  
 > 2 Mana Mage Spell  
 > **Text**  
 > Deal $3 damage to a character and **Freeze** it.
 
-Using `@` before `card name` will search uncollectible cards only.
+### card:text-flavor
 
-`::@jaraxxus::`
+Displays card text and flavor text.
 
-> **Lord Jaraxxus**  
-> Warlock Hero
-
-## Add-ons
-
-Additional information about cards can be obtained using add-ons.  
-To use an add-on, after the card name, add a question mark `?` followed by the add-on name.
-
-### Flavor
-
-`::devolve?flavor::`
-
+**Format**: `!text-flavor <name>`  
+**Aliases**: `flavor-text`, `flavor`, `f`, `🥓`, `🍗`, `🍿`, `🍰`  
+**Example**: `!text-flavor devolve`
 > **Devolve**  
 > 2 Mana Shaman Spell  
 > **Text**  
@@ -35,38 +32,48 @@ To use an add-on, after the card name, add a question mark `?` followed by the a
 > **Flavor**  
 > Ragnaros looked down. He looked like some kind of War Golem. "WHAT HAVE YOU DONE TO ME," he yelled. But all that came out was a deep grinding sound. He began to cry.
 
-### Art
+### card:image
 
-`::raza?art::`
+Displays card image.
 
-> **Raza the Chained**  
-> 5 Mana 5/5 Priest Minion  
-> **Text**  
-> [x] Battlecry: If your deck has no duplicates, your Hero Power costs (0) this game.  
-> ![](https://art.hearthstonejson.com/v1/512x/CFM_020.jpg)
-
-### Image
-
-`::firey win axe?image::`
-
+**Format**: `!image <name>`  
+**Aliases**: `img`, `i`, `📷`, `📸`  
+**Example**: `!image firey war axe`
 > ![](http://media.services.zam.com/v1/media/byName/hs/cards/enus/CS2_106.png)
 
-### Gold
+### card:image-gold
 
-`::twisting nether?gold::`
+Displays golden card image.
 
+**Format**: `!image-gold <name>`  
+**Aliases**: `gold-image`, `gold`, `g`, `👑`, `💰`  
+**Example**: `!image-gold twisting nether`
 > ![](http://media.services.zam.com/v1/media/byName/hs/cards/enus/animated/EX1_312_premium.gif)
 
-### Sound
+### card:image-art
 
-In addition to printing the default output, if you are in a voice channel, stonebot will join your voice channel and play the requested sound of the card.
+Displays the artist and full art from the card.
 
-There are 3 variations to the sound add-on:
+**Format**: `!image-art <name>`  
+**Aliases**: `art-image`, `art`, `a`, `🖼`, `🎨`  
+**Example**: `!image-art raza`
+> **Raza the Chained**  
+> **Artist**  
+> James Ryman  
+> ![](https://art.hearthstonejson.com/v1/512x/CFM_020.jpg)
 
-* `?sound` or `?sound-play`: The play sound
-* `?sound-attack`: The attack sound
-* `?sound-trigger`: The trigger sound
-* `?sound-death`: The death sound
+### card:sound
+
+Plays card sound in your current voice channel.
+
+**Format**: `!sound [kind] <name>`  
+`[kind]`: One of `play`, `attack`, `death` or `trigger`. Optional.  
+**Aliases**: `snd`, `s`, `🔈`, `🔉`, `🔊`, `🎧`, `🎵`  
+**Examples**
+* `!sound tirion`
+* `!sound attack jaraxxus`
+* `!sound death refreshment vendor`
+* `!sound trigger antonaidas`
 
 # Make Stonebot Your Friend
 

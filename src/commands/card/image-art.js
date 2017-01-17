@@ -9,7 +9,7 @@ module.exports = class ImageArtCommand extends Command {
             aliases: ['art-image', 'art', 'a', '🖼', '🎨'],
             group: 'card',
             memberName: 'image-art',
-            description: 'Displays the full card art.',
+            description: 'Displays the artist and full art from the card.',
             args: [
                 {
                     key: 'name',
