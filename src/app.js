@@ -1,5 +1,6 @@
 import Commando from 'discord.js-commando'
 import path from 'path'
+import sqlite from 'sqlite'
 import config from './config.json'
 
 const client = new Commando.Client({
@@ -27,6 +28,10 @@ client.on('ready', () => {
     client.user.setGame('Hearthstone')
 })
 
+client.setProvider(
+    sqlite.open('/data/settings.sqlite3')
+        .then(db => new Commando.SQLiteProvider(db))
+).catch(console.error)
 
 client.registry
     .registerDefaultTypes()
