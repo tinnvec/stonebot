@@ -51,4 +51,4 @@ tmp
 bin
 
 # Config files
-src/config/config.js
+src/config.json

@@ -5,13 +5,14 @@
   "scripts": {
     "cleanup": "rm -rf bin",
     "build": "babel src --out-dir bin --copy-files",
-    "start": "yarn run cleanup && yarn run build && node bin/app.js"
+    "start": "yarn run cleanup && yarn run build && node --harmony bin/app.js"
   },
   "repository": "https://github.com/tinnvec/stonebot.git",
   "author": "Alex Hanna <tinnvec@gmail.com>",
   "license": "MIT",
   "dependencies": {
     "discord.js": "^11.0.0",
+    "discord.js-commando": "^0.8.3",
     "erlpack": "hammerandchisel/erlpack",
     "fluent-ffmpeg": "^2.1.0",
     "fuse.js": "^2.5.0",
@@ -24,7 +25,6 @@
   "devDependencies": {
     "babel-cli": "^6.18.0",
     "babel-eslint": "^7.1.1",
-    "babel-plugin-transform-async-to-generator": "^6.16.0",
     "babel-preset-modern-node": "^3.2.0",
     "eslint": "^3.12.2"
   }

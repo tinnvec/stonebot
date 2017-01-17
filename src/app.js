@@ -1,26 +1,40 @@
-import Discord from 'discord.js'
+import Commando from 'discord.js-commando'
+import path from 'path'
+import config from './config.json'
 
-import messageHandler from './handlers/message-handler'
-import config from './config/config'
+const client = new Commando.Client({
+    owner: config.owner,
+    commandPrefix: config.prefix
+})
 
-const client = new Discord.Client()
-
-if (config.logLevel > 1) { client.on('debug', console.info) }
-if (config.logLevel > 0) { client.on('warn', console.warn) }
+if (config.logLevel > 1) {
+    client.on('debug', console.info)
+    client.on('guildCreate', guild => { console.info(`Joined Guild: ${guild.name}.`) })
+    client.on('guildDelete', guild => { console.info(`Left Guild: ${guild.name}.`) })
+}
+if (config.logLevel > 0) {
+    client.on('warn', console.warn)
+    client.on('disconnect', event => { console.warn(`Disconnected[${event.code}]: ${event.reason}`)} )
+    client.on('reconnecting', () => { console.warn('Reconnecting...')})
+}
 client.on('error', console.error)
 
-client.on('guildCreate', guild => { console.log(`Joined Guild: ${guild.name}`) })
-client.on('guildDelete', guild => { console.log(`Left Guild: ${guild.name}`) })
-
-client.on('reconnecting', () => { console.log('Reconnecting...')})
-client.on('disconnect', event => { console.log(`Disconnected: ${event.reason}`)} )
-
 client.on('ready', () => {
-    let guilds = client.guilds.map(guild => { return guild.name })
-    console.log(`Current Guilds: ${guilds.join(', ')}`)
+    if (config.logLevel > 1) {
+        console.info('Client Ready.')
+        console.info(`Current Guilds(${client.guilds.size}): ${client.guilds.map(guild => { return guild.name }).join('; ')}.`)
+    }
     client.user.setGame('Hearthstone')
 })
 
-client.on('message', messageHandler)
+
+client.registry
+    .registerDefaultTypes()
+    .registerGroups([
+        ['card', 'Card Information']
+    ])
+    .registerDefaultGroups()
+    .registerCommandsIn(path.join(__dirname, 'commands'))
+    .registerDefaultCommands({ eval_: false, commandState: false })
 
 client.login(config.token)
