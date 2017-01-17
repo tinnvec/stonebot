@@ -94,13 +94,16 @@ git clone https://github.com/tinnvec/stonebot.git
 cd stonebot
 
 # Rename sample config file
-cp src/config/config.sample.js src/config/config.js
+cp src/config.json.example src/config.json
 
-# Edit src/config/config.js with desired settings
+# Edit src/config.json with desired settings
 
-# Build and run docker image
+# Build Docker image
 docker build -t stonebot .
-docker run -d --name stonebot stonebot
+
+# Create data container for persistent settings
+docker run -v /data --name stonestore ubuntu:16.04
+
+# Run stonebot container
+docker run -d --name stonebot --volumes-from stonestore --restart on-failure stonebot
 ```
-
-
