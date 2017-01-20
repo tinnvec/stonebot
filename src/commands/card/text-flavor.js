@@ -12,6 +12,7 @@ module.exports = class TextFlavorCommand extends Command {
             group: 'card',
             memberName: 'text-flavor',
             description: 'Displays card text and flavor text.',
+            examples: ['text-flavor devolve'],
             args: [
                 {
                     key: 'name',

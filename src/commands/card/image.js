@@ -11,6 +11,7 @@ module.exports = class ImageCommand extends Command {
             group: 'card',
             memberName: 'image',
             description: 'Displays card image.',
+            examples: ['image fiery war axe'],
             args: [
                 {
                     key: 'name',

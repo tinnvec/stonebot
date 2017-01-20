@@ -17,7 +17,12 @@ module.exports = class SoundCommand extends Command {
             guildOnly: true,
             description: 'Plays card sound in your current voice channel.',
             format:'[kind] <name>',
-            examples: ['sound tirion', 'sound attack jaraxxus', 'sound death refreshment vendor', 'sound trigger antonaidas'],
+            examples: [
+                'sound tirion',
+                'sound attack jaraxxus',
+                'sound death refreshment vendor',
+                'sound trigger antonaidas'
+            ],
             args: [
                 {
                     key: 'kind',

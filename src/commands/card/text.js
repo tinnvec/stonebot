@@ -12,6 +12,7 @@ module.exports = class TextCommand extends Command {
             group: 'card',
             memberName: 'text',
             description: 'Displays card text.',
+            examples: ['text frostbolt'],
             args: [
                 {
                     key: 'name',

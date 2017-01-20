@@ -2,11 +2,11 @@ Hearthstone Bot for Discord.
 
 # Commands
 
-## Card Information
+# Card Information
 
 Stonebot uses a fuzzy search when matching card names and returns the highest scoring result, favoring collectible cards over uncollectible ones. Using `@` before `name` will search uncollectible cards only.
 
-### card:text
+## card:text
 
 Displays card text.  
 
@@ -18,7 +18,7 @@ Displays card text.
 > **Text**  
 > Deal $3 damage to a character and **Freeze** it.
 
-### card:text-flavor
+## card:text-flavor
 
 Displays card text and flavor text.
 
@@ -32,25 +32,27 @@ Displays card text and flavor text.
 > **Flavor**  
 > Ragnaros looked down. He looked like some kind of War Golem. "WHAT HAVE YOU DONE TO ME," he yelled. But all that came out was a deep grinding sound. He began to cry.
 
-### card:image
+## card:image
 
 Displays card image.
 
 **Format**: `!image <name>`  
 **Aliases**: `img`, `i`, `📷`, `📸`  
-**Example**: `!image firey war axe`
-> ![](http://media.services.zam.com/v1/media/byName/hs/cards/enus/CS2_106.png)
+**Example**: `!image firey war axe`  
+http://media.services.zam.com/v1/media/byName/hs/cards/enus/CS2_106.png
+![](http://media.services.zam.com/v1/media/byName/hs/cards/enus/CS2_106.png)
 
-### card:image-gold
+## card:image-gold
 
 Displays golden card image.
 
 **Format**: `!image-gold <name>`  
 **Aliases**: `gold-image`, `gold`, `g`, `👑`, `💰`  
 **Example**: `!image-gold twisting nether`
-> ![](http://media.services.zam.com/v1/media/byName/hs/cards/enus/animated/EX1_312_premium.gif)
+http://media.services.zam.com/v1/media/byName/hs/cards/enus/animated/EX1_312_premium.gif
+![](http://media.services.zam.com/v1/media/byName/hs/cards/enus/animated/EX1_312_premium.gif)
 
-### card:image-art
+## card:image-art
 
 Displays the artist and full art from the card.
 
@@ -62,9 +64,9 @@ Displays the artist and full art from the card.
 > James Ryman  
 > ![](https://art.hearthstonejson.com/v1/512x/CFM_020.jpg)
 
-### card:sound
+## card:sound
 
-Plays card sound in your current voice channel.
+Plays card sound in your voice channel.
 
 **Format**: `!sound [kind] <name>`  
 `[kind]`: One of `play`, `attack`, `death` or `trigger`. Optional.  
@@ -75,7 +77,7 @@ Plays card sound in your current voice channel.
 * `!sound death refreshment vendor`
 * `!sound trigger antonaidas`
 
-### card:json
+## card:json
 
 Displays JSON inormation for card.
 
@@ -100,6 +102,8 @@ Displays JSON inormation for card.
 }
 ```
 
+---
+
 # Make Stonebot Your Friend
 
 [![Add Stonebot to your Server][discord-add-badge]][discord-oauth-link]
@@ -107,7 +111,8 @@ Displays JSON inormation for card.
 [discord-oauth-link]: https://discordapp.com/oauth2/authorize?client_id=181041901225377793&scope=bot&permissions=19456
 [discord-add-badge]: https://img.shields.io/badge/Discord-Invite%20Stonebot-7289DA.svg?style=flat-square
 
-Want to add stonebot to your server? I run a public version that you can invite to your server with the button at the top of this section, or the following url: [https://discordapp.com/oauth2/authorize?client_id=181041901225377793&scope=bot&permissions=19456](https://discordapp.com/oauth2/authorize?client_id=181041901225377793&scope=bot&permissions=19456)
+Want to add stonebot to your server? I run a public version that you can invite to your server with the button at the top of this section, or the following url:  
+https://discordapp.com/oauth2/authorize?client_id=181041901225377793&scope=bot&permissions=19456
 
 You can also run your own version with docker, using the information below.
 

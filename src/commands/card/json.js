@@ -11,7 +11,8 @@ module.exports = class JSONCommand extends Command {
             aliases: ['dev', 'info', '🗡'],
             group: 'card',
             memberName: 'json',
-            description: 'Displays JSON for card.',
+            description: 'Displays JSON inormation for card.',
+            examples: ['json jade golem'],
             args: [
                 {
                     key: 'name',

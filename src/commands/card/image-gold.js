@@ -11,6 +11,7 @@ module.exports = class ImageGoldCommand extends Command {
             group: 'card',
             memberName: 'image-gold',
             description: 'Displays golden card image.',
+            examples: ['image-gold twisting nether'],
             args: [
                 {
                     key: 'name',

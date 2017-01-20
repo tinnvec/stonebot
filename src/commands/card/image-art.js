@@ -12,6 +12,7 @@ module.exports = class ImageArtCommand extends Command {
             group: 'card',
             memberName: 'image-art',
             description: 'Displays the artist and full art from the card.',
+            examples: ['image-art raza'],
             args: [
                 {
                     key: 'name',
