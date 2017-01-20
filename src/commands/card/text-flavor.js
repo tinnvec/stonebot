@@ -1,6 +1,7 @@
-import Discord from 'discord.js'
+import Card from '../../card'
 import { Command } from 'discord.js-commando'
-import Card from '../../card/card'
+import Discord from 'discord.js'
+
 import winston from 'winston'
 
 module.exports = class TextFlavorCommand extends Command {

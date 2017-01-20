@@ -1,7 +1,6 @@
-import Discord from 'discord.js'
+import Card from '../../card'
 import { Command } from 'discord.js-commando'
-import Card from '../../card/card'
-import SoundProcessor from '../../sound/sound-processor'
+import SoundProcessor from '../../sound-processor'
 import winston from 'winston'
 
 const SOUND_KINDS = ['play', 'attack', 'trigger', 'death']
