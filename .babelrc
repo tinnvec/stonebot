@@ -1,4 +1,3 @@
 {
-    "presets": ["modern-node"],
-    "plugins": ["transform-async-to-generator"]
+    "presets": ["modern-node"]
 }

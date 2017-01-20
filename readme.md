@@ -1,33 +1,30 @@
-Monitors Text Channels for `::card name::` in messages and responds with the card information.
+Hearthstone Bot for Discord.
 
-# [](#usage)Usage
+# Commands
 
-Double colons `::` around `card name` for default output.  
-Collectible cards will be favored over uncollectible ones in the results.
+# Card Information
 
-`::frostbolt::`
+Stonebot uses a fuzzy search when matching card names and returns the highest scoring result, favoring collectible cards over uncollectible ones. Using `@` before `name` will search uncollectible cards only.
 
+## card:text
+
+Displays card text.  
+
+**Format**: `!text <name>`  
+**Aliases**: `card`, `txt`, `t`, `c`, `🎴`, `🃏`, `📝`, `📜`, `📃`  
+**Example**: `!text frostbolt`
 > **Frostbolt**  
 > 2 Mana Mage Spell  
 > **Text**  
 > Deal $3 damage to a character and **Freeze** it.
 
-Using `@` before `card name` will search uncollectible cards only
+## card:text-flavor
 
-`::@jaraxxus::`
+Displays card text and flavor text.
 
-> **Lord Jaraxxus**  
-> Warlock Hero
-
-## [](#add-ons)Add-ons
-
-Additional information about cards can be obtained using add-ons.  
-To use an add-on, after the card name, add a question mark `?` followed by the add-on name
-
-### Flavor
-
-`::devolve?flavor::`
-
+**Format**: `!text-flavor <name>`  
+**Aliases**: `flavor-text`, `flavor`, `f`, `🥓`, `🍗`, `🍿`, `🍰`  
+**Example**: `!text-flavor devolve`
 > **Devolve**  
 > 2 Mana Shaman Spell  
 > **Text**  
@@ -35,58 +32,87 @@ To use an add-on, after the card name, add a question mark `?` followed by the a
 > **Flavor**  
 > Ragnaros looked down. He looked like some kind of War Golem. "WHAT HAVE YOU DONE TO ME," he yelled. But all that came out was a deep grinding sound. He began to cry.
 
-### Art
+## card:image
 
-`::raza?art::`
+Displays card image.
 
+**Format**: `!image <name>`  
+**Aliases**: `img`, `i`, `📷`, `📸`  
+**Example**: `!image firey war axe`  
+http://media.services.zam.com/v1/media/byName/hs/cards/enus/CS2_106.png  
+![](http://media.services.zam.com/v1/media/byName/hs/cards/enus/CS2_106.png)
+
+## card:image-gold
+
+Displays golden card image.
+
+**Format**: `!image-gold <name>`  
+**Aliases**: `gold-image`, `gold`, `g`, `👑`, `💰`  
+**Example**: `!image-gold twisting nether`
+http://media.services.zam.com/v1/media/byName/hs/cards/enus/animated/EX1_312_premium.gif  
+![](http://media.services.zam.com/v1/media/byName/hs/cards/enus/animated/EX1_312_premium.gif)
+
+## card:image-art
+
+Displays the artist and full art from the card.
+
+**Format**: `!image-art <name>`  
+**Aliases**: `art-image`, `art`, `a`, `🖼`, `🎨`  
+**Example**: `!image-art raza`
 > **Raza the Chained**  
-> 5 Mana 5/5 Priest Minion  
-> **Text**  
-> [x] Battlecry: If your deck has no duplicates, your Hero Power costs (0) this game.  
+> **Artist**  
+> James Ryman  
 > ![](https://art.hearthstonejson.com/v1/512x/CFM_020.jpg)
 
-### Image
+## card:sound
 
-`::firey win axe?image::`
+Plays card sound in your voice channel.
 
-> ![](http://media.services.zam.com/v1/media/byName/hs/cards/enus/CS2_106.png)
+**Format**: `!sound [kind] <name>`  
+`[kind]`: One of `play`, `attack`, `death` or `trigger`. Optional.  
+**Aliases**: `snd`, `s`, `🔈`, `🔉`, `🔊`, `🎧`, `🎵`  
+**Examples**
+* `!sound tirion`
+* `!sound attack jaraxxus`
+* `!sound death refreshment vendor`
+* `!sound trigger antonaidas`
 
-### Gold
+## card:json
 
-`::twisting nether?gold::`
+Displays JSON inormation for card.
 
-> ![](http://media.services.zam.com/v1/media/byName/hs/cards/enus/animated/EX1_312_premium.gif)
+**Format**: `!json <name>`  
+**Aliases**: `dev`, `info`, `🗡`  
+**Example**: `!json jade golem`
+```json
+{
+  "artist": "Konstantin Turovec",
+  "attack": 1,
+  "cost": 1,
+  "dbfId": 42098,
+  "health": 1,
+  "id": "CFM_712_t01",
+  "mechanics": [
+    "JADE_GOLEM"
+  ],
+  "name": "Jade Golem",
+  "playerClass": "NEUTRAL",
+  "set": "GANGS",
+  "type": "MINION"
+}
+```
 
-### Sound
+---
 
-In addition to printing the default output, if you are in a voice channel, stonebot will join your voice channel and play the requested sound of the card.
-
-There are 3 variations to the sound addon:
-
-* `?sound` or `?sound-play`: The play sound
-* `?sound-attack`: The attack sound
-* `?sound-trigger`: The trigger sound
-* `?sound-death`: The death sound
-
-# [](#make-stonebot-your-friend)Make Stonebot Your Friend
+# Make Stonebot Your Friend
 
 [![Add Stonebot to your Server][discord-add-badge]][discord-oauth-link]
 
 [discord-oauth-link]: https://discordapp.com/oauth2/authorize?client_id=181041901225377793&scope=bot&permissions=19456
 [discord-add-badge]: https://img.shields.io/badge/Discord-Invite%20Stonebot-7289DA.svg?style=flat-square
 
-Want to add stonebot to your server? I run a public version that you can invite to your server with the button at the top of this section, or the following url: [https://discordapp.com/oauth2/authorize?client_id=181041901225377793&scope=bot&permissions=19456](https://discordapp.com/oauth2/authorize?client_id=181041901225377793&scope=bot&permissions=19456)
-
-You can also run your own version with docker, using the information below.
-
-# [](#make-stonebot-your-friend)Make Stonebot Your Friend
-
-[![Add Stonebot to your Server][discord-add-badge]][discord-oauth-link]
-
-[discord-oauth-link]: https://discordapp.com/oauth2/authorize?client_id=181041901225377793&scope=bot&permissions=19456
-[discord-add-badge]: https://img.shields.io/badge/Discord-Invite%20Stonebot-7289DA.svg?style=flat-square
-
-Want to add stonebot to your server? I run a public version that you can invite to your server with the button at the top of this section, or the following url: [https://discordapp.com/oauth2/authorize?client_id=181041901225377793&scope=bot&permissions=19456](https://discordapp.com/oauth2/authorize?client_id=181041901225377793&scope=bot&permissions=19456)
+Want to add stonebot to your server? I run a public version that you can invite to your server with the button at the top of this section, or the following url:  
+https://discordapp.com/oauth2/authorize?client_id=181041901225377793&scope=bot&permissions=19456
 
 You can also run your own version with docker, using the information below.
 
@@ -98,13 +124,16 @@ git clone https://github.com/tinnvec/stonebot.git
 cd stonebot
 
 # Rename sample config file
-cp src/config/config.sample.js src/config/config.js
+cp src/config.json.example src/config.json
 
-# Edit src/config/config.js with desired settings
+# Edit src/config.json with desired settings
 
-# Build and run docker image
+# Build Docker image
 docker build -t stonebot .
-docker run -d --name stonebot stonebot
+
+# Create data container for persistent settings
+docker run -v /data --name stonebot-data ubuntu:16.04
+
+# Run stonebot container
+docker run -d --restart on-failure --name stonebot --volumes-from stonebot-data stonebot
 ```
-
-

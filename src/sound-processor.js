@@ -1,9 +1,10 @@
 import ffmpeg from 'fluent-ffmpeg'
-import uniqueFilename from 'unique-filename'
 import os from 'os'
+import uniqueFilename from 'unique-filename'
+// import winston from 'winston'
 
 export default class SoundProcessor {
-    static getSoundUrl(filename) {
+    static getCardSoundUrl(filename) {
         // alternate: http://media.services.zam.com/v1/media/byName/hs/sounds/enus
         const urlBase = 'http://media-hearth.cursecdn.com/audio/card-sounds/sound'
         const extension = 'ogg'
@@ -18,7 +19,7 @@ export default class SoundProcessor {
             cmd.on('end', () => { resolve(filename) })
 
             sounds.forEach(sound => {
-                cmd.input(this.getSoundUrl(sound.name))
+                cmd.input(this.getCardSoundUrl(sound.name))
                 cmd.inputOption(`-itsoffset ${sound.delay}`)
             })
             cmd.complexFilter([{

@@ -47,8 +47,10 @@ jspm_packages
 .yarn-integrity
 
 # Additional directories
-tmp
 bin
 
 # Config files
-src/config/config.js
+src/config.json
+
+# Database
+*.sqlite*

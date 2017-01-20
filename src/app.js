@@ -1,26 +1,48 @@
-import Discord from 'discord.js'
+import Commando from 'discord.js-commando'
 
-import messageHandler from './handlers/message-handler'
-import config from './config/config'
+import path from 'path'
+import sqlite from 'sqlite'
+import winston from 'winston'
 
-const client = new Discord.Client()
+import config from './config.json'
 
-if (config.logLevel > 1) { client.on('debug', console.info) }
-if (config.logLevel > 0) { client.on('warn', console.warn) }
-client.on('error', console.error)
+winston.remove(winston.transports.Console)
+winston.add(winston.transports.Console, { level: config.logLevel, colorize: true })
 
-client.on('guildCreate', guild => { console.log(`Joined Guild: ${guild.name}`) })
-client.on('guildDelete', guild => { console.log(`Left Guild: ${guild.name}`) })
+const client = new Commando.Client({
+    owner: config.owner,
+    commandPrefix: config.prefix
+})
 
-client.on('reconnecting', () => { console.log('Reconnecting...')})
-client.on('disconnect', event => { console.log(`Disconnected: ${event.reason}`)} )
+client.on('debug', winston.debug)
+client.on('warn', winston.warn)
+client.on('error', winston.error)
+
+client.on('guildCreate', guild => { winston.info(`Joined Guild: ${guild.name}.`) })
+client.on('guildDelete', guild => { winston.info(`Departed Guild: ${guild.name}.`) })
+
+client.on('disconnect', event => { winston.warn(`Disconnected [${event.code}]: ${event.reason || 'Unknown reason'}`)} )
+client.on('reconnecting', () => { winston.verbose('Reconnecting...')})
+
 
 client.on('ready', () => {
-    let guilds = client.guilds.map(guild => { return guild.name })
-    console.log(`Current Guilds: ${guilds.join(', ')}`)
+    winston.info('Client Ready.')
+    winston.verbose(`Current Guilds (${client.guilds.size}): ${client.guilds.map(guild => { return guild.name }).join('; ')}.`)
     client.user.setGame('Hearthstone')
 })
 
-client.on('message', messageHandler)
+client.setProvider(
+    sqlite.open('/data/settings.sqlite3')
+        .then(db => new Commando.SQLiteProvider(db))
+).catch(winston.error)
+
+client.registry
+    .registerDefaultTypes()
+    .registerGroups([
+        ['card', 'Card Information']
+    ])
+    .registerDefaultGroups()
+    .registerCommandsIn(path.join(__dirname, 'commands'))
+    .registerDefaultCommands({ eval_: false, commandState: false })
 
 client.login(config.token)
