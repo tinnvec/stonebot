@@ -25,11 +25,11 @@ module.exports = class TextFlavorCommand extends Command {
         if (!msg.channel.typing) { msg.channel.startTyping() }
         const card = await Card.findByName(args.name).catch(winston.error)
         const embed = new Discord.RichEmbed()
-            .setColor(card.getClassColor())
+            .setColor(card.classColor)
             .setTitle(card.name)
-            .setDescription(card.getOneLineDescription())
-        if (card.getDisplayText()) { embed.addField('Text', card.getDisplayText()) }
-        if (card.flavor) { embed.addField('Flavor', card.flavor) }
+            .setDescription(card.description)
+            .addField('Text', card.text)
+            .addField('Flavor', card.flavor)
         if (msg.channel.typing) { msg.channel.stopTyping() }
         return msg.embed(embed)
     }

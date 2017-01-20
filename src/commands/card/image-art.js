@@ -23,13 +23,19 @@ module.exports = class ImageArtCommand extends Command {
 
     async run(msg, args) {
         if (!msg.channel.typing) { msg.channel.startTyping() }
-        const embed = new Discord.RichEmbed()
-            .setColor(card.getClassColor())
-            .setTitle(card.name)
-            .setImage(card.getImageUrl('art'))
-        if (card.artist) { embed.addField('Artist', card.artist) }
-        if (msg.channel.typing) { msg.channel.stopTyping() }
-        return msg.embed(embed)
         const card = await Card.findByName(args.name).catch(winston.error)
+        card.getImageUrl('art', imgUrl => {
+            if (!imgUrl) {
+                if (msg.channel.typing) { msg.channel.stopTyping() }
+                return msg.reply(`sorry, I couldn't find the art for ${card.name}`)
+            }
+            const embed = new Discord.RichEmbed()
+                .setColor(card.classColor)
+                .setTitle(card.name)
+                .setImage(imgUrl)
+                .addField('Artist', card.artist)
+            if (msg.channel.typing) { msg.channel.stopTyping() }
+            return msg.embed(embed)
+        })
     }
 }
