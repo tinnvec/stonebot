@@ -75,6 +75,31 @@ Plays card sound in your current voice channel.
 * `!sound death refreshment vendor`
 * `!sound trigger antonaidas`
 
+### card:json
+
+Displays JSON inormation for card.
+
+**Format**: `!json <name>`  
+**Aliases**: `dev`, `info`, `🗡`  
+**Example**: `!json jade golem`
+```json
+{
+  "artist": "Konstantin Turovec",
+  "attack": 1,
+  "cost": 1,
+  "dbfId": 42098,
+  "health": 1,
+  "id": "CFM_712_t01",
+  "mechanics": [
+    "JADE_GOLEM"
+  ],
+  "name": "Jade Golem",
+  "playerClass": "NEUTRAL",
+  "set": "GANGS",
+  "type": "MINION"
+}
+```
+
 # Make Stonebot Your Friend
 
 [![Add Stonebot to your Server][discord-add-badge]][discord-oauth-link]

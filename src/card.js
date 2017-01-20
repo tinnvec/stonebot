@@ -22,6 +22,8 @@ const CLASS_COLORS = { // RGB
 
 export default class Card {
     constructor(obj) {
+        this.json = obj
+
         // Identifiers
         this.id = obj.id
         // this.dbfId = obj.dbfId
@@ -39,10 +41,11 @@ export default class Card {
         this._artist = obj.artist
         // this.collectible = obj.collectible
         // this.rarity = obj.rarity
+        // this.set = obj.set
         // this.multiClassGroup = obj.multiClassGroup
         // this.classes = obj.classes
         // this.faction = obj.faction
-        // this.set = obj.set
+        
 
         // Texts
         this._text = obj.text
