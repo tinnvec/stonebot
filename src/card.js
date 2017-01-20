@@ -23,8 +23,8 @@ const CLASS_COLORS = { // RGB
 export default class Card {
     constructor(obj) {
         // Identifiers
-        // this.dbfId = obj.dbfId
         this.id = obj.id
+        // this.dbfId = obj.dbfId
 
         // Stats
         this.cost = obj.cost
@@ -61,18 +61,18 @@ export default class Card {
 
     get artist() {
         if (this._artist) { return this._artist }
-        return '_NONE_'
+        return '_[unknown]_'
     }
 
     get text() {
         if (this._collectionText) { return toMarkdown(this._collectionText) }
         if (this._text) { return toMarkdown(this._text) }
-        return '_NONE_'
+        return '_[blank]_'
     }
 
     get flavor() {
         if (this._flavor) { return toMarkdown(this._flavor) }
-        return '_NONE_'
+        return '_[blank]_'
     }
 
     get classColor() {
