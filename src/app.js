@@ -1,37 +1,40 @@
 import Commando from 'discord.js-commando'
+
 import path from 'path'
 import sqlite from 'sqlite'
+import winston from 'winston'
+
 import config from './config.json'
+
+winston.remove(winston.transports.Console)
+winston.add(winston.transports.Console, { level: config.logLevel, colorize: true })
 
 const client = new Commando.Client({
     owner: config.owner,
     commandPrefix: config.prefix
 })
 
-if (config.logLevel > 1) {
-    client.on('debug', console.info)
-    client.on('guildCreate', guild => { console.info(`Joined Guild: ${guild.name}.`) })
-    client.on('guildDelete', guild => { console.info(`Left Guild: ${guild.name}.`) })
-}
-if (config.logLevel > 0) {
-    client.on('warn', console.warn)
-    client.on('disconnect', event => { console.warn(`Disconnected[${event.code}]: ${event.reason}`)} )
-    client.on('reconnecting', () => { console.warn('Reconnecting...')})
-}
-client.on('error', console.error)
+client.on('debug', winston.debug)
+client.on('warn', winston.warn)
+client.on('error', winston.error)
+
+client.on('guildCreate', guild => { winston.info(`Joined Guild: ${guild.name}.`) })
+client.on('guildDelete', guild => { winston.info(`Departed Guild: ${guild.name}.`) })
+
+client.on('disconnect', event => { winston.warn(`Disconnected [${event.code}]: ${event.reason || 'Unknown reason'}`)} )
+client.on('reconnecting', () => { winston.warn('Reconnecting...')})
+
 
 client.on('ready', () => {
-    if (config.logLevel > 1) {
-        console.info('Client Ready.')
-        console.info(`Current Guilds(${client.guilds.size}): ${client.guilds.map(guild => { return guild.name }).join('; ')}.`)
-    }
+    winston.info('Client Ready.')
+    winston.verbose(`Current Guilds (${client.guilds.size}): ${client.guilds.map(guild => { return guild.name }).join('; ')}.`)
     client.user.setGame('Hearthstone')
 })
 
 client.setProvider(
     sqlite.open('/data/settings.sqlite3')
         .then(db => new Commando.SQLiteProvider(db))
-).catch(console.error)
+).catch(winston.error)
 
 client.registry
     .registerDefaultTypes()

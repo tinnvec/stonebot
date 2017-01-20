@@ -1,6 +1,8 @@
-import Discord from 'discord.js'
+import Card from '../../card'
 import { Command } from 'discord.js-commando'
-import Card from '../../card/card'
+import Discord from 'discord.js'
+
+import winston from 'winston'
 
 module.exports = class TextFlavorCommand extends Command {
     constructor(client) {
@@ -22,13 +24,13 @@ module.exports = class TextFlavorCommand extends Command {
 
     async run(msg, args) {
         if (!msg.channel.typing) { msg.channel.startTyping() }
-        const card = await Card.findByName(args.name).catch(console.error)
+        const card = await Card.findByName(args.name).catch(winston.error)
         const embed = new Discord.RichEmbed()
-            .setColor(card.getClassColor())
+            .setColor(card.classColor)
             .setTitle(card.name)
-            .setDescription(card.getOneLineDescription())
-        if (card.getDisplayText()) { embed.addField('Text', card.getDisplayText()) }
-        if (card.flavor) { embed.addField('Flavor', card.flavor) }
+            .setDescription(card.description)
+            .addField('Text', card.text)
+            .addField('Flavor', card.flavor)
         if (msg.channel.typing) { msg.channel.stopTyping() }
         return msg.embed(embed)
     }

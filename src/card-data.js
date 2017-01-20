@@ -1,6 +1,8 @@
 import Fuse from 'fuse.js'
 import HearthstoneJSON from 'hearthstonejson'
 
+import winston from 'winston'
+
 export default class CardData {
     static getAll() {
         const hsjson = new HearthstoneJSON()
@@ -17,7 +19,7 @@ export default class CardData {
             uncollectibleOnly = true
         }
         if (!Array.isArray(keys) || keys.length < 1) { keys = ['name'] }
-        const allCards = await this.getAll().catch(console.error)
+        const allCards = await this.getAll().catch(winston.error)
         const uncollectibleFuse = new Fuse(
             allCards.filter(card => { return !card.collectible }),
             { keys: keys, include: ['score'] }
