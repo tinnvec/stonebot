@@ -30,6 +30,6 @@ module.exports = class JSONCommand extends Command {
         result += `${JSON.stringify(card.json, null, '  ')}\n`
         result += '```'
         if (msg.channel.typing) { msg.channel.stopTyping() }
-        return msg.say(result)
+        return msg.say(result).catch(winston.error)
     }
 }

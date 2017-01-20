@@ -56,12 +56,12 @@ module.exports = class SoundCommand extends Command {
         const soundFilenames = card.getSoundFilenames(args.kind)
         if (!soundFilenames) {
             if (msg.channel.typing) { msg.channel.stopTyping() }
-            return msg.reply(`sorry, I don't know the ${args.kind} sound for ${card.name}.`)
+            return msg.reply(`sorry, I don't know the ${args.kind} sound for ${card.name}.`).catch(winston.error)
         }
         this.queue.push({ message: msg, soundFilenames: soundFilenames })
         if (this.queue.length === 1) { this.handleSound().catch(winston.error) }
         if (msg.channel.typing) { msg.channel.stopTyping() }
-        return msg.reply(`I'll join your voice channel and play the ${args.kind} sound for ${card.name} in a moment.`)
+        return msg.reply(`I'll join your voice channel and play the ${args.kind} sound for ${card.name} in a moment.`).catch(winston.error)
     }
 
     async handleSound() {
@@ -73,7 +73,7 @@ module.exports = class SoundCommand extends Command {
             this.queue.shift()
             fs.unlink(file, err => { if (err) { winston.error(err) } })
             if (message.member.voiceChannel) { message.member.voiceChannel.leave() }
-            message.reply(`sorry, there was an error joining your voice channel, ${connection || 'unkown'}`)
+            message.reply(`sorry, there was an error joining your voice channel, ${connection || 'unkown'}`).catch(winston.error)
             if (this.queue.length > 0) { this.handleSound() }
             return
         }

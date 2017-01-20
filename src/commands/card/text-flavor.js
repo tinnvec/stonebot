@@ -33,6 +33,6 @@ module.exports = class TextFlavorCommand extends Command {
             .addField('Text', card.text)
             .addField('Flavor', card.flavor)
         if (msg.channel.typing) { msg.channel.stopTyping() }
-        return msg.embed(embed)
+        return msg.embed(embed).catch(winston.error)
     }
 }

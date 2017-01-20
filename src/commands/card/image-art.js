@@ -29,7 +29,7 @@ module.exports = class ImageArtCommand extends Command {
         card.getImageUrl('art', imgUrl => {
             if (!imgUrl) {
                 if (msg.channel.typing) { msg.channel.stopTyping() }
-                return msg.reply(`sorry, I couldn't find the art for ${card.name}`)
+                return msg.reply(`sorry, I couldn't find the art for ${card.name}`).catch(winston.error)
             }
             const embed = new Discord.RichEmbed()
                 .setColor(card.classColor)
@@ -37,7 +37,7 @@ module.exports = class ImageArtCommand extends Command {
                 .setImage(imgUrl)
                 .addField('Artist', card.artist)
             if (msg.channel.typing) { msg.channel.stopTyping() }
-            return msg.embed(embed)
+            return msg.embed(embed).catch(winston.error)
         })
     }
 }

@@ -27,8 +27,8 @@ module.exports = class ImageCommand extends Command {
         const card = await Card.findByName(args.name).catch(winston.error)
         card.getImageUrl('image', imgUrl => {
             if (msg.channel.typing) { msg.channel.stopTyping() }
-            if (!imgUrl) { return msg.reply(`sorry, I couldn't find an image for ${card.name}`) }
-            return msg.say(imgUrl)
+            if (!imgUrl) { return msg.reply(`sorry, I couldn't find an image for ${card.name}`).catch(winston.error) }
+            return msg.say(imgUrl).catch(winston.error)
         })
     }
 }

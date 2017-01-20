@@ -32,6 +32,6 @@ module.exports = class TextCommand extends Command {
             .setDescription(card.description)
             .addField('Text', card.text)
         if (msg.channel.typing) { msg.channel.stopTyping() }
-        return msg.embed(embed)
+        return msg.embed(embed).catch(winston.error)
     }
 }

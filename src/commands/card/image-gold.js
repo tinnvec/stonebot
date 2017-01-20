@@ -28,7 +28,7 @@ module.exports = class ImageGoldCommand extends Command {
         card.getImageUrl('gold', imgUrl => {
             if (msg.channel.typing) { msg.channel.stopTyping() }
             if (!imgUrl) { return msg.reply(`sorry, I couldn't find a gold image for ${card.name}`) }
-            return msg.say(imgUrl)
+            return msg.say(imgUrl).catch(winston.error)
         })
     }
 }
