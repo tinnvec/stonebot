@@ -23,10 +23,11 @@ module.exports = class ImageCommand extends Command {
 
     async run(msg, args) {
         if (!msg.channel.typing) { msg.channel.startTyping() }
-        const embed = new Discord.RichEmbed()
-            .setImage(card.getImageUrl())
-        if (msg.channel.typing) { msg.channel.stopTyping() }
-        return msg.embed(embed)
         const card = await Card.findByName(args.name).catch(winston.error)
+        card.getImageUrl('image', imgUrl => {
+            if (msg.channel.typing) { msg.channel.stopTyping() }
+            if (!imgUrl) { return msg.reply(`sorry, I couldn't find an image for ${card.name}`) }
+            return msg.say(imgUrl)
+        })
     }
 }
