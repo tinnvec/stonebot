@@ -102,8 +102,8 @@ cp src/config.json.example src/config.json
 docker build -t stonebot .
 
 # Create data container for persistent settings
-docker run -v /data --name stonestore ubuntu:16.04
+docker run -v /data --name stonebot-data ubuntu:16.04
 
 # Run stonebot container
-docker run -d --name stonebot --volumes-from stonestore --restart on-failure stonebot
+docker run -d --restart on-failure --name stonebot --volumes-from stonebot-data stonebot
 ```
