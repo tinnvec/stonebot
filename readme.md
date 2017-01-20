@@ -13,6 +13,7 @@ Displays card text.
 **Format**: `!text <name>`  
 **Aliases**: `card`, `txt`, `t`, `c`, `🎴`, `🃏`, `📝`, `📜`, `📃`  
 **Example**: `!text frostbolt`
+
 > **Frostbolt**  
 > 2 Mana Mage Spell  
 > **Text**  
@@ -25,6 +26,7 @@ Displays card text and flavor text.
 **Format**: `!text-flavor <name>`  
 **Aliases**: `flavor-text`, `flavor`, `f`, `🥓`, `🍗`, `🍿`, `🍰`  
 **Example**: `!text-flavor devolve`
+
 > **Devolve**  
 > 2 Mana Shaman Spell  
 > **Text**  
@@ -38,7 +40,8 @@ Displays card image.
 
 **Format**: `!image <name>`  
 **Aliases**: `img`, `i`, `📷`, `📸`  
-**Example**: `!image firey war axe`  
+**Example**: `!image firey war axe`
+
 http://media.services.zam.com/v1/media/byName/hs/cards/enus/CS2_106.png  
 ![](http://media.services.zam.com/v1/media/byName/hs/cards/enus/CS2_106.png)
 
@@ -49,6 +52,7 @@ Displays golden card image.
 **Format**: `!image-gold <name>`  
 **Aliases**: `gold-image`, `gold`, `g`, `👑`, `💰`  
 **Example**: `!image-gold twisting nether`
+
 http://media.services.zam.com/v1/media/byName/hs/cards/enus/animated/EX1_312_premium.gif  
 ![](http://media.services.zam.com/v1/media/byName/hs/cards/enus/animated/EX1_312_premium.gif)
 
@@ -59,6 +63,7 @@ Displays the artist and full art from the card.
 **Format**: `!image-art <name>`  
 **Aliases**: `art-image`, `art`, `a`, `🖼`, `🎨`  
 **Example**: `!image-art raza`
+
 > **Raza the Chained**  
 > **Artist**  
 > James Ryman  
@@ -72,10 +77,11 @@ Plays card sound in your voice channel.
 `[kind]`: One of `play`, `attack`, `death` or `trigger`. Optional.  
 **Aliases**: `snd`, `s`, `🔈`, `🔉`, `🔊`, `🎧`, `🎵`  
 **Examples**
-* `!sound tirion`
-* `!sound attack jaraxxus`
-* `!sound death refreshment vendor`
-* `!sound trigger antonaidas`
+
+- `!sound tirion`
+- `!sound attack jaraxxus`
+- `!sound death refreshment vendor`
+- `!sound trigger antonaidas`
 
 ## card:json
 
@@ -84,6 +90,7 @@ Displays JSON inormation for card.
 **Format**: `!json <name>`  
 **Aliases**: `dev`, `info`, `🗡`  
 **Example**: `!json jade golem`
+
 ```json
 {
   "artist": "Konstantin Turovec",
