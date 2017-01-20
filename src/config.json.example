@@ -1,5 +1,6 @@
 {
     "token": "",
     "owner": "",
-    "logLevel": 0
+    "prefix": "!",
+    "logLevel": "verbose"
 }
