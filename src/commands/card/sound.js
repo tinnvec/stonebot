@@ -2,6 +2,7 @@ import Discord from 'discord.js'
 import { Command } from 'discord.js-commando'
 import Card from '../../card/card'
 import SoundProcessor from '../../sound/sound-processor'
+import winston from 'winston'
 
 const SOUND_KINDS = ['play', 'attack', 'trigger', 'death']
 
@@ -52,9 +53,9 @@ module.exports = class SoundCommand extends Command {
         }
         if (!args.name) {
             this.args[1].default = null
-            args.name = await this.args[1].obtain(msg).catch(console.error)
+            args.name = await this.args[1].obtain(msg).catch(winston.error)
         }
-        const card = await Card.findByName(args.name).catch(console.error)
+        const card = await Card.findByName(args.name).catch(winston.error)
         const soundFilenames = card.getSoundFilenames(args.kind)
         if (!soundFilenames) {
             if (msg.channel.typing) { msg.channel.stopTyping() }

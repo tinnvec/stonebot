@@ -1,6 +1,7 @@
 import Discord from 'discord.js'
 import { Command } from 'discord.js-commando'
 import Card from '../../card/card'
+import winston from 'winston'
 
 module.exports = class ImageCommand extends Command {
     constructor(client) {
@@ -22,10 +23,10 @@ module.exports = class ImageCommand extends Command {
 
     async run(msg, args) {
         if (!msg.channel.typing) { msg.channel.startTyping() }
-        const card = await Card.findByName(args.name).catch(console.error)
         const embed = new Discord.RichEmbed()
             .setImage(card.getImageUrl())
         if (msg.channel.typing) { msg.channel.stopTyping() }
         return msg.embed(embed)
+        const card = await Card.findByName(args.name).catch(winston.error)
     }
 }
