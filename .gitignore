@@ -52,3 +52,10 @@ bin
 
 # Config files
 src/config.json
+
+# Jekyll stuff
+_site/
+.sass-cache/
+.jekyll-metadata
+/.bundle/
+/vendor/
