@@ -15,7 +15,7 @@ module.exports = class SoundCommand extends Command {
             group: 'card',
             memberName: 'sound',
             guildOnly: true,
-            description: 'Plays card sound in your current voice channel.',
+            description: 'Plays card sound in your voice channel.',
             format:'[kind] <name>',
             examples: [
                 'sound tirion',
@@ -69,11 +69,11 @@ module.exports = class SoundCommand extends Command {
         const soundFilenames = this.queue[0].soundFilenames
         const file = await SoundProcessor.mergeSounds(soundFilenames).catch(winston.error)
         const connection = await this.joinVoiceChannel(message.member.voiceChannel).catch(winston.error)
-        if (!connection) {
+        if (!connection || typeof connection === 'string') {
             this.queue.shift()
             fs.unlink(file, err => { if (err) { winston.error(err) } })
             if (message.member.voiceChannel) { message.member.voiceChannel.leave() }
-            message.reply('sorry, there was an error joining your voice channel.')
+            message.reply(`sorry, there was an error joining your voice channel, ${connection || 'unkown'}`)
             if (this.queue.length > 0) { this.handleSound() }
             return
         }
@@ -90,12 +90,9 @@ module.exports = class SoundCommand extends Command {
     }
 
     async joinVoiceChannel(voiceChannel) {
-        if (!voiceChannel || voiceChannel.type !== 'voice') { return null }
+        if (!voiceChannel || voiceChannel.type !== 'voice') { return 'you\'re not in one' }
         let connection = this.client.voiceConnections.find(conn => conn.channel === voiceChannel)
         if (connection) { return connection }
-        return await voiceChannel.join().catch(err => {
-            winston.error(err)
-            return null
-        })
+        return await voiceChannel.join().catch(err => { return err.message.replace('You', 'I') })
     }
 }
