@@ -22,7 +22,7 @@ client.on('guildCreate', guild => { winston.info(`Joined Guild: ${guild.name}.`)
 client.on('guildDelete', guild => { winston.info(`Departed Guild: ${guild.name}.`) })
 
 client.on('disconnect', event => { winston.warn(`Disconnected [${event.code}]: ${event.reason || 'Unknown reason'}`)} )
-client.on('reconnecting', () => { winston.warn('Reconnecting...')})
+client.on('reconnecting', () => { winston.verbose('Reconnecting...')})
 
 
 client.on('ready', () => {
