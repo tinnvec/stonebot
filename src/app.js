@@ -7,7 +7,7 @@ import winston from 'winston'
 import config from './config.json'
 
 winston.remove(winston.transports.Console)
-winston.add(winston.transports.Console, { level: config.logLevel, colorize: true })
+winston.add(winston.transports.Console, { level: config.logLevel })
 
 const client = new Commando.Client({
     owner: config.owner,
