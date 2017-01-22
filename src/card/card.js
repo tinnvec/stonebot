@@ -1,6 +1,7 @@
 import FileManager from '../file-manager'
 import Fuse from 'fuse.js'
 import HearthstoneJSON from 'hearthstonejson'
+import SoundProcessor from '../sound-processor'
 
 import fs from 'fs'
 import toMarkdown from 'to-markdown'
@@ -127,11 +128,36 @@ export default class Card {
         return imgUrl
     }
 
-    getSoundFilenames(kind) {
+    async getSound(soundKind) {
+        let filename = this.getSoundFilename(soundKind)
+        if (fs.existsSync(filename)) {
+            winston.debug('File exits, using it.')
+            return filename
+        }
+        const soundParts = this.getSoundParts(soundKind)
+        if (!soundParts) { return null }
+        winston.debug('File does not exist, creating it.')
+        return await SoundProcessor.mergeSounds(soundParts, filename).catch(winston.error)
+    }
+
+    getSoundFilename(soundKind) {
+        const dataPath = '/data/sounds'
+        const extension = 'ogg'
+        return `${dataPath}/${this.id}_${soundKind}.${extension}`
+    }
+
+    getSoundParts(soundKind) {
         if (!cardSoundsById[this.id]) { return null }
-        if (!kind) { kind = 'play' }
-        if (!cardSoundsById[this.id][kind] || cardSoundsById[this.id][kind].length < 1) { return null }
-        return cardSoundsById[this.id][kind]
+        if (!soundKind) { soundKind = 'play' }
+        if (!cardSoundsById[this.id][soundKind] || cardSoundsById[this.id][soundKind].length < 1) { return null }
+        return cardSoundsById[this.id][soundKind].map(s => { return { name: this.getSoundUrl(s.name), delay: s.delay} })
+    }
+
+    getSoundUrl(filename) {
+        // alternate: http://media.services.zam.com/v1/media/byName/hs/sounds/enus
+        const urlBase = 'http://media-hearth.cursecdn.com/audio/card-sounds/sound'
+        const extension = 'ogg'
+        return `${urlBase}/${filename}.${extension}`
     }
 
     static getAll() {

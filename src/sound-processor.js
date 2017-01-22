@@ -1,32 +1,27 @@
 import ffmpeg from 'fluent-ffmpeg'
-import os from 'os'
-import uniqueFilename from 'unique-filename'
+import mkdirp from 'mkdirp'
+import path from 'path'
 // import winston from 'winston'
 
 export default class SoundProcessor {
-    static getCardSoundUrl(filename) {
-        // alternate: http://media.services.zam.com/v1/media/byName/hs/sounds/enus
-        const urlBase = 'http://media-hearth.cursecdn.com/audio/card-sounds/sound'
-        const extension = 'ogg'
-        return `${urlBase}/${filename}.${extension}`
-    }
-
-    static mergeSounds(sounds) {
-        const filename = `${uniqueFilename(os.tmpdir())}.ogg`
+    static mergeSounds(sounds, filename) {
         const cmd = ffmpeg()
         return new Promise((resolve, reject) => {
-            cmd.on('error', err => { reject(err) })
-            cmd.on('end', () => { resolve(filename) })
+            mkdirp(path.dirname(filename), error => {
+                if (error) { return reject(error) }
+                cmd.on('error', err => { reject(err) })
+                cmd.on('end', () => { resolve(filename) })
 
-            sounds.forEach(sound => {
-                cmd.input(this.getCardSoundUrl(sound.name))
-                cmd.inputOption(`-itsoffset ${sound.delay}`)
+                sounds.forEach(sound => {
+                    cmd.input(sound.name)
+                    cmd.inputOption(`-itsoffset ${sound.delay}`)
+                })
+                cmd.complexFilter([{
+                    filter: 'amix',
+                    options: { inputs: sounds.length }
+                }])
+                cmd.audioCodec('libvorbis').save(filename)
             })
-            cmd.complexFilter([{
-                filter: 'amix',
-                options: { inputs: sounds.length }
-            }])
-            cmd.audioCodec('libvorbis').save(filename)
         })
     }
 }
