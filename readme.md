@@ -109,6 +109,43 @@ Displays JSON inormation for card.
 }
 ```
 
+# Community
+
+## community:bnet-list
+
+Lists community member battle.net ids.
+
+**Format**: `!bnet-list <server>`  
+**Alias**: `bnet`  
+**Examples**
+
+- `!bnet-list americas`
+- `!bnet-list europe`
+- `!bnet-list asia`
+
+## community:bnet-add
+
+Adds your battle.net id to the community list.
+
+**Format**: `!bnet-add <server> <bnetid>`  
+**Examples**
+
+- `bnet-add americas user#1234`
+- `bnet-add europe user#1234`
+- `bnet-add asia user#1234`
+
+## community:bnet-remove
+
+Removes your battle.net id from the community list.
+
+**Format**: `!bnet-remove <server>`  
+**Alias**: `bnet-rm`
+**Examples**
+
+- `!bnet-remove americas`
+- `!bnet-remove europe`
+- `!bnet-remove asia`
+
 # Utility
 
 ## util:help
