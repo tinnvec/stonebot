@@ -20,10 +20,8 @@ module.exports = class ImageGoldCommand extends Command {
     async run(msg, args) {
         if (!msg.channel.typing) { msg.channel.startTyping() }
         const card = await Card.findByName(args.cardName).catch(winston.error)
-        card.getImageUrl('gold', imgUrl => {
-            if (msg.channel.typing) { msg.channel.stopTyping() }
-            if (!imgUrl) { return msg.reply(`sorry, I couldn't find a gold image for ${card.name}`) }
-            return msg.say(imgUrl).catch(winston.error)
-        })
+        const filename = await card.getImage('gold').catch(winston.error)
+        if (msg.channel.typing) { msg.channel.stopTyping() }
+        return msg.say('', { file: { attachment: filename } }).catch(winston.error)
     }
 }
