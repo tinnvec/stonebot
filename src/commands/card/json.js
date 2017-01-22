@@ -1,6 +1,5 @@
 import Card from '../../card'
 import { Command } from 'discord.js-commando'
-import Discord from 'discord.js'
 
 import winston from 'winston'
 

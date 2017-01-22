@@ -12,10 +12,7 @@ String.prototype.capitalizeFirstLetter = function() { return this.charAt(0).toUp
 winston.remove(winston.transports.Console)
 winston.add(winston.transports.Console, { level: config.logLevel })
 
-const client = new Commando.Client({
-    owner: config.owner,
-    commandPrefix: config.prefix
-})
+const client = new Commando.Client({ owner: config.owner, commandPrefix: config.prefix })
 
 client.on('debug', winston.debug)
 client.on('warn', winston.warn)
@@ -36,8 +33,7 @@ client.on('ready', async () => {
 })
 
 client.setProvider(
-    sqlite.open('/data/settings.sqlite3')
-        .then(db => new Commando.SQLiteProvider(db))
+    sqlite.open('/data/settings.sqlite3').then(db => new Commando.SQLiteProvider(db))
 ).catch(winston.error)
 
 client.registry
