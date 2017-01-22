@@ -1,9 +1,10 @@
+import FileManager from '../file-manager'
 import Fuse from 'fuse.js'
 import HearthstoneJSON from 'hearthstonejson'
+import SoundProcessor from '../sound-processor'
 
-import http from 'http'
+import fs from 'fs'
 import toMarkdown from 'to-markdown'
-import url from 'url'
 import winston from 'winston'
 
 import cardSoundsById from './card-sounds-by-id'
@@ -47,7 +48,6 @@ export default class Card {
         // this.classes = obj.classes
         // this.faction = obj.faction
         
-
         // Texts
         this._text = obj.text
         this._collectionText = obj.collectionText
@@ -92,40 +92,72 @@ export default class Card {
         return desc
     }
 
-    getSoundFilenames(kind) {
-        if (!cardSoundsById[this.id]) { return null }
-        if (!kind) { kind = 'play' }
-        if (!cardSoundsById[this.id][kind] || cardSoundsById[this.id][kind].length < 1) { return null }
-        return cardSoundsById[this.id][kind]
+    async getImage(imageType) {
+        const filename = this.getImageFilename(imageType)
+        if (fs.existsSync(filename)) {
+            winston.debug('File exits, using it.')
+            return filename
+        }
+        winston.debug('File does not exist, downloading it.')
+        const res = await FileManager.downloadFile(this.getImageUrl(imageType), filename).catch(winston.error)
+        if (!res.startsWith('/data')) { return null }
+        return res
     }
 
-    getImageUrl(imgType, callback) {
-        const cardImgBaseUrl = 'http://media.services.zam.com/v1/media/byName/hs/cards/enus'
-        const artSize = 512 // or 256
-        const artImgBaseUrl = `http://art.hearthstonejson.com/v1/${artSize}x`
-        let imgUrl
-        if (!this.id) { return callback(null) }
-        switch(imgType) {
-        case 'gold':
-            imgUrl = `${cardImgBaseUrl}/animated/${this.id}_premium.gif`
-            break
-        case 'art':
-            imgUrl = `${artImgBaseUrl}/${this.id}.jpg`
-            break
-        default:
-            imgUrl = `${cardImgBaseUrl}/${this.id}.png`
+    getImageFilename(imageType) {
+        const dataPath = '/data/images'
+        let imageTypePath = ''
+        let imageExtension = 'png'
+        if (imageType === 'gold') {
+            imageTypePath = '/gold'
+            imageExtension = 'gif'
+        } else if (imageType === 'art') {
+            imageTypePath = '/art'
+            imageExtension = 'jpg'
         }
-        const req = http.request({
-            method: 'HEAD',
-            hostname: url.parse(imgUrl).hostname,
-            path: url.parse(imgUrl).pathname
-        })
-        req.on('response', res => {
-            if (res.statusCode !== 200) { return callback(null) }
-            return callback(imgUrl)
-        })
-        req.on('error', winston.error)
-        req.end()
+        return `${dataPath}${imageTypePath}/${this.id}.${imageExtension}`
+    }
+
+    getImageUrl(imgType) {
+        if (!this.id) { return null }
+        const cardImgBaseUrl = 'http://media.services.zam.com/v1/media/byName/hs/cards/enus'
+        const artImgBaseUrl = 'http://art.hearthstonejson.com/v1/512x'
+        let imgUrl = `${cardImgBaseUrl}/${this.id}.png`
+        if (imgType === 'gold') { imgUrl = `${cardImgBaseUrl}/animated/${this.id}_premium.gif` }
+        else if (imgType === 'art') { imgUrl = `${artImgBaseUrl}/${this.id}.jpg` }
+        return imgUrl
+    }
+
+    async getSound(soundKind) {
+        let filename = this.getSoundFilename(soundKind)
+        if (fs.existsSync(filename)) {
+            winston.debug('File exits, using it.')
+            return filename
+        }
+        const soundParts = this.getSoundParts(soundKind)
+        if (!soundParts) { return null }
+        winston.debug('File does not exist, creating it.')
+        return await SoundProcessor.mergeSounds(soundParts, filename).catch(winston.error)
+    }
+
+    getSoundFilename(soundKind) {
+        const dataPath = '/data/sounds'
+        const extension = 'ogg'
+        return `${dataPath}/${this.id}_${soundKind}.${extension}`
+    }
+
+    getSoundParts(soundKind) {
+        if (!cardSoundsById[this.id]) { return null }
+        if (!soundKind) { soundKind = 'play' }
+        if (!cardSoundsById[this.id][soundKind] || cardSoundsById[this.id][soundKind].length < 1) { return null }
+        return cardSoundsById[this.id][soundKind].map(s => { return { name: this.getSoundUrl(s.name), delay: s.delay} })
+    }
+
+    getSoundUrl(filename) {
+        // alternate: http://media.services.zam.com/v1/media/byName/hs/sounds/enus
+        const urlBase = 'http://media-hearth.cursecdn.com/audio/card-sounds/sound'
+        const extension = 'ogg'
+        return `${urlBase}/${filename}.${extension}`
     }
 
     static getAll() {

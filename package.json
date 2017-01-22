@@ -17,6 +17,8 @@
     "fluent-ffmpeg": "^2.1.0",
     "fuse.js": "^2.5.0",
     "hearthstonejson": "^0.2.1",
+    "image-downloader": "^2.0.3",
+    "mkdirp": "^0.5.1",
     "node-opus": "^0.2.4",
     "sqlite": "^2.2.4",
     "to-markdown": "^3.0.3",
