@@ -135,7 +135,3 @@ export default class Card {
         return new Card(await CardData.search(id, ['id']).catch(winston.error))
     }
 }
-
-String.prototype.capitalizeFirstLetter = function() {
-    return this.charAt(0).toUpperCase() + this.slice(1)
-}

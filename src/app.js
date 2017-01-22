@@ -7,6 +7,8 @@ import winston from 'winston'
 
 import config from './config.json'
 
+String.prototype.capitalizeFirstLetter = function() { return this.charAt(0).toUpperCase() + this.slice(1) }
+
 winston.remove(winston.transports.Console)
 winston.add(winston.transports.Console, { level: config.logLevel })
 
