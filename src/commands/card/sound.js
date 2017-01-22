@@ -3,12 +3,15 @@ import { Command } from 'discord.js-commando'
 import SoundProcessor from '../../sound-processor'
 
 import fs from 'fs'
+import { soundKind, cardName } from '../../command-arguments'
 import winston from 'winston'
 
 const SOUND_KINDS = ['play', 'attack', 'trigger', 'death']
 
 module.exports = class SoundCommand extends Command {
     constructor(client) {
+        let nameWithDefault = { default: '' }
+        Object.assign(nameWithDefault, cardName)
         super(client, {
             name: 'sound',
             aliases: ['snd', 's', '🔈', '🔉', '🔊', '🎧', '🎵'],
@@ -23,20 +26,7 @@ module.exports = class SoundCommand extends Command {
                 'sound death refreshment vendor',
                 'sound trigger antonaidas'
             ],
-            args: [
-                {
-                    key: 'kind',
-                    prompt: '',
-                    type: 'string',
-                    default: 'play'
-                },
-                {
-                    key: 'name',
-                    prompt: 'what card are you searching for?\n',
-                    type: 'string',
-                    default: ''
-                }
-            ]
+            args: [ soundKind, nameWithDefault ]
         })
 
         this.queue = []
@@ -44,24 +34,24 @@ module.exports = class SoundCommand extends Command {
 
     async run(msg, args) {
         if (!msg.channel.typing) { msg.channel.startTyping() }
-        if (!SOUND_KINDS.includes(args.kind)) {
-            args.name = `${args.kind} ${args.name}`.trim()
-            args.kind = 'play'
+        if (!SOUND_KINDS.includes(args.soundKind)) {
+            args.cardName = `${args.soundKind} ${args.cardName}`.trim()
+            args.soundKind = 'play'
         }
-        if (!args.name) {
+        if (!args.cardName) {
             this.args[1].default = null
-            args.name = await this.args[1].obtain(msg).catch(winston.error)
+            args.cardName = await this.args[1].obtain(msg).catch(winston.error)
         }
-        const card = await Card.findByName(args.name).catch(winston.error)
-        const soundFilenames = card.getSoundFilenames(args.kind)
+        const card = await Card.findByName(args.cardName).catch(winston.error)
+        const soundFilenames = card.getSoundFilenames(args.soundKind)
         if (!soundFilenames) {
             if (msg.channel.typing) { msg.channel.stopTyping() }
-            return msg.reply(`sorry, I don't know the ${args.kind} sound for ${card.name}.`).catch(winston.error)
+            return msg.reply(`sorry, I don't know the ${args.soundKind} sound for ${card.name}.`).catch(winston.error)
         }
         this.queue.push({ message: msg, soundFilenames: soundFilenames })
         if (this.queue.length === 1) { this.handleSound().catch(winston.error) }
         if (msg.channel.typing) { msg.channel.stopTyping() }
-        return msg.reply(`I'll join your voice channel and play the ${args.kind} sound for ${card.name} in a moment.`).catch(winston.error)
+        return msg.reply(`I'll join your voice channel and play the ${args.soundKind} sound for ${card.name} in a moment.`).catch(winston.error)
     }
 
     async handleSound() {

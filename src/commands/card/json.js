@@ -1,6 +1,7 @@
 import Card from '../../card/card'
 import { Command } from 'discord.js-commando'
 
+import { cardName } from '../../command-arguments'
 import winston from 'winston'
 
 module.exports = class JSONCommand extends Command {
@@ -12,19 +13,13 @@ module.exports = class JSONCommand extends Command {
             memberName: 'json',
             description: 'Displays JSON inormation for card.',
             examples: ['json jade golem'],
-            args: [
-                {
-                    key: 'name',
-                    prompt: 'what card are you searching for?\n',
-                    type: 'string'
-                }
-            ]
+            args: [ cardName ]
         })
     }
 
     async run(msg, args) {
         if (!msg.channel.typing) { msg.channel.startTyping() }
-        const card = await Card.findByName(args.name).catch(winston.error)
+        const card = await Card.findByName(args.cardName).catch(winston.error)
         let result = '```json\n'
         result += `${JSON.stringify(card.json, null, '  ')}\n`
         result += '```'
