@@ -4,16 +4,20 @@ import Villager from '../../community/villager'
 import { bnetServer } from '../../command-arguments'
 import winston from 'winston'
 
-module.exports = class BnetRemoveCommand extends Command {
+module.exports = class VillagerRemoveCommand extends Command {
     constructor(client) {
         super(client, {
-            name: 'bnet-remove',
-            aliases: ['bnet-rm'],
+            name: 'villager-remove',
+            aliases: [
+                'villager-rm', 'villagers-remove', 'villagers-rm', 'v-remove', 'v-rm', 'vr',
+                'bnet-remove', 'bnet-rm', 'b-remove', 'b-rm', 'br', '🏚'
+            ],
             group: 'community',
-            memberName: 'bnet-remove',
+            memberName: 'villager-remove',
             guildOnly: true,
             description: 'Removes your battle.net id from the community list.',
-            examples: ['bnet-remove americas', 'bnet-remove europe', 'bnet-remove asia'],
+            details: '`<bnetServer>` can be one of `americas`, `na`, `europe`, `eu`, `asia`.',
+            examples: ['villager-remove americas', 'villager-remove europe', 'villager-remove asia'],
             args: [ bnetServer ]
         })
     }
