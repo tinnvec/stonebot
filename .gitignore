@@ -56,6 +56,8 @@ src/config.json
 *.sqlite*
 
 # Jekyll stuff
-.bundle
-vendor/bundle
-_site
+_site/
+.sass-cache/
+.jekyll-metadata
+/.bundle/
+/vendor/
