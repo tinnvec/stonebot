@@ -17,7 +17,8 @@ module.exports = class SoundCommand extends Command {
             memberName: 'sound',
             guildOnly: true,
             description: 'Plays card sound in your voice channel.',
-            format:'[kind] <name>',
+            details: '`[soundKind]` can be one of `play`, `attack`, `death` or `trigger`. Optional.',
+            format:'[soundKind] <cardName>',
             examples: [
                 'sound tirion',
                 'sound attack jaraxxus',
@@ -26,7 +27,6 @@ module.exports = class SoundCommand extends Command {
             ],
             args: [ soundKind, nameWithDefault ]
         })
-
         this.queue = []
     }
 
