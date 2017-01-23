@@ -8,7 +8,7 @@ module.exports = class ImageGoldCommand extends Command {
     constructor(client) {
         super(client, {
             name: 'image-gold',
-            aliases: ['gold-image', 'gold', 'g', '👑', '💰'],
+            aliases: ['gold-image', 'gold', 'g', '👑'],
             group: 'card',
             memberName: 'image-gold',
             description: 'Displays golden card image.',
