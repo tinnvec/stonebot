@@ -160,7 +160,7 @@ Lists community members with the Hearhtstone Play a Friend (aka 80g) quest.
 `<bnetServer>` can be one of `americas`, `na`, `europe`, `eu`, `asia`.
 
 **Format**: `!quest-list <bnetServer>`  
-**Alises**: `quests`, `quests-list`, `q`, `80g-list`, `80g`, `💰`  
+**Aliases**: `quests`, `quests-list`, `q`, `80g-list`, `80g`, `💰`  
 **Examples**
 
 - `!quest-list americas`
@@ -175,7 +175,7 @@ Adds you to the list of community members with the Hearhtstone Play a Friend (ak
 `[bnetId]` is your battle.net id. Optional if you are already on the `villager-list` for `<bnetServer>`
 
 **Format**: `!quest-add <bnetServer> [bnetId]`  
-**Alises**: `quests-add`, `q-add`, `qa`, `80g-add`, `80ga`, `🤑`  
+**Aliases**: `quests-add`, `q-add`, `qa`, `80g-add`, `80ga`, `🤑`  
 **Examples**
 
 - `!quest-add americas user#1234`
@@ -189,7 +189,7 @@ Removes you from the list of community members with the Hearhtstone Play a Frien
 `<bnetServer>` can be one of `americas`, `na`, `europe`, `eu`, `asia`.
 
 **Format**: `!quest-remove <bnetServer>`  
-**Alises**: `quests-remove`, `quests-rm`, `quest-rm`, `q-rm`, `qr`, `80g-rm`, `80gr`, `💸`  
+**Aliases**: `quests-remove`, `quests-rm`, `quest-rm`, `q-rm`, `qr`, `80g-rm`, `80gr`, `💸`  
 **Examples**
 
 - `!quest-remove americas`
