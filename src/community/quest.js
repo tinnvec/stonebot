@@ -7,7 +7,7 @@ export default class Quest {
         let res = await this.find(guildId, userId, bnetServer).catch(winston.error)
         if (!res) {
             res = await Community.db
-                .run('INSERT INTO quests VALUES (?, ?, ?, ?, ?)', guildId, userId, bnetServer, bnetId, Math.floor(new Date() / 1000))
+                .run('INSERT INTO quests VALUES (?, ?, ?, ?, ?)', guildId, userId, bnetServer, bnetId, Math.floor((new Date()).getTime() / 1000))
                 .catch(winston.error)
             if (res && res.changes === 1) { return 'added you to the list.' }
         } else {
@@ -29,7 +29,7 @@ export default class Quest {
 
     static async update(guildId, userId, bnetServer, bnetId) {
         return await Community.db
-            .run('UPDATE quests SET bnetId = ?, createdAt = ? WHERE guildId = ? AND userId = ? AND bnetServer = ?', bnetId, Math.floor(new Date() / 1000), guildId, userId, bnetServer)
+            .run('UPDATE quests SET bnetId = ?, createdAt = ? WHERE guildId = ? AND userId = ? AND bnetServer = ?', bnetId, Math.floor((new Date()).getTime() / 1000), guildId, userId, bnetServer)
             .catch(winston.error)
     }
 

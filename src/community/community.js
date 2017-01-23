@@ -17,8 +17,7 @@ export default class Community {
     static async dropOldQuests() {
         winston.verbose('Auto-deleting quests that more than 1 day old.')
         const oneDayAgo = new Date()
-        oneDayAgo.setDate(oneDayAgo.getDate() + 1)
-        const oldestTimestamp = Math.floor(oneDayAgo / 1000)
-        await this.db.all('DELETE FROM quests WHERE createdAt < ?', oldestTimestamp)
+        oneDayAgo.setDate(oneDayAgo.getDate() - 1)
+        await this.db.run('DELETE FROM quests WHERE createdAt < ?', Math.floor(oneDayAgo.getTime() / 1000))
     }
 }
