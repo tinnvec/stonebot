@@ -54,3 +54,8 @@ src/config.json
 
 # Database
 *.sqlite*
+
+# Jekyll stuff
+.bundle
+vendor/bundle
+_site
