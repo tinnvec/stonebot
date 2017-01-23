@@ -11,14 +11,20 @@ export const soundKind = {
     default: 'play'
 }
 
+const bnetServerChoices = ['americas', 'na', 'europe', 'eu', 'asia']
 export const bnetServer = {
     key: 'bnetServer',
     prompt: 'which battle.net server do you play on?\n',
     type: 'string',
-    parse: value => { return value.toLowerCase() },
+    parse: value => {
+        value = value.toLowerCase()
+        if (value === 'na') { return 'americas' }
+        if (value === 'eu') { return 'europe'}
+        return value
+    },
     validate: value => {
-        if (['americas', 'europe', 'asia'].includes(value.toLowerCase())) { return true }
-        return 'please choose a server from `americas`, `europe`, `asia`.\n'
+        if (bnetServerChoices.includes(value.toLowerCase())) { return true }
+        return `please choose a server from \`${bnetServerChoices.join('`, `')}\`.\n`
     }
 }
 
