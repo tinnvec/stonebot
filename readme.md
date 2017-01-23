@@ -1,4 +1,12 @@
-Hearthstone Bot for Discord. Features card information and community features.
+# tl;dr
+
+Hearthstone Bot for Discord. Features commands for card information and community features.
+
+## Longer version
+
+Stonebot is a [node.js](https://nodejs.org/) [Discord](https://discordapp.com/) bot, built using with [discord.js](https://discord.js.org/) and [Commando](https://github.com/Gawdl3y/discord.js-commando). Hearthstone card information is obtained using the [HearthstoneJSON](http://hearthstonejson.com/) API. Sound processing is done with [FFmpeg](https://ffmpeg.org/) through the use of [node-fluent-ffmpeg](https://github.com/fluent-ffmpeg/node-fluent-ffmpeg).
+
+---
 
 # Commands
 
