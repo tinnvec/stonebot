@@ -11,7 +11,7 @@ export default class Community {
         await this.db
             .run('CREATE TABLE IF NOT EXISTS quests (guildId INTEGER, userId INTEGER, bnetServer TEXT, bnetId TEXT, createdAt INTEGER, PRIMARY KEY(guildId, userId, bnetServer))')
             .catch(winston.error)
-        setTimeout(async () => { await this.dropOldQuests() }, (10 * 60 * 1000))
+        setInterval(async () => { await this.dropOldQuests() }, (10 * 60 * 1000))
     }
 
     static async dropOldQuests() {
