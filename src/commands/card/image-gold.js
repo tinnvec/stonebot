@@ -1,34 +1,28 @@
-import Card from '../../card'
+import Card from '../../card/card'
 import { Command } from 'discord.js-commando'
 
+import { cardName } from '../../command-arguments'
 import winston from 'winston'
 
 module.exports = class ImageGoldCommand extends Command {
     constructor(client) {
         super(client, {
             name: 'image-gold',
-            aliases: ['gold-image', 'gold', 'g', '👑', '💰'],
+            aliases: ['gold-image', 'gold', 'g', '👑'],
             group: 'card',
             memberName: 'image-gold',
             description: 'Displays golden card image.',
             examples: ['image-gold twisting nether'],
-            args: [
-                {
-                    key: 'name',
-                    prompt: 'what card are you searching for?\n',
-                    type: 'string'
-                }
-            ]
+            args: [ cardName ]
         })
     }
 
     async run(msg, args) {
         if (!msg.channel.typing) { msg.channel.startTyping() }
-        const card = await Card.findByName(args.name).catch(winston.error)
-        card.getImageUrl('gold', imgUrl => {
-            if (msg.channel.typing) { msg.channel.stopTyping() }
-            if (!imgUrl) { return msg.reply(`sorry, I couldn't find a gold image for ${card.name}`) }
-            return msg.say(imgUrl).catch(winston.error)
-        })
+        const card = await Card.findByName(args.cardName).catch(winston.error)
+        const filename = await card.getImage('gold').catch(winston.error)
+        if (msg.channel.typing) { msg.channel.stopTyping() }
+        if (!filename) { return msg.reply(`sorry, there was a problem getting the golden image for ${card.name}`) }
+        return msg.say('', { file: { attachment: filename } }).catch(winston.error)
     }
 }
