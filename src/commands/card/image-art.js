@@ -23,6 +23,7 @@ module.exports = class ImageArtCommand extends Command {
         const filename = await card.getImage('art').catch(winston.error)
         let result = `**${card.name}**\n**Artist**: ${card.artist}`
         if (msg.channel.typing) { msg.channel.stopTyping() }
+        if (!filename) { return msg.reply(`sorry, there was a problem getting the art for ${card.name}`) }
         return msg.say(result, { file: { attachment: filename } }).catch(winston.error)
     }
 }

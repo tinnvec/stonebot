@@ -41,6 +41,11 @@ module.exports = class SoundCommand extends Command {
             args.cardName = await this.args[1].obtain(msg).catch(winston.error)
         }
         const card = await Card.findByName(args.cardName).catch(winston.error)
+        const sounds = card.getSoundParts(args.soundKind)
+        if (!sounds || sounds.length < 1) {
+            if (msg.channel.typing) { msg.channel.stopTyping() }
+            return msg.reply(`sorry, I don't know the ${args.soundKind} sound for ${card.name}.`).catch(winston.error)
+        }
         this.queue.push({ message: msg, card: card, soundKind: args.soundKind })
         if (this.queue.length === 1) { this.handleSound().catch(winston.error) }
         if (msg.channel.typing) { msg.channel.stopTyping() }

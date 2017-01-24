@@ -1,6 +1,7 @@
-import image_downloader from 'image-downloader'
+import fs from 'fs'
 import mkdirp from 'mkdirp'
 import path from 'path'
+import request from 'request'
 import winston from 'winston'
 
 export default class FileManager {
@@ -9,15 +10,25 @@ export default class FileManager {
             winston.debug(`Requesting file from ${uri}`)
             mkdirp(path.dirname(filename), error => {
                 if (error) { return reject(error) }
-                image_downloader({
-                    url: uri,
-                    dest: filename,
-                    done: (error, result) => {
-                        if (error) { return reject(error) }
-                        winston.debug(`Downloaded file to ${result}`)
-                        resolve(result)
-                    }
+
+                let requestClosedClean = false
+                let requestError = ''
+
+                const writeStream = fs.createWriteStream(filename)
+                writeStream.on('error', err => { fs.unlink(filename, reject.bind(null, err)) })
+                writeStream.on('finish', () => {
+                    if (requestClosedClean) { return resolve(filename) }
+                    fs.unlink(filename, reject.bind(null, requestError))
                 })
+
+                request.get(uri)
+                    .on('error', err => { requestError = err })
+                    .on('response', response => {
+                        if (response.statusCode === 200) { requestClosedClean = true }
+                        else { requestError = `${response.statusCode} - ${response.statusMessage}` }
+                    })
+                    .pipe(writeStream)
+                    .on('close', () => { requestClosedClean = true })
             })
         })
     }

@@ -22,6 +22,7 @@ module.exports = class ImageCommand extends Command {
         const card = await Card.findByName(args.cardName).catch(winston.error)
         const filename = await card.getImage().catch(winston.error)
         if (msg.channel.typing) { msg.channel.stopTyping() }
+        if (!filename) { return msg.reply(`sorry, there was a problem getting the image for ${card.name}`) }
         return msg.say('', { file: { attachment: filename } }).catch(winston.error)
     }
 }
