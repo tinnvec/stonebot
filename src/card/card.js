@@ -95,13 +95,13 @@ export default class Card {
     async getImage(imageType) {
         const filename = this.getImageFilename(imageType)
         if (fs.existsSync(filename)) {
-            winston.debug('File exits, using it.')
+            winston.debug('Image exits, using it.')
             return filename
         }
-        winston.debug('File does not exist, downloading it.')
+        winston.debug('Image does not exist, downloading it.')
         const res = await FileManager.downloadFile(this.getImageUrl(imageType), filename).catch(winston.error)
         if (!res || !res.startsWith('/data')) {
-            winston.debug(`Error downloading file: ${res}`)
+            winston.debug(`Error downloading image: ${res}`)
             return null
         }
         return res
@@ -134,12 +134,12 @@ export default class Card {
     async getSound(soundKind) {
         let filename = this.getSoundFilename(soundKind)
         if (fs.existsSync(filename)) {
-            winston.debug('File exits, using it.')
+            winston.debug('Sound exits, using it.')
             return filename
         }
         const soundParts = this.getSoundParts(soundKind)
         if (!soundParts) { return null }
-        winston.debug('File does not exist, creating it.')
+        winston.debug('Sound does not exist, creating it.')
         return await SoundProcessor.mergeSounds(soundParts, filename).catch(winston.error)
     }
 
@@ -182,6 +182,7 @@ export default class Card {
     static async search(pattern, keys) {
         let uncollectibleOnly = false
         if (pattern.startsWith('@')) {
+            winston.debug('Using uncollectible-only search mode.')
             pattern = pattern.substring(1)
             uncollectibleOnly = true
         }
