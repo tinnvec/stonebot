@@ -32,11 +32,14 @@ module.exports = class QuestAddCommand extends Command {
             args.bnetId = await this.args[1].obtain(msg).catch(winston.error)
             this.args[1].default = ''
         }
-        let result = await Quest.add(msg.guild.id, msg.author.id, args.bnetServer, args.bnetId).catch(winston.error)
-        if (!result || typeof result !== 'string') { result = 'sorry, there was an error adding you to the list.' }
         if (!msg.channel.typing) { msg.channel.startTyping() }
+        const result = await Quest.add(msg.guild.id, msg.author.id, args.bnetServer, args.bnetId).catch(winston.error)
+        let response = 'sorry, there was an error adding you to the'
+        if (result === 'added') { response = 'added you to the' }
+        else if (result === 'updated') { response = 'updated your entry in the' }
+        response += ` Battle.net ${args.bnetServer.capitalizeFirstLetter()} 80g Quest list on this discord server.`
         await MessageManager.deleteArgumentPromptMessages(msg)
-        return msg.reply(result)
+        return msg.reply(response)
             .then(m => { if (m.channel.typing) { m.channel.stopTyping() } })
             .catch(winston.error)
     }

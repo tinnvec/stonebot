@@ -11,11 +11,11 @@ export default class Quest {
             res = await Community.db
                 .run('INSERT INTO quests VALUES (?, ?, ?, ?, ?)', guildId, userId, bnetServer, bnetId, Math.floor((new Date()).getTime() / 1000))
                 .catch(winston.error)
-            if (res && res.changes === 1) { return 'added you to the list.' }
+            if (res && res.changes === 1) { return 'added' }
         } else {
             winston.debug('Quest exits, updating it.')
             res = await this.update(guildId, userId, bnetServer, bnetId).catch(winston.error)
-            if (res && res.changes === 1) { return 'updated your entry in the list.' }
+            if (res && res.changes === 1) { return 'updated' }
         }
         return null
     }
