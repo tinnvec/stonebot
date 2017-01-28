@@ -273,5 +273,5 @@ docker build -t stonebot .
 docker run -v /data --name stonebot-data ubuntu:16.04
 
 # Run stonebot container
-docker run -d --restart on-failure --name stonebot --volumes-from stonebot-data stonebot
+docker run -d --name stonebot --volumes-from stonebot-data stonebot
 ```
