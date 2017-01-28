@@ -40,6 +40,7 @@ module.exports = class SoundCommand extends Command {
         if (!args.cardName) {
             this.args[1].default = null
             args.cardName = await this.args[1].obtain(msg).catch(winston.error)
+            this.args[1].default = ''
         }
         const card = await Card.findByName(args.cardName).catch(winston.error)
         const sounds = card.getSoundParts(args.soundKind)

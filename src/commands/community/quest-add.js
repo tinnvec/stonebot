@@ -31,6 +31,7 @@ module.exports = class QuestAddCommand extends Command {
         } else if (!args.bnetId) {
             this.args[1].default = null
             args.bnetId = await this.args[1].obtain(msg).catch(winston.error)
+            this.args[1].default = ''
         }
         let result = await Quest.add(msg.guild.id, msg.author.id, args.bnetServer, args.bnetId).catch(winston.error)
         if (!result || typeof result !== 'string') { result = 'sorry, there was an error adding you to the list.' }
