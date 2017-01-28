@@ -44,14 +44,17 @@ module.exports = class SoundCommand extends Command {
         const card = await Card.findByName(args.cardName).catch(winston.error)
         const sounds = card.getSoundParts(args.soundKind)
         await MessageManager.deleteArgumentPromptMessages(msg)
+        let response
         if (!sounds || sounds.length < 1) {
-            if (msg.channel.typing) { msg.channel.stopTyping() }
-            return msg.reply(`sorry, I don't know the ${args.soundKind} sound for ${card.name}.`).catch(winston.error)
+            response = msg.reply(`sorry, I don't know the ${args.soundKind} sound for ${card.name}.`)
+        } else {
+            response = msg.reply(`I'll join your voice channel and play the ${args.soundKind} sound for ${card.name} in a moment.`)
+            this.queue.push({ message: msg, card: card, soundKind: args.soundKind })
+            if (this.queue.length === 1) { this.handleSound().catch(winston.error) }
         }
-        this.queue.push({ message: msg, card: card, soundKind: args.soundKind })
-        if (this.queue.length === 1) { this.handleSound().catch(winston.error) }
-        if (msg.channel.typing) { msg.channel.stopTyping() }
-        return msg.reply(`I'll join your voice channel and play the ${args.soundKind} sound for ${card.name} in a moment.`).catch(winston.error)
+        return response
+            .then(m => { if (m.channel.typing) { m.channel.stopTyping() } })
+            .catch(winston.error)
     }
 
     async handleSound() {

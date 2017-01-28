@@ -25,8 +25,9 @@ module.exports = class QuestRemoveCommand extends Command {
         const result = await Quest.remove(msg.guild.id, msg.author.id, args.bnetServer).catch(winston.error)
         let reply = 'I\'ve removed you from the list.'
         if (result !== 1) { reply = 'sorry, there was an error removing you from the list.' }
-        if (msg.channel.typing) { msg.channel.stopTyping() }
-        return msg.reply(reply).catch(winston.error)
         await MessageManager.deleteArgumentPromptMessages(msg)
+        return msg.reply(reply)
+            .then(m => { if (m.channel.typing) { m.channel.stopTyping() } })
+            .catch(winston.error)
     }
 }

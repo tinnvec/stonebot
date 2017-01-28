@@ -30,8 +30,9 @@ module.exports = class QuestListCommand extends Command {
             let member = msg.guild.members.find(m => parseInt(m.id) === villager.userId)
             reply += `${member.user.username} - ${villager.bnetId}\n`
         })
-        if (msg.channel.typing) { msg.channel.stopTyping() }
-        return msg.say(reply).catch(winston.error)
         await MessageManager.deleteArgumentPromptMessages(msg)
+        return msg.say(reply)
+            .then(m => { if (m.channel.typing) { m.channel.stopTyping() } })
+            .catch(winston.error)
     }
 }

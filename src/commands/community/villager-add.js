@@ -24,8 +24,9 @@ module.exports = class VillagerAddCommand extends Command {
         if (!msg.channel.typing) { msg.channel.startTyping() }
         let result = await Villager.add(msg.guild.id, msg.author.id, args.bnetServer, args.bnetId).catch(winston.error)
         if (!result || typeof result !== 'string') { result = 'sorry, there was an error adding you to the list.' }
-        if (msg.channel.typing) { msg.channel.stopTyping() }
-        return msg.reply(result).catch(winston.error)
         await MessageManager.deleteArgumentPromptMessages(msg)
+        return msg.reply(result)
+            .then(m => { if (m.channel.typing) { m.channel.stopTyping() } })
+            .catch(winston.error)
     }
 }

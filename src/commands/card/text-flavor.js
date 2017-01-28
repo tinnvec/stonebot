@@ -28,8 +28,9 @@ module.exports = class TextFlavorCommand extends Command {
             .setDescription(card.description)
             .addField('Text', card.text)
             .addField('Flavor', card.flavor)
-        if (msg.channel.typing) { msg.channel.stopTyping() }
-        return msg.embed(embed).catch(winston.error)
         await MessageManager.deleteArgumentPromptMessages(msg)
+        return msg.embed(embed)
+            .then(m => { if (m.channel.typing) { m.channel.stopTyping() } })
+            .catch(winston.error)
     }
 }

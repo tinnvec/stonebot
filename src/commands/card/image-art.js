@@ -22,10 +22,12 @@ module.exports = class ImageArtCommand extends Command {
         if (!msg.channel.typing) { msg.channel.startTyping() }
         const card = await Card.findByName(args.cardName).catch(winston.error)
         const filename = await card.getImage('art').catch(winston.error)
-        let result = `**${card.name}**\n**Artist**: ${card.artist}`
-        if (msg.channel.typing) { msg.channel.stopTyping() }
-        if (!filename) { return msg.reply(`sorry, there was a problem getting the art for ${card.name}`) }
-        return msg.say(result, { file: { attachment: filename } }).catch(winston.error)
         await MessageManager.deleteArgumentPromptMessages(msg)
+        const response = filename ?
+            msg.say(`**${card.name}**\n**Artist**: ${card.artist}`, { file: { attachment: filename } }) :
+            msg.reply(`sorry, there was a problem getting the art for ${card.name}`)
+        return response
+            .then(m => { if (m.channel.typing) { m.channel.stopTyping() } })
+            .catch(winston.error)
     }
 }
