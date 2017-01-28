@@ -1,4 +1,5 @@
 import { Command } from 'discord.js-commando'
+import MessageManager from '../../message-manager'
 import Villager from '../../community/villager'
 
 import { bnetId, bnetServer } from '../../command-arguments'
@@ -21,9 +22,14 @@ module.exports = class VillagerAddCommand extends Command {
 
     async run(msg, args) {
         if (!msg.channel.typing) { msg.channel.startTyping() }
-        let result = await Villager.add(msg.guild.id, msg.author.id, args.bnetServer, args.bnetId).catch(winston.error)
-        if (!result || typeof result !== 'string') { result = 'sorry, there was an error adding you to the list.' }
-        if (msg.channel.typing) { msg.channel.stopTyping() }
-        return msg.reply(result).catch(winston.error)
+        const result = await Villager.add(msg.guild.id, msg.author.id, args.bnetServer, args.bnetId).catch(winston.error)
+        let response = 'sorry, there was an error adding you to the'
+        if (result === 'added') { response = 'added you to the' }
+        else if (result === 'updated') { response = 'updated your entry in the' }
+        response += ` Battle.net ${args.bnetServer.capitalizeFirstLetter()} list on this discord server.`
+        await MessageManager.deleteArgumentPromptMessages(msg)
+        return msg.reply(response)
+            .then(m => { if (m.channel.typing) { m.channel.stopTyping() } })
+            .catch(winston.error)
     }
 }

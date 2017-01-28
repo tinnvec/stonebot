@@ -1,5 +1,6 @@
 import Card from '../../card/card'
 import { Command } from 'discord.js-commando'
+import MessageManager from '../../message-manager'
 
 import { soundKind, cardName } from '../../command-arguments'
 import winston from 'winston'
@@ -31,7 +32,6 @@ module.exports = class SoundCommand extends Command {
     }
 
     async run(msg, args) {
-        if (!msg.channel.typing) { msg.channel.startTyping() }
         if (!SOUND_KINDS.includes(args.soundKind)) {
             args.cardName = `${args.soundKind} ${args.cardName}`.trim()
             args.soundKind = 'play'
@@ -39,17 +39,23 @@ module.exports = class SoundCommand extends Command {
         if (!args.cardName) {
             this.args[1].default = null
             args.cardName = await this.args[1].obtain(msg).catch(winston.error)
+            this.args[1].default = ''
         }
+        if (!msg.channel.typing) { msg.channel.startTyping() }
         const card = await Card.findByName(args.cardName).catch(winston.error)
         const sounds = card.getSoundParts(args.soundKind)
+        await MessageManager.deleteArgumentPromptMessages(msg)
+        let response
         if (!sounds || sounds.length < 1) {
-            if (msg.channel.typing) { msg.channel.stopTyping() }
-            return msg.reply(`sorry, I don't know the ${args.soundKind} sound for ${card.name}.`).catch(winston.error)
+            response = msg.reply(`sorry, I don't know the ${args.soundKind} sound for ${card.name}.`)
+        } else {
+            response = msg.reply(`I'll join your voice channel and play the ${args.soundKind} sound for ${card.name} in a moment.`)
+            this.queue.push({ message: msg, card: card, soundKind: args.soundKind })
+            if (this.queue.length === 1) { this.handleSound().catch(winston.error) }
         }
-        this.queue.push({ message: msg, card: card, soundKind: args.soundKind })
-        if (this.queue.length === 1) { this.handleSound().catch(winston.error) }
-        if (msg.channel.typing) { msg.channel.stopTyping() }
-        return msg.reply(`I'll join your voice channel and play the ${args.soundKind} sound for ${card.name} in a moment.`).catch(winston.error)
+        return response
+            .then(m => { if (m.channel.typing) { m.channel.stopTyping() } })
+            .catch(winston.error)
     }
 
     async handleSound() {
@@ -84,7 +90,7 @@ module.exports = class SoundCommand extends Command {
 
     async joinVoiceChannel(voiceChannel) {
         if (!voiceChannel || voiceChannel.type !== 'voice') { return 'you\'re not in one' }
-        let connection = this.client.voiceConnections.find(conn => conn.channel === voiceChannel)
+        const connection = this.client.voiceConnections.find(conn => conn.channel === voiceChannel)
         if (connection) { return connection }
         return await voiceChannel.join().catch(err => { return err.message.replace('You', 'I') })
     }

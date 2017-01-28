@@ -1,7 +1,6 @@
 import ffmpeg from 'fluent-ffmpeg'
 import mkdirp from 'mkdirp'
 import path from 'path'
-// import winston from 'winston'
 
 export default class SoundProcessor {
     static mergeSounds(sounds, filename) {
@@ -25,17 +24,3 @@ export default class SoundProcessor {
         })
     }
 }
-
-// function concatCardSounds(soundFiles) {
-//     return new Promise((resolve, reject) => {
-//         let filename = `${__dirname}/sounds/${Math.round(Math.random() * 100)}.ogg`
-//         let cmd = ffmpeg()
-//         soundFiles.forEach(file => { cmd.input(file) })
-//         cmd.on('error', err => {
-//             console.log(err)
-//             reject(err)
-//         })
-//         cmd.on('end', () => { resolve(filename) })
-//         cmd.audioCodec('libvorbis').mergeToFile(filename, `${__dirname}/sounds/tmp`)
-//     })
-// }

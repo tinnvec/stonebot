@@ -1,4 +1,5 @@
 import { Command } from 'discord.js-commando'
+import MessageManager from '../../message-manager'
 import Quest from '../../community/quest'
 import Villager from '../../community/villager'
 
@@ -15,7 +16,7 @@ module.exports = class QuestAddCommand extends Command {
             group: 'community',
             memberName: 'quest-add',
             guildOnly: true,
-            description: 'Adds you to the list of community members with the Hearhtstone Play a Friend (aka 80g) quest.',
+            description: 'Adds you to the list of community members with the Hearthstone Play a Friend (aka 80g) quest.',
             details: '`<bnetServer>` can be one of `americas`, `na`, `europe`, `eu`, `asia`\n`<bnetId>` is your battle.net id. This is optional if you are already on the `villager-list` for `<bnetServer>',
             examples: ['quest-add americas user#1234', 'quest-add europe user#1234', 'quest-add asia user#1234'],
             args: [ bnetServer, bnetIdWithDefault ]
@@ -23,17 +24,23 @@ module.exports = class QuestAddCommand extends Command {
     }
 
     async run(msg, args) {
-        if (!msg.channel.typing) { msg.channel.startTyping() }
         const villager = await Villager.find(msg.guild.id, msg.author.id, args.bnetServer).catch(winston.error)
         if (villager) {
             args.bnetId = villager.bnetId
         } else if (!args.bnetId) {
             this.args[1].default = null
             args.bnetId = await this.args[1].obtain(msg).catch(winston.error)
+            this.args[1].default = ''
         }
-        let result = await Quest.add(msg.guild.id, msg.author.id, args.bnetServer, args.bnetId).catch(winston.error)
-        if (!result || typeof result !== 'string') { result = 'sorry, there was an error adding you to the list.' }
-        if (msg.channel.typing) { msg.channel.stopTyping() }
-        return msg.reply(result).catch(winston.error)
+        if (!msg.channel.typing) { msg.channel.startTyping() }
+        const result = await Quest.add(msg.guild.id, msg.author.id, args.bnetServer, args.bnetId).catch(winston.error)
+        let response = 'sorry, there was an error adding you to the'
+        if (result === 'added') { response = 'added you to the' }
+        else if (result === 'updated') { response = 'updated your entry in the' }
+        response += ` Battle.net ${args.bnetServer.capitalizeFirstLetter()} 80g Quest list on this discord server.`
+        await MessageManager.deleteArgumentPromptMessages(msg)
+        return msg.reply(response)
+            .then(m => { if (m.channel.typing) { m.channel.stopTyping() } })
+            .catch(winston.error)
     }
 }
