@@ -23,8 +23,9 @@ module.exports = class QuestRemoveCommand extends Command {
     async run(msg, args) {
         if (!msg.channel.typing) { msg.channel.startTyping() }
         const result = await Quest.remove(msg.guild.id, msg.author.id, args.bnetServer).catch(winston.error)
-        let reply = 'I\'ve removed you from the list.'
-        if (result !== 1) { reply = 'sorry, there was an error removing you from the list.' }
+        let reply = 'removed you from the'
+        if (result !== 1) { reply = 'sorry, there was an error removing you from the' }
+        reply += ` Battle.net ${args.bnetServer.capitalizeFirstLetter()} 80g Quest list on this discord server.`
         await MessageManager.deleteArgumentPromptMessages(msg)
         return msg.reply(reply)
             .then(m => { if (m.channel.typing) { m.channel.stopTyping() } })
