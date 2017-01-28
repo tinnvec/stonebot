@@ -24,7 +24,6 @@ module.exports = class QuestAddCommand extends Command {
     }
 
     async run(msg, args) {
-        if (!msg.channel.typing) { msg.channel.startTyping() }
         const villager = await Villager.find(msg.guild.id, msg.author.id, args.bnetServer).catch(winston.error)
         if (villager) {
             args.bnetId = villager.bnetId
@@ -35,6 +34,7 @@ module.exports = class QuestAddCommand extends Command {
         }
         let result = await Quest.add(msg.guild.id, msg.author.id, args.bnetServer, args.bnetId).catch(winston.error)
         if (!result || typeof result !== 'string') { result = 'sorry, there was an error adding you to the list.' }
+        if (!msg.channel.typing) { msg.channel.startTyping() }
         await MessageManager.deleteArgumentPromptMessages(msg)
         return msg.reply(result)
             .then(m => { if (m.channel.typing) { m.channel.stopTyping() } })

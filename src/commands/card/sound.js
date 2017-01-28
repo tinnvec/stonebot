@@ -32,7 +32,6 @@ module.exports = class SoundCommand extends Command {
     }
 
     async run(msg, args) {
-        if (!msg.channel.typing) { msg.channel.startTyping() }
         if (!SOUND_KINDS.includes(args.soundKind)) {
             args.cardName = `${args.soundKind} ${args.cardName}`.trim()
             args.soundKind = 'play'
@@ -42,6 +41,7 @@ module.exports = class SoundCommand extends Command {
             args.cardName = await this.args[1].obtain(msg).catch(winston.error)
             this.args[1].default = ''
         }
+        if (!msg.channel.typing) { msg.channel.startTyping() }
         const card = await Card.findByName(args.cardName).catch(winston.error)
         const sounds = card.getSoundParts(args.soundKind)
         await MessageManager.deleteArgumentPromptMessages(msg)
