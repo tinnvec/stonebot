@@ -1,4 +1,5 @@
 import { Command } from 'discord.js-commando'
+import MessageManager from '../../message-manager'
 import Villager from '../../community/villager'
 
 import { bnetServer } from '../../command-arguments'
@@ -29,5 +30,6 @@ module.exports = class VillagerRemoveCommand extends Command {
         if (result !== 1) { reply = 'sorry, there was an error removing you from the list.' }
         if (msg.channel.typing) { msg.channel.stopTyping() }
         return msg.reply(reply).catch(winston.error)
+        await MessageManager.deleteArgumentPromptMessages(msg)
     }
 }

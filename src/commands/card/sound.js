@@ -1,5 +1,6 @@
 import Card from '../../card/card'
 import { Command } from 'discord.js-commando'
+import MessageManager from '../../message-manager'
 
 import { soundKind, cardName } from '../../command-arguments'
 import winston from 'winston'
@@ -42,6 +43,7 @@ module.exports = class SoundCommand extends Command {
         }
         const card = await Card.findByName(args.cardName).catch(winston.error)
         const sounds = card.getSoundParts(args.soundKind)
+        await MessageManager.deleteArgumentPromptMessages(msg)
         if (!sounds || sounds.length < 1) {
             if (msg.channel.typing) { msg.channel.stopTyping() }
             return msg.reply(`sorry, I don't know the ${args.soundKind} sound for ${card.name}.`).catch(winston.error)

@@ -1,4 +1,5 @@
 import { Command } from 'discord.js-commando'
+import MessageManager from '../../message-manager'
 import Quest from '../../community/quest'
 
 import { bnetServer } from '../../command-arguments'
@@ -31,5 +32,6 @@ module.exports = class QuestListCommand extends Command {
         })
         if (msg.channel.typing) { msg.channel.stopTyping() }
         return msg.say(reply).catch(winston.error)
+        await MessageManager.deleteArgumentPromptMessages(msg)
     }
 }

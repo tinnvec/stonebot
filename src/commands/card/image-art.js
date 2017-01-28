@@ -1,5 +1,6 @@
 import Card from '../../card/card'
 import { Command } from 'discord.js-commando'
+import MessageManager from '../../message-manager'
 
 import { cardName } from '../../command-arguments'
 import winston from 'winston'
@@ -25,5 +26,6 @@ module.exports = class ImageArtCommand extends Command {
         if (msg.channel.typing) { msg.channel.stopTyping() }
         if (!filename) { return msg.reply(`sorry, there was a problem getting the art for ${card.name}`) }
         return msg.say(result, { file: { attachment: filename } }).catch(winston.error)
+        await MessageManager.deleteArgumentPromptMessages(msg)
     }
 }

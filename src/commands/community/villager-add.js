@@ -1,4 +1,5 @@
 import { Command } from 'discord.js-commando'
+import MessageManager from '../../message-manager'
 import Villager from '../../community/villager'
 
 import { bnetId, bnetServer } from '../../command-arguments'
@@ -25,5 +26,6 @@ module.exports = class VillagerAddCommand extends Command {
         if (!result || typeof result !== 'string') { result = 'sorry, there was an error adding you to the list.' }
         if (msg.channel.typing) { msg.channel.stopTyping() }
         return msg.reply(result).catch(winston.error)
+        await MessageManager.deleteArgumentPromptMessages(msg)
     }
 }
