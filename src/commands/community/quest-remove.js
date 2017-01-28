@@ -13,7 +13,7 @@ module.exports = class QuestRemoveCommand extends Command {
             group: 'community',
             memberName: 'quest-remove',
             guildOnly: true,
-            description: 'Removes you from the list of community members with the Hearhtstone Play a Friend (aka 80g) quest.',
+            description: 'Removes you from the list of community members with the Hearthstone Play a Friend (aka 80g) quest.',
             details: '`<bnetServer>` can be one of `americas`, `na`, `europe`, `eu`, `asia`.',
             examples: ['quest-remove americas', 'quest-remove europe', 'quest-remove asia'],
             args: [ bnetServer ]

@@ -13,7 +13,7 @@ module.exports = class QuestListCommand extends Command {
             group: 'community',
             memberName: 'quest-list',
             guildOnly: true,
-            description: 'Lists community members with the Hearhtstone Play a Friend (aka 80g) quest.',
+            description: 'Lists community members with the Hearthstone Play a Friend (aka 80g) quest.',
             details: '`<bnetServer>` can be one of `americas`, `na`, `europe`, `eu`, `asia`.',
             examples: ['quest-list americas', 'quest-list europe', 'quest-list asia'],
             args: [ bnetServer ]

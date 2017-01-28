@@ -16,7 +16,7 @@ module.exports = class QuestAddCommand extends Command {
             group: 'community',
             memberName: 'quest-add',
             guildOnly: true,
-            description: 'Adds you to the list of community members with the Hearhtstone Play a Friend (aka 80g) quest.',
+            description: 'Adds you to the list of community members with the Hearthstone Play a Friend (aka 80g) quest.',
             details: '`<bnetServer>` can be one of `americas`, `na`, `europe`, `eu`, `asia`\n`<bnetId>` is your battle.net id. This is optional if you are already on the `villager-list` for `<bnetServer>',
             examples: ['quest-add americas user#1234', 'quest-add europe user#1234', 'quest-add asia user#1234'],
             args: [ bnetServer, bnetIdWithDefault ]
