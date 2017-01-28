@@ -29,6 +29,7 @@ module.exports = class QuestListCommand extends Command {
         if (quests.length < 1) { reply += '_No users on this list._' }
         quests.forEach(quest => {
             let member = msg.guild.members.find(m => parseInt(m.id) === quest.userId)
+            if (!member) { return }
             reply += `**${member.user.username}** - _${quest.bnetId}_\n`
         })
         await MessageManager.deleteArgumentPromptMessages(msg)

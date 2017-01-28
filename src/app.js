@@ -21,12 +21,14 @@ client.on('error', winston.error)
 client.on('guildCreate', guild => { winston.info(`Joined Guild: ${guild.name}.`) })
 client.on('guildDelete', guild => { winston.info(`Departed Guild: ${guild.name}.`) })
 
+client.on('guildMemberRemove', guildMember => { Community.dropDepartedMember(guildMember.guild.id, guildMember.id) })
+
 client.on('disconnect', event => { winston.warn(`Disconnected [${event.code}]: ${event.reason || 'Unknown reason'}`)} )
 client.on('reconnecting', () => { winston.info('Reconnecting...')})
 
 
 client.on('ready', async () => {
-    await Community.init().catch(winston.error)
+    await Community.init(client).catch(winston.error)
     winston.info('Client Ready.')
     winston.verbose(`Current Guilds (${client.guilds.size}): ${client.guilds.map(guild => { return guild.name }).join('; ')}.`)
     client.user.setGame('Hearthstone')

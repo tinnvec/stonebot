@@ -29,6 +29,7 @@ module.exports = class VillagerListCommand extends Command {
         if (villagers.length < 1) { reply += '_No users on this list._' }
         villagers.forEach(villager => {
             let member = msg.guild.members.find(m => parseInt(m.id) === villager.userId)
+            if (!member) { return }
             reply += `**${member.user.username}** - _${villager.bnetId}_\n`
         })
         await MessageManager.deleteArgumentPromptMessages(msg)
