@@ -22,11 +22,16 @@ export default class Community {
             winston.debug('Community database initialized.')
         }
         winston.debug('Setting interval timer to remove expired quests')
-        setInterval(async () => { await this.dropOldQuests() }, (10 * 60 * 1000))
+        if (!this.questDropper) {
+            this.questDropper = setInterval(
+                async () => { await this.dropOldQuests() },
+                (10 * 60 * 1000)
+            )
+        }
     }
 
     static async dropOldQuests() {
-        winston.debug('Removing community quests that more than 1 day old.')
+        winston.debug('Removing community quests older than 1 day.')
         const oneDayAgo = new Date()
         oneDayAgo.setDate(oneDayAgo.getDate() - 1)
         await this.db.run('DELETE FROM quests WHERE createdAt < ?', Math.floor(oneDayAgo.getTime() / 1000))
