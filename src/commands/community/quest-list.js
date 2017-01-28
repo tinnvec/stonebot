@@ -24,11 +24,12 @@ module.exports = class QuestListCommand extends Command {
         if (!msg.channel.typing) { msg.channel.startTyping() }
         let quests = await Quest.getAll().catch(winston.error)
         quests = quests.filter(v => { return v.guildId === parseInt(msg.guild.id) && v.bnetServer === args.bnetServer })
-        let reply = `**Battle.net - 80g Quest - ${args.bnetServer.capitalizeFirstLetter()}**\n`
+        let reply = `**${msg.guild.name} - Battle.net ${args.bnetServer.capitalizeFirstLetter()} - 80g Quest**\n`
+        reply += 'These folks have the Hearthstone Play a Friend (aka 80g) quest.\nIf you also have the quest, they would would love to trade!\n\n'
         if (quests.length < 1) { reply += '_No users on this list._' }
-        quests.forEach(villager => {
-            let member = msg.guild.members.find(m => parseInt(m.id) === villager.userId)
-            reply += `${member.user.username} - ${villager.bnetId}\n`
+        quests.forEach(quest => {
+            let member = msg.guild.members.find(m => parseInt(m.id) === quest.userId)
+            reply += `**${member.user.username}** - _${quest.bnetId}_\n`
         })
         await MessageManager.deleteArgumentPromptMessages(msg)
         return msg.say(reply)

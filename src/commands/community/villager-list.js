@@ -24,11 +24,12 @@ module.exports = class VillagerListCommand extends Command {
         if (!msg.channel.typing) { msg.channel.startTyping() }
         let villagers = await Villager.getAll().catch(winston.error)
         villagers = villagers.filter(v => { return v.guildId === parseInt(msg.guild.id) && v.bnetServer === args.bnetServer })
-        let reply = `**Battle.net - ${args.bnetServer.capitalizeFirstLetter()}**\n`
+        let reply = `**${msg.guild.name} - Battle.net ${args.bnetServer.capitalizeFirstLetter()}**\n`
+        reply += `These folks play games on the Battle.net ${args.bnetServer.capitalizeFirstLetter()} server and would love to be your friend!\n\n`
         if (villagers.length < 1) { reply += '_No users on this list._' }
         villagers.forEach(villager => {
             let member = msg.guild.members.find(m => parseInt(m.id) === villager.userId)
-            reply += `${member.user.username} - ${villager.bnetId}\n`
+            reply += `**${member.user.username}** - _${villager.bnetId}_\n`
         })
         await MessageManager.deleteArgumentPromptMessages(msg)
         return msg.say(reply)
