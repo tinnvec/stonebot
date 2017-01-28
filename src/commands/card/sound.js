@@ -90,7 +90,7 @@ module.exports = class SoundCommand extends Command {
 
     async joinVoiceChannel(voiceChannel) {
         if (!voiceChannel || voiceChannel.type !== 'voice') { return 'you\'re not in one' }
-        let connection = this.client.voiceConnections.find(conn => conn.channel === voiceChannel)
+        const connection = this.client.voiceConnections.find(conn => conn.channel === voiceChannel)
         if (connection) { return connection }
         return await voiceChannel.join().catch(err => { return err.message.replace('You', 'I') })
     }
