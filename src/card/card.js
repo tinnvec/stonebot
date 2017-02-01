@@ -172,11 +172,15 @@ export default class Card {
     }
 
     static async findByName(name) {
-        return new Card(await this.search(name, ['name']).catch(winston.error))
+        const res = await this.search(name, ['name']).catch(winston.error)
+        if (!res) { return null }
+        return new Card(res)
     }
 
     static async findById(id) {
-        return new Card(await this.search(id, ['id']).catch(winston.error))
+        const res = await this.search(id, ['id']).catch(winston.error)
+        if (!res) { return null }
+        return new Card(res)
     }
 
     static async search(pattern, keys) {
@@ -199,8 +203,9 @@ export default class Card {
             { keys: keys, include: ['score'] }
         )
         const foundCollectible = collectibleFuse.search(pattern)
-        if (foundCollectible.length < 1 && foundUncollectible.length > 0) { return foundUncollectible[0].item }
-        if (foundCollectible.length > 0 && foundUncollectible.length < 1) { return foundCollectible[0].item }
+        if (foundCollectible.length < 1 && foundUncollectible.length < 1) { return null }
+        if (foundCollectible.length < 1) { return foundUncollectible[0].item }
+        if (foundUncollectible.length < 1) { return foundCollectible[0].item }
         if (foundUncollectible[0].score < foundCollectible[0].score) { return foundUncollectible[0].item }
         return foundCollectible[0].item
     }

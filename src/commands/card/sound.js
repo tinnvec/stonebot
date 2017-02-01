@@ -42,20 +42,30 @@ module.exports = class SoundCommand extends Command {
             this.args[1].default = ''
         }
         if (!msg.channel.typing) { msg.channel.startTyping() }
+
         const card = await Card.findByName(args.cardName).catch(winston.error)
-        const sounds = card.getSoundParts(args.soundKind)
-        await MessageManager.deleteArgumentPromptMessages(msg)
-        let response
-        if (!sounds || sounds.length < 1) {
-            response = msg.reply(`sorry, I don't know the ${args.soundKind} sound for ${card.name}.`)
-        } else {
-            response = msg.reply(`I'll join your voice channel and play the ${args.soundKind} sound for ${card.name} in a moment.`)
-            this.queue.push({ message: msg, card: card, soundKind: args.soundKind })
-            if (this.queue.length === 1) { this.handleSound().catch(winston.error) }
+        if (!card) {
+            await MessageManager.deleteArgumentPromptMessages(msg).catch(winston.error)
+            return msg.reply(`sorry, I couldn't find a card with a name like '${args.cardName}'`)
+                .then(m => { if (m.channel.typing) { m.channel.stopTyping() } })
+                .catch(winston.error)
         }
-        return response
+
+        const sounds = card.getSoundParts(args.soundKind)
+        if (!sounds || sounds.length < 1) {
+            await MessageManager.deleteArgumentPromptMessages(msg).catch(winston.error)
+            return msg.reply(`sorry, I don't know the ${args.soundKind} sound for ${card.name}.`)
+                .then(m => { if (m.channel.typing) { m.channel.stopTyping() } })
+                .catch(winston.error)
+        }
+
+        await MessageManager.deleteArgumentPromptMessages(msg)
+        return msg.reply(`I'll join your voice channel and play the ${args.soundKind} sound for ${card.name} in a moment.`)
             .then(m => { if (m.channel.typing) { m.channel.stopTyping() } })
-            .catch(winston.error)
+            .then(() => {
+                this.queue.push({ message: msg, card: card, soundKind: args.soundKind })
+                if (this.queue.length === 1) { this.handleSound().catch(winston.error) }
+            }).catch(winston.error)
     }
 
     async handleSound() {

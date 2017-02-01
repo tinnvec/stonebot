@@ -21,13 +21,21 @@ module.exports = class TextCommand extends Command {
 
     async run(msg, args) {
         if (!msg.channel.typing) { msg.channel.startTyping() }
+        
         const card = await Card.findByName(args.cardName).catch(winston.error)
+        if (!card) {
+            await MessageManager.deleteArgumentPromptMessages(msg).catch(winston.error)
+            return msg.reply(`sorry, I couldn't find a card with a name like '${args.cardName}'`)
+                .then(m => { if (m.channel.typing) { m.channel.stopTyping() } })
+                .catch(winston.error)
+        }
+        
         const embed = new Discord.RichEmbed()
             .setColor(card.classColor)
             .setTitle(card.name)
             .setDescription(card.description)
             .addField('Text', card.text)
-        await MessageManager.deleteArgumentPromptMessages(msg)
+        await MessageManager.deleteArgumentPromptMessages(msg).catch(winston.error)
         return msg.embed(embed)
             .then(m => { if (m.channel.typing) { m.channel.stopTyping() } })
             .catch(winston.error)
