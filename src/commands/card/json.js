@@ -20,12 +20,17 @@ module.exports = class JSONCommand extends Command {
 
     async run(msg, args) {
         if (!msg.channel.typing) { msg.channel.startTyping() }
+
         const card = await Card.findByName(args.cardName).catch(winston.error)
-        let result = '```json\n'
-        result += `${JSON.stringify(card.json, null, '  ')}\n`
-        result += '```'
-        await MessageManager.deleteArgumentPromptMessages(msg)
-        return msg.say(result)
+        if (!card) {
+            await MessageManager.deleteArgumentPromptMessages(msg).catch(winston.error)
+            return msg.reply(`sorry, I couldn't find a card with a name like '${args.cardName}'`)
+                .then(m => { if (m.channel.typing) { m.channel.stopTyping() } })
+                .catch(winston.error)
+        }
+
+        await MessageManager.deleteArgumentPromptMessages(msg).catch(winston.error)
+        return msg.code('json', JSON.stringify(card.json, null, '  '))
             .then(m => { if (m.channel.typing) { m.channel.stopTyping() } })
             .catch(winston.error)
     }

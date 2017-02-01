@@ -20,13 +20,25 @@ module.exports = class ImageCommand extends Command {
 
     async run(msg, args) {
         if (!msg.channel.typing) { msg.channel.startTyping() }
+
         const card = await Card.findByName(args.cardName).catch(winston.error)
+        if (!card) {
+            await MessageManager.deleteArgumentPromptMessages(msg).catch(winston.error)
+            return msg.reply(`sorry, I couldn't find a card with a name like '${args.cardName}'`)
+                .then(m => { if (m.channel.typing) { m.channel.stopTyping() } })
+                .catch(winston.error)
+        }
+
         const filename = await card.getImage().catch(winston.error)
-        await MessageManager.deleteArgumentPromptMessages(msg)
-        const response = filename ?
-            msg.say('', { file: { attachment: filename } }) :
-            msg.reply(`sorry, there was a problem getting the image for ${card.name}`)
-        return response
+        if (!filename) {
+            await MessageManager.deleteArgumentPromptMessages(msg).catch(winston.error)
+            return msg.reply(`sorry, there was a problem getting the image for ${card.name}`)
+                .then(m => { if (m.channel.typing) { m.channel.stopTyping() } })
+                .catch(winston.error)
+        }
+
+        await MessageManager.deleteArgumentPromptMessages(msg).catch(winston.error)
+        return msg.say('', { file: { attachment: filename } })
             .then(m => { if (m.channel.typing) { m.channel.stopTyping() } })
             .catch(winston.error)
     }
