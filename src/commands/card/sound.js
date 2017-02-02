@@ -9,7 +9,7 @@ const SOUND_KINDS = ['play', 'attack', 'trigger', 'death']
 
 module.exports = class SoundCommand extends Command {
     constructor(client) {
-        let nameWithDefault = { default: '' }
+        const nameWithDefault = { default: '' }
         Object.assign(nameWithDefault, cardName)
         super(client, {
             name: 'sound',
