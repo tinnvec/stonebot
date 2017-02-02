@@ -14,195 +14,124 @@ Stonebot is a [node.js](https://nodejs.org/) [Discord](https://discordapp.com/) 
 
 Stonebot uses a fuzzy search when matching card names and returns the highest scoring result, favoring collectible cards over uncollectible ones. Using `@` before `<cardName>` will search uncollectible cards only.
 
-## card:text
+## text
 
 Displays card text.  
 
 **Format**: `!text <cardName>`  
-**Aliases**: `card`, `txt`, `t`, `c`, `🎴`, `🃏`, `📝`, `📜`, `📃`  
-**Example**: `!text frostbolt`
+**Aliases**: txt, t, card, c  
+**Examples**
 
-> **Frostbolt**  
-> 2 Mana Mage Spell  
-> **Text**  
-> Deal $3 damage to a character and **Freeze** it.
+- `!text frostbolt`
+- `!t gadgetzan auctioneer`
+- `!card yshaarj`
+- `!c tinyfin`
 
-## card:text-flavor
+## flavor
 
 Displays card text and flavor text.
 
-**Format**: `!text-flavor <cardName>`  
-**Aliases**: `flavor-text`, `flavor`, `f`, `🥓`, `🍗`, `🍿`, `🍰`  
-**Example**: `!text-flavor devolve`
+**Format**: `!flavor <cardName>`  
+**Aliases**: f, flavor-text, flavortext  
+**Examples**
 
-> **Devolve**  
-> 2 Mana Shaman Spell  
-> **Text**  
-> Transform all enemy minions into random ones that cost (1) less.  
-> **Flavor**  
-> Ragnaros looked down. He looked like some kind of War Golem. "WHAT HAVE YOU DONE TO ME," he yelled. But all that came out was a deep grinding sound. He began to cry.
+- `!flavor devolve`
+- `!f small time recruits`
 
-## card:image
+## image
 
 Displays card image.
 
 **Format**: `!image <cardName>`  
-**Aliases**: `img`, `i`, `📷`, `📸`  
-**Example**: `!image firey war axe`
+**Aliases**: img, i  
+**Examples**
 
-![](http://media.services.zam.com/v1/media/byName/hs/cards/enus/CS2_106.png)
+- `!image fiery war axe`
+- `!i brawl`
 
-## card:image-gold
+## gold
 
 Displays golden card image.
 
-**Format**: `!image-gold <cardName>`  
-**Aliases**: `gold-image`, `gold`, `g`, `👑`  
-**Example**: `!image-gold twisting nether`
+**Format**: `!gold <cardName>`  
+**Aliases**: g, gold-image, goldimage  
+**Examples**
 
-![](http://media.services.zam.com/v1/media/byName/hs/cards/enus/animated/EX1_312_premium.gif)
+- `!gold twisting nether`
+- `!g dragonfire potion`
 
-## card:image-art
+## art
 
 Displays the artist and full art from the card.
 
-**Format**: `!image-art <cardName>`  
-**Aliases**: `art-image`, `art`, `a`, `🖼`, `🎨`  
-**Example**: `!image-art raza`
+**Format**: `!art <cardName>`  
+**Aliases**: a, art-image, artimage  
+**Examples**
 
-**Raza the Chained**  
-**Artist**: James Ryman  
-![](https://art.hearthstonejson.com/v1/512x/CFM_020.jpg)
+- `!art raza`
+- `!a secretkeeper`
 
-## card:sound
+## sound
 
-Plays card sound in your voice channel.
+Plays card sound in your voice channel. (Usable only in servers)
 
 `[soundKind]` can be one of `play`, `attack`, `death` or `trigger`. Optional.
 
 **Format**: `!sound [soundKind] <cardName>`  
-**Aliases**: `snd`, `s`, `🔈`, `🔉`, `🔊`, `🎧`, `🎵`  
+**Aliases**: snd, s  
 **Examples**
 
 - `!sound tirion`
 - `!sound attack jaraxxus`
-- `!sound death refreshment vendor`
-- `!sound trigger antonaidas`
+- `!snd death refreshment vendor`
+- `!s trigger antonaidas`
 
-## card:json
+## json
 
 Displays JSON inormation for card.
 
 **Format**: `!json <cardName>`  
-**Aliases**: `dev`, `info`, `🗡`  
 **Example**: `!json jade golem`
-
-```json
-{
-  "artist": "Konstantin Turovec",
-  "attack": 1,
-  "cost": 1,
-  "dbfId": 42098,
-  "health": 1,
-  "id": "CFM_712_t01",
-  "mechanics": [
-    "JADE_GOLEM"
-  ],
-  "name": "Jade Golem",
-  "playerClass": "NEUTRAL",
-  "set": "GANGS",
-  "type": "MINION"
-}
-```
 
 # Community
 
-## community:villager-list
+## villager
 
-Lists community member battle.net ids.
+List of community members with battle.net ids. (Usable only in servers)
 
-`<bnetServer>` can be one of `americas`, `na`, `europe`, `eu`, `asia`.
+You'll be are removed from the list if you leave the discord server.  
+Responses from this command will be removed automatically after 10 minutes.  
+`[action]` can be one of `list`, `add`, `remove`. Default: `list`.  
+`<bnetServer>` can be one of `americas|america|na`, `europe|eu`, `asia`.  
+`[bnetId]` is your battle.net id. Required only for `add` action.
 
-**Format**: `!villager-list <bnetServer>`  
-**Aliases**: `villagers`, `v`, `bnet-list`, `bnet`, `b`, `🏠`  
+**Format**: `!villager [action] <bnetServer> [bnetId]`  
+**Aliases**: villagers, v, bnet, b  
 **Examples**
 
-- `!villager-list americas`
-- `!villager-list europe`
-- `!villager-list asia`
+- `!villager list americas`
+- `!v na`
+- `!bnet add europe User#1234`
+- `!b remove asia`
 
-## community:villager-add
-
-Adds your battle.net id to the community list.
-
-`<bnetServer>` can be one of `americas`, `na`, `europe`, `eu`, `asia`.  
-`<bnetId>` is your battle.net id.
-
-**Format**: `!villager-add <bnetServer> <bnetId>`  
-**Aliases**: `villagers-add`, `v-add`, `va`, `bnet-add`, `b-add`, `ba`, `🏡`  
-**Examples**
-
-- `!villager-add americas user#1234`
-- `!villager-add europe user#1234`
-- `!villager-add asia user#1234`
-
-## community:villager-remove
-
-Removes your battle.net id from the community list.
-
-`<bnetServer>` can be one of `americas`, `na`, `europe`, `eu`, `asia`.
-
-**Format**: `!villager-remove <bnetServer>`  
-**Aliases**: `villager-rm`, `villagers-remove`, `villagers-rm`, `v-remove`, `v-rm`, `vr`,
-                `bnet-remove`, `bnet-rm`, `b-remove`, `b-rm`, `br`, `🏚`  
-**Examples**
-
-- `!villager-remove americas`
-- `!villager-remove europe`
-- `!villager-remove asia`
-
-## community:quest-list
+## quest
 
 Lists community members with the Hearhtstone Play a Friend (aka 80g) quest.
 
-`<bnetServer>` can be one of `americas`, `na`, `europe`, `eu`, `asia`.
+Quests are removed (expire) after 24 hours or if you leave the discord server.  
+Responses from this command will be removed automatically after 10 minutes.  
+`[action]` can be one of `list`, `add`, `remove`. Default: `list`.  
+`<bnetServer>` can be one of `americas|america|na`, `europe|eu`, `asia`.  
+`[bnetId]` is your battle.net id. Required only for `add` action, optional if you are on the villagers list.
 
-**Format**: `!quest-list <bnetServer>`  
-**Aliases**: `quests`, `quests-list`, `q`, `80g-list`, `80g`, `💰`  
+**Format**: `!quest [action] <bnetServer> [bnetId]`  
+**Aliases**: quests, q, 80g  
 **Examples**
 
-- `!quest-list americas`
-- `!quest-list europe`
-- `!quest-list asia`
-
-## community:quest-add
-
-Adds you to the list of community members with the Hearhtstone Play a Friend (aka 80g) quest.
-
-`<bnetServer>` can be one of `americas`, `na`, `europe`, `eu`, `asia`  
-`[bnetId]` is your battle.net id. Optional if you are already on the `villager-list` for `<bnetServer>`
-
-**Format**: `!quest-add <bnetServer> [bnetId]`  
-**Aliases**: `quests-add`, `q-add`, `qa`, `80g-add`, `80ga`, `🤑`  
-**Examples**
-
-- `!quest-add americas user#1234`
-- `!quest-add europe user#1234`
-- `!quest-add asia user#1234`
-
-## community:quest-remove
-
-Removes you from the list of community members with the Hearhtstone Play a Friend (aka 80g) quest.
-
-`<bnetServer>` can be one of `americas`, `na`, `europe`, `eu`, `asia`.
-
-**Format**: `!quest-remove <bnetServer>`  
-**Aliases**: `quests-remove`, `quests-rm`, `quest-rm`, `q-rm`, `qr`, `80g-rm`, `80gr`, `💸`  
-**Examples**
-
-- `!quest-remove americas`
-- `!quest-remove europe`
-- `!quest-remove asia`
+- `!quest list americas`
+- `!q na`
+- `!80g add europe User#1234`
+- `!q remove asia`
 
 # Utility
 
@@ -213,7 +142,7 @@ Displays a list of available commands, or detailed information for a specified c
 The command may be part of a command name or a whole command name. If it isn't specified, all available commands will be listed.
 
 **Format**: `!help [command]`  
-**Alias**: `commands`  
+**Alias**: commands  
 **Examples**:
 
 - `!help`
