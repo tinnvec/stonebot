@@ -13,13 +13,22 @@ module.exports = class QuestCommand extends Command {
     constructor(client) {
         super(client, {
             name: 'quest',
-            aliases: ['quests', '80g'],
+            aliases: ['quests', 'q', '80g'],
             group: 'community',
             memberName: 'quest',
             description: 'List of community members with the Hearthstone Play a Friend (aka 80g) quest.',
             format: '[action] <bnetServer> [bnetId]',
-            // details: '`<bnetServer>` can be one of `americas`, `na`, `europe`, `eu`, `asia`.',
-            // examples: ['quest-list americas', 'quest-list europe', 'quest-list asia'],
+            details: 'Quests are removed (expire) after 24 hours or if you leave the discord server.\n' +
+                'Responses from this command will be removed automatically after 10 minutes.\n' +
+                '`[action]` can be one of `list`, `add`, `remove`. Default: `list`.\n' +
+                '`<bnetServer>` can be one of `americas|america|na`, `europe|eu`, `asia`.\n' +
+                '`[bnetId]` is your battle.net id. Required only for add action, optional if you are on the villagers list.',
+            examples: [
+                'quest list americas',
+                'q na',
+                '80g add europe User#1234',
+                'q remove asia'
+            ],
             guildOnly: true,
             args: [ listAction, bnetServer, bnetId ]
             // argsPromptLimit: 0

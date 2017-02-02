@@ -13,7 +13,7 @@ module.exports = class SoundCommand extends Command {
         Object.assign(nameWithDefault, cardName)
         super(client, {
             name: 'sound',
-            aliases: ['snd', 's', '🔈', '🔉', '🔊', '🎧', '🎵'],
+            aliases: ['snd', 's'],
             group: 'card',
             memberName: 'sound',
             guildOnly: true,
@@ -23,8 +23,8 @@ module.exports = class SoundCommand extends Command {
             examples: [
                 'sound tirion',
                 'sound attack jaraxxus',
-                'sound death refreshment vendor',
-                'sound trigger antonaidas'
+                'snd death refreshment vendor',
+                's trigger antonaidas'
             ],
             args: [ soundKind, nameWithDefault ]
         })
@@ -41,28 +41,22 @@ module.exports = class SoundCommand extends Command {
             args.cardName = await this.args[1].obtain(msg).catch(winston.error)
             this.args[1].default = ''
         }
-        if (!msg.channel.typing) { msg.channel.startTyping() }
-
-        const card = await Card.findByName(args.cardName).catch(winston.error)
-        if (!card) {
-            await MessageManager.deleteArgumentPromptMessages(msg).catch(winston.error)
-            return msg.reply(`sorry, I couldn't find a card with a name like '${args.cardName}'`)
-                .then(m => { if (m.channel.typing) { m.channel.stopTyping() } })
-                .catch(winston.error)
-        }
-
-        const sounds = card.getSoundParts(args.soundKind)
-        if (!sounds || sounds.length < 1) {
-            await MessageManager.deleteArgumentPromptMessages(msg).catch(winston.error)
-            return msg.reply(`sorry, I don't know the ${args.soundKind} sound for ${card.name}.`)
-                .then(m => { if (m.channel.typing) { m.channel.stopTyping() } })
-                .catch(winston.error)
-        }
 
         await MessageManager.deleteArgumentPromptMessages(msg)
-        return msg.reply(`I'll join your voice channel and play the ${args.soundKind} sound for ${card.name} in a moment.`)
+        if (!msg.channel.typing) { msg.channel.startTyping() }
+
+        let reply, sounds
+        const card = await Card.findByName(args.cardName).catch(winston.error)
+        if (!card) { reply = `sorry, I couldn't find a card with a name like '${args.cardName}'` }
+        else {
+            sounds = card.getSoundParts(args.soundKind)
+            if (!sounds || sounds.length < 1) { reply = `sorry, I don't know the ${args.soundKind} sound for ${card.name}.` }
+        }
+        
+        return msg.reply(reply || `I'll join your voice channel and play the ${args.soundKind} sound for ${card.name} in a moment.`)
             .then(m => { if (m.channel.typing) { m.channel.stopTyping() } })
             .then(() => {
+                if (reply) { return }
                 this.queue.push({ message: msg, card: card, soundKind: args.soundKind })
                 if (this.queue.length === 1) { this.handleSound().catch(winston.error) }
             }).catch(winston.error)
@@ -72,29 +66,32 @@ module.exports = class SoundCommand extends Command {
         const message = this.queue[0].message
         const card = this.queue[0].card
         const soundKind = this.queue[0].soundKind
+        
+        let reply, connection
         const file = await card.getSound(soundKind).catch(winston.error)
-        if (!file) {
-            this.queue.shift()
-            message.reply(`sorry, I don't know the ${soundKind} sound for ${card.name}.`).catch(winston.error)
-            if (this.queue.length > 0) { this.handleSound() }
-            return
+        if (!file) { reply = `sorry, I don't know the ${soundKind} sound for ${card.name}.` }
+        else {
+            connection = await this.joinVoiceChannel(message.member.voiceChannel).catch(winston.error)
+            if (!connection || typeof connection === 'string') {
+                if (message.member.voiceChannel) { message.member.voiceChannel.leave() }
+                reply = `sorry, there was an error joining your voice channel, ${connection || 'unkown'}`
+            }
         }
-        const connection = await this.joinVoiceChannel(message.member.voiceChannel).catch(winston.error)
-        if (!connection || typeof connection === 'string') {
-            this.queue.shift()
-            if (message.member.voiceChannel) { message.member.voiceChannel.leave() }
-            message.reply(`sorry, there was an error joining your voice channel, ${connection || 'unkown'}`).catch(winston.error)
-            if (this.queue.length > 0) { this.handleSound() }
-            return
+        
+        if (reply) {
+            return message.reply(reply)
+                .then(() => {
+                    this.queue.shift()
+                    if (this.queue.length > 0) { this.handleSound() }
+                }).catch(winston.error)
         }
+
         connection.playFile(file).on('end', () => {
             this.queue.shift()
             if (this.queue.length > 0) {
                 if (this.queue[0].message.member.voiceChannel !== connection.channel) { connection.channel.leave() }
                 this.handleSound()
-            } else {
-                connection.channel.leave()
-            }
+            } else { connection.channel.leave() }
         })
     }
 

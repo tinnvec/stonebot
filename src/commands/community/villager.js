@@ -12,13 +12,22 @@ module.exports = class VillagerCommand extends Command {
     constructor(client) {
         super(client, {
             name: 'villager',
-            aliases: ['villagers', 'bnet'],
+            aliases: ['villagers', 'v', 'bnet', 'b'],
             group: 'community',
             memberName: 'villager',
             description: 'List of community members with battle.net ids.',
             format: '[action] <bnetServer> [bnetId]',
-            // details: '',
-            // examples: [''],
+            details: 'You\'ll be are removed from the list if you leave the discord server.\n' +
+                'Responses from this command will be removed automatically after 10 minutes.\n' +
+                '`[action]` can be one of `list`, `add`, `remove`. Default: `list`.\n' +
+                '`<bnetServer>` can be one of `americas|america|na`, `europe|eu`, `asia`.\n' +
+                '`[bnetId]` is your battle.net id. Required only for add action.',
+            examples: [
+                'villager list americas',
+                'v na',
+                'bnet add europe User#1234',
+                'b remove asia'
+            ],
             guildOnly: true,
             args: [ listAction, bnetServer, bnetId ]
             // argsPromptLimit: 0

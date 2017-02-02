@@ -1,24 +1,21 @@
 import Card from '../../card/card'
 import { Command } from 'discord.js-commando'
-import Discord from 'discord.js'
 import MessageManager from '../../message-manager'
 
 import { cardName } from '../../command-arguments'
 import winston from 'winston'
 
-module.exports = class TextCommand extends Command {
+module.exports = class GoldCommand extends Command {
     constructor(client) {
         super(client, {
-            name: 'text',
-            aliases: ['txt', 't', 'card', 'c'],
+            name: 'gold',
+            aliases: ['g', 'gold-image'],
             group: 'card',
-            memberName: 'text',
-            description: 'Displays card text.',
+            memberName: 'gold',
+            description: 'Displays golden card image.',
             examples: [
-                'text frostbolt',
-                't gadgetzan auctioneer',
-                'card yshaarj',
-                'c tinyfin'
+                'gold twisting nether',
+                'g dragonfire potion'
             ],
             args: [ cardName ]
         })
@@ -27,19 +24,17 @@ module.exports = class TextCommand extends Command {
     async run(msg, args) {
         await MessageManager.deleteArgumentPromptMessages(msg).catch(winston.error)
         if (!msg.channel.typing) { msg.channel.startTyping() }
-        
-        let reply
+
+        let reply, filename
         const card = await Card.findByName(args.cardName).catch(winston.error)
         if (!card) { reply = `sorry, I couldn't find a card with a name like '${args.cardName}'` }
-        
-        return (reply ?
-            msg.reply(reply) :
-            msg.embed(new Discord.RichEmbed()
-                .setColor(card.classColor)
-                .setTitle(card.name)
-                .setDescription(card.description)
-                .addField('Text', card.text))
-            ).then(m => { if (m.channel.typing) { m.channel.stopTyping() } })
+        else {
+            filename = await card.getImage('gold').catch(winston.error)
+            if (!filename) { reply = `sorry, there was a problem getting the golden image for ${card.name}` }
+        }
+
+        return (reply ? msg.reply(reply) : msg.say('', { file: { attachment: filename } }))
+            .then(m => { if (m.channel.typing) { m.channel.stopTyping() } })
             .catch(winston.error)
     }
 }
