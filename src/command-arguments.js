@@ -8,6 +8,7 @@ export const soundKind = {
     key: 'soundKind',
     prompt: '',
     type: 'string',
+    parse: value => { return value.toLowerCase() },
     default: 'play'
 }
 
