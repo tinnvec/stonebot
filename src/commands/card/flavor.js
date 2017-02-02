@@ -6,19 +6,17 @@ import MessageManager from '../../message-manager'
 import { cardName } from '../../command-arguments'
 import winston from 'winston'
 
-module.exports = class TextCommand extends Command {
+module.exports = class TFlavorCommand extends Command {
     constructor(client) {
         super(client, {
-            name: 'text',
-            aliases: ['txt', 't', 'card', 'c'],
+            name: 'flavor',
+            aliases: ['f', 'flavor-text'],
             group: 'card',
-            memberName: 'text',
-            description: 'Displays card text.',
+            memberName: 'flavor',
+            description: 'Displays card text and flavor text.',
             examples: [
-                'text frostbolt',
-                't gadgetzan auctioneer',
-                'card yshaarj',
-                'c tinyfin'
+                'flavor devolve',
+                'f small time recruits'
             ],
             args: [ cardName ]
         })
@@ -27,18 +25,19 @@ module.exports = class TextCommand extends Command {
     async run(msg, args) {
         await MessageManager.deleteArgumentPromptMessages(msg).catch(winston.error)
         if (!msg.channel.typing) { msg.channel.startTyping() }
-        
+
         let reply
         const card = await Card.findByName(args.cardName).catch(winston.error)
         if (!card) { reply = `sorry, I couldn't find a card with a name like '${args.cardName}'` }
-        
+
         return (reply ?
             msg.reply(reply) :
             msg.embed(new Discord.RichEmbed()
                 .setColor(card.classColor)
                 .setTitle(card.name)
                 .setDescription(card.description)
-                .addField('Text', card.text))
+                .addField('Text', card.text)
+                .addField('Flavor', card.flavor))
             ).then(m => { if (m.channel.typing) { m.channel.stopTyping() } })
             .catch(winston.error)
     }
