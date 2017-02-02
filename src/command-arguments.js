@@ -11,25 +11,39 @@ export const soundKind = {
     default: 'play'
 }
 
-const bnetServerChoices = ['americas', 'na', 'europe', 'eu', 'asia']
+export const listAction = {
+    key: 'listAction',
+    prompt: '',
+    type: 'string',
+    parse: value => { return value.toLowerCase() },
+    default: 'list'
+}
+
+const bnetServerChoices = ['americas', 'america', 'na', 'europe', 'eu', 'asia']
 export const bnetServer = {
     key: 'bnetServer',
     prompt: 'which battle.net server do you play on?\n',
     type: 'string',
     parse: value => {
         value = value.toLowerCase()
-        if (value === 'na') { return 'americas' }
+        if (value === 'na' || value === 'america') { return 'americas' }
         if (value === 'eu') { return 'europe'}
         return value
     },
     validate: value => {
         if (bnetServerChoices.includes(value.toLowerCase())) { return true }
         return `please choose a server from \`${bnetServerChoices.join('`, `')}\`.\n`
-    }
+    },
+    default: ''
 }
 
 export const bnetId = {
     key: 'bnetId',
     prompt: 'what is your battle.net id?\n',
-    type: 'string'
+    type: 'string',
+    validate: value => {
+        if (/\S+#\d+/.test(value)) { return true }
+        return 'sorry, that doesn\'t look like a battle.net id. What is your battle.net id?\n'
+    },
+    default: ''
 }
