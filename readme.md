@@ -135,7 +135,7 @@ Responses from this command will be removed automatically after 10 minutes.
 
 # Utility
 
-## util:help
+## help
 
 Displays a list of available commands, or detailed information for a specified command.
 
@@ -143,25 +143,25 @@ The command may be part of a command name or a whole command name. If it isn't s
 
 **Format**: `!help [command]`  
 **Alias**: commands  
-**Examples**:
+**Examples**
 
 - `!help`
 - `!help prefix`
 
-## util:ping
+## ping
 
 Checks the bot's ping to the Discord server.
 
 **Format**: `!ping`
 
-## util:prefix
+## prefix
 
 Shows or sets the command prefix.
 
 If no prefix is provided, the current prefix will be shown. If the prefix is "default", the prefix will be reset to the bot's default prefix. If the prefix is "none", the prefix will be removed entirely, only allowing mentions to run commands. Only administrators may change the prefix.
 
 **Format**: `!prefix [prefix/"default"/"none"]`  
-**Examples**:
+**Examples**
 
 - `!prefix`
 - `!prefix -`
