@@ -80,7 +80,7 @@ General search accross most visible card text in addition to several keywords.
 Set keywords: `nax`, `naxx`, `gvg`, `brm`, `tgt`, `loe`, `tog`, `wog`, `wotog`, `kara`, `msg`, `msog`.  
 Value keywords: `attack`, `health`, `mana`, `artist`.  
 Value keywords take the form of `<keyword>:<value>`.  
-The artist keyword only accepts text without spaces.  
+The `artist` keyword only accepts text without spaces.  
 All other keywords use a numeric `<value>` with range options.  
 `<value>` alone means exact value.  
 `<value>-` means value or lower.  
