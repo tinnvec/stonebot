@@ -71,6 +71,33 @@ Displays the artist and full art from the card.
 - `!art raza`
 - `!a secretkeeper`
 
+## search
+
+Searches for Hearthstone cards.
+
+Works like Hearthstone collection searching.  
+General search accross most visible card text in addition to several keywords.  
+Set keywords: `nax`, `naxx`, `gvg`, `brm`, `tgt`, `loe`, `tog`, `wog`, `wotog`, `kara`, `msg`, `msog`.  
+Value keywords: `attack`, `health`, `mana`, `artist`.  
+Value keywords take the form of `<keyword>:<value>`.  
+The `artist` keyword only accepts text without spaces.  
+All other keywords use a numeric `<value>` with range options.  
+`<value>` alone means exact value.  
+`<value>-` means value or lower.  
+`<value>+` means value or higher.  
+`<value1>-<value2>` means between value1 and value2.  
+
+**Format**: `!search <terms>...`  
+**Alias**: find  
+**Examples**
+
+- `!search thermaplugg`
+- `!search health:2+ battlecry`
+- `!search artist:blizz`
+- `!search mana:4- loe`
+- `!search health:8+`
+- `!search attack:3-5 mana:2-4 deathrattle`
+
 ## sound
 
 Plays card sound in your voice channel. (Usable only in servers)
@@ -116,7 +143,7 @@ Responses from this command will be removed automatically after 10 minutes.
 
 ## quest
 
-Lists community members with the Hearhtstone Play a Friend (aka 80g) quest.
+Lists community members with the Hearhtstone Play a Friend (aka 80g) quest. (Usable only in servers)
 
 Quests are removed (expire) after 24 hours or if you leave the discord server.  
 Responses from this command will be removed automatically after 10 minutes.  
@@ -135,7 +162,13 @@ Responses from this command will be removed automatically after 10 minutes.
 
 # Utility
 
-## util:help
+## stats
+
+Displays bot statistics. Bot owner only. (Usable only in servers)
+
+**Format**: `!stats`
+
+## help
 
 Displays a list of available commands, or detailed information for a specified command.
 
@@ -143,25 +176,25 @@ The command may be part of a command name or a whole command name. If it isn't s
 
 **Format**: `!help [command]`  
 **Alias**: commands  
-**Examples**:
+**Examples**
 
 - `!help`
 - `!help prefix`
 
-## util:ping
+## ping
 
 Checks the bot's ping to the Discord server.
 
 **Format**: `!ping`
 
-## util:prefix
+## prefix
 
 Shows or sets the command prefix.
 
 If no prefix is provided, the current prefix will be shown. If the prefix is "default", the prefix will be reset to the bot's default prefix. If the prefix is "none", the prefix will be removed entirely, only allowing mentions to run commands. Only administrators may change the prefix.
 
 **Format**: `!prefix [prefix/"default"/"none"]`  
-**Examples**:
+**Examples**
 
 - `!prefix`
 - `!prefix -`
