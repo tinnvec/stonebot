@@ -21,7 +21,7 @@ module.exports = class StatsCommand extends Command {
     async run(msg) {
         return msg.embed({
             title: `${this.client.user.username} Statistics`,
-            image: { url: this.client.user.avatarURL },
+            thumbnail: { url: this.client.user.displayAvatarURL },
             fields: [
                 {
                     name: 'Uptime',
