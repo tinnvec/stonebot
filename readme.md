@@ -116,7 +116,7 @@ Responses from this command will be removed automatically after 10 minutes.
 
 ## quest
 
-Lists community members with the Hearhtstone Play a Friend (aka 80g) quest.
+Lists community members with the Hearhtstone Play a Friend (aka 80g) quest. (Usable only in servers)
 
 Quests are removed (expire) after 24 hours or if you leave the discord server.  
 Responses from this command will be removed automatically after 10 minutes.  
@@ -134,6 +134,12 @@ Responses from this command will be removed automatically after 10 minutes.
 - `!q remove asia`
 
 # Utility
+
+## stats
+
+Displays bot statistics. Bot owner only. (Usable only in servers)
+
+**Format**: `!stats`
 
 ## help
 
