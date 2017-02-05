@@ -1,12 +1,12 @@
 {
+    "root": true,
     "env": {
         "es6": true,
         "node": true
     },
-    "parser": "babel-eslint",
     "parserOptions": {
         "sourceType": "module",
-        "ecmaFeatures": { "esversion": 6 }
+        "ecmaVersion": 8
     },
     "extends": "eslint:recommended",
     "rules": {
