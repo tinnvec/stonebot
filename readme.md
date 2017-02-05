@@ -71,6 +71,33 @@ Displays the artist and full art from the card.
 - `!art raza`
 - `!a secretkeeper`
 
+## search
+
+Searches for Hearthstone cards.
+
+Works like Hearthstone collection searching.  
+General search accross most visible card text in addition to several keywords.  
+Set keywords: `nax`, `naxx`, `gvg`, `brm`, `tgt`, `loe`, `tog`, `wog`, `wotog`, `kara`, `msg`, `msog`.  
+Value keywords: `attack`, `health`, `mana`, `artist`.  
+Value keywords take the form of `<keyword>:<value>`.  
+The artist keyword only accepts text without spaces.  
+All other keywords use a numeric `<value>` with range options.  
+`<value>` alone means exact value.  
+`<value>-` means value or lower.  
+`<value>+` means value or higher.  
+`<value1>-<value2>` means between value1 and value2.  
+
+**Format**: `!search <terms>...`  
+**Alias**: find  
+**Examples**
+
+- `!search thermaplugg`
+- `!search health:2+ battlecry`
+- `!search artist:blizz`
+- `!search mana:4- loe`
+- `!search health:8+`
+- `!search attack:3-5 mana:2-4 deathrattle`
+
 ## sound
 
 Plays card sound in your voice channel. (Usable only in servers)
