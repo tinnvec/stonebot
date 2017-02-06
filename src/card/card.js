@@ -25,47 +25,26 @@ const CLASS_COLORS = {
 export default class Card {
     constructor(obj) {
         this.json = obj
-
         // Identifiers
         this.id = obj.id
-        // this.dbfId = obj.dbfId
-
         // Stats
         this.cost = obj.cost
         this.attack = obj.attack
         this.health = obj.health
         this.durability = obj.durability
-
         // Details
         this.name = obj.name
         this.type = obj.type
         this.playerClass = obj.playerClass
         this._artist = obj.artist
-        // this.collectible = obj.collectible
-        // this.rarity = obj.rarity
-        // this.set = obj.set
-        // this.multiClassGroup = obj.multiClassGroup
-        // this.classes = obj.classes
-        // this.faction = obj.faction
-        
         // Texts
         this._text = obj.text
         this._collectionText = obj.collectionText
         this._flavor = obj.flavor
-        // this.targetingArrowText = obj.targetingArrowText
-        // this.howToEarn = obj.howToEarn
-        // this.howToEarnGolden = obj.howToEarnGolden
-
-        // Other
-        // this.dust = obj.dust
-        // this.playRequirements = obj.playRequirements
-        // this.mechanics = obj.mechanics
-        // this.entourage = obj.entourage
     }
 
     get artist() {
-        if (this._artist) { return this._artist }
-        return '_[unknown]_'
+        return this._artist || '_[unknown]_'
     }
 
     get text() {

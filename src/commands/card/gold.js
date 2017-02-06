@@ -24,7 +24,6 @@ module.exports = class GoldCommand extends Command {
     async run(msg, args) {
         await MessageManager.deleteArgumentPromptMessages(msg).catch(winston.error)
         if (!msg.channel.typing) { msg.channel.startTyping() }
-
         let reply, filename
         const card = await Card.findByName(args.cardName).catch(winston.error)
         if (!card) { reply = `sorry, I couldn't find a card with a name like '${args.cardName}'` }
@@ -32,9 +31,10 @@ module.exports = class GoldCommand extends Command {
             filename = await card.getImage('gold').catch(winston.error)
             if (!filename) { reply = `sorry, there was a problem getting the golden image for ${card.name}` }
         }
-
-        return (reply ? msg.reply(reply) : msg.say('', { file: { attachment: filename } }))
-            .then(m => { if (m.channel.typing) { m.channel.stopTyping() } })
-            .catch(winston.error)
+        return (reply ?
+            msg.reply(reply) :
+            msg.say('', { file: { attachment: filename } })
+        ).then(m => { if (m.channel.typing) { m.channel.stopTyping() } })
+        .catch(winston.error)
     }
 }
