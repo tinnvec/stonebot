@@ -92,6 +92,10 @@ export default class Card {
         return desc
     }
 
+    get url() {
+        return `http://hearthstone.gamepedia.com/${this.name.replace(/\s/g, '_')}`
+    }
+
     async getImage(imageType) {
         const filename = this.getImageFilename(imageType)
         if (fs.existsSync(filename)) {
