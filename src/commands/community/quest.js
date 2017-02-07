@@ -88,16 +88,16 @@ module.exports = class QuestCommand extends Command {
                 reply += `**${member.user.username}** - _${quest.bnetId}_\n`
             })
             return msg.say(reply)
-                .then(m => {
-                    if (m.channel.typing) { m.channel.stopTyping() }
-                    m.delete(RESPONSE_DELETE_TIME)
-                }).catch(winston.error)
-        }
-        
-        return msg.reply(reply)
             .then(m => {
                 if (m.channel.typing) { m.channel.stopTyping() }
                 m.delete(RESPONSE_DELETE_TIME)
             }).catch(winston.error)
+        }
+        
+        return msg.reply(reply)
+        .then(m => {
+            if (m.channel.typing) { m.channel.stopTyping() }
+            m.delete(RESPONSE_DELETE_TIME)
+        }).catch(winston.error)
     }
 }

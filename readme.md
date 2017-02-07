@@ -80,7 +80,7 @@ General search accross most visible card text in addition to several keywords.
 Set keywords: `nax`, `naxx`, `gvg`, `brm`, `tgt`, `loe`, `tog`, `wog`, `wotog`, `kara`, `msg`, `msog`.  
 Value keywords: `attack`, `health`, `mana`, `artist`.  
 Value keywords take the form of `<keyword>:<value>`.  
-The artist keyword only accepts text without spaces.  
+The `artist` keyword only accepts text without spaces.  
 All other keywords use a numeric `<value>` with range options.  
 `<value>` alone means exact value.  
 `<value>-` means value or lower.  
@@ -213,27 +213,3 @@ If no prefix is provided, the current prefix will be shown. If the prefix is "de
 
 Want to add stonebot to your server? I run a public version that you can invite to your server with the button at the top of this section, or the following url:  
 https://discordapp.com/oauth2/authorize?client_id=181041901225377793&scope=bot&permissions=3206144
-
-You can also run your own version with docker, using the information below.
-
-## Docker Instructions
-
-```bash
-# Clone the repository
-git clone https://github.com/tinnvec/stonebot.git
-cd stonebot
-
-# Rename sample config file
-cp src/config.json.example src/config.json
-
-# Edit src/config.json with desired settings
-
-# Build Docker image
-docker build -t stonebot .
-
-# Create data container for persistent settings
-docker run -v /data --name stonebot-data ubuntu:16.04
-
-# Run stonebot container
-docker run -d --name stonebot --volumes-from stonebot-data stonebot
-```

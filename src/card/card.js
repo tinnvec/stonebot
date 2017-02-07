@@ -9,63 +9,42 @@ import winston from 'winston'
 
 import cardSoundsById from './card-sounds-by-id'
 
-const CLASS_COLORS = { // RGB
-    'WARRIOR': [196, 30, 59],
-    'SHAMAN': [0, 122, 222],
-    'ROGUE': [0, 0, 0],
-    'PALADIN': [255, 245, 105],
-    'HUNTER': [171, 212, 115],
-    'DRUID': [199, 156, 110],
-    'WARLOCK': [148, 130, 201],
-    'MAGE': [105, 204, 240],
-    'PRIEST': [255, 255, 255],
-    'NEUTRAL': [128, 128, 128]
+const CLASS_COLORS = {
+    'WARRIOR': 12852795, // #C41E3B
+    'SHAMAN': 31454, // #007ADE
+    'ROGUE': 0, // #000000
+    'PALADIN': 16774505, // #FFF569
+    'HUNTER': 11261043, // #ABD473
+    'DRUID': 13081710, // #C79C6E
+    'WARLOCK': 9732809, // #9482C9
+    'MAGE': 6933744, // #69CCF0
+    'PRIEST': 16777215, // #FFFFFF
+    'NEUTRAL': 8421504 //#808080
 }
 
 export default class Card {
     constructor(obj) {
         this.json = obj
-
         // Identifiers
         this.id = obj.id
-        // this.dbfId = obj.dbfId
-
         // Stats
         this.cost = obj.cost
         this.attack = obj.attack
         this.health = obj.health
         this.durability = obj.durability
-
         // Details
         this.name = obj.name
         this.type = obj.type
         this.playerClass = obj.playerClass
         this._artist = obj.artist
-        // this.collectible = obj.collectible
-        // this.rarity = obj.rarity
-        // this.set = obj.set
-        // this.multiClassGroup = obj.multiClassGroup
-        // this.classes = obj.classes
-        // this.faction = obj.faction
-        
         // Texts
         this._text = obj.text
         this._collectionText = obj.collectionText
         this._flavor = obj.flavor
-        // this.targetingArrowText = obj.targetingArrowText
-        // this.howToEarn = obj.howToEarn
-        // this.howToEarnGolden = obj.howToEarnGolden
-
-        // Other
-        // this.dust = obj.dust
-        // this.playRequirements = obj.playRequirements
-        // this.mechanics = obj.mechanics
-        // this.entourage = obj.entourage
     }
 
     get artist() {
-        if (this._artist) { return this._artist }
-        return '_[unknown]_'
+        return this._artist || '_[unknown]_'
     }
 
     get text() {
@@ -90,6 +69,10 @@ export default class Card {
         desc += ` ${this.playerClass.toLowerCase().capitalizeFirstLetter()}`
         desc += ` ${this.type.toLowerCase().capitalizeFirstLetter()}`
         return desc
+    }
+
+    get url() {
+        return `http://hearthstone.gamepedia.com/${this.name.replace(/\s/g, '_')}`
     }
 
     async getImage(imageType) {
