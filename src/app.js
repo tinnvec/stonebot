@@ -5,7 +5,7 @@ import path from 'path'
 import sqlite from 'sqlite'
 import winston from 'winston'
 
-import config from './config.json'
+import config from '/data/config.json'
 
 String.prototype.capitalizeFirstLetter = function() { return this.charAt(0).toUpperCase() + this.slice(1) }
 
