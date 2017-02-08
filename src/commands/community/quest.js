@@ -31,7 +31,6 @@ module.exports = class QuestCommand extends Command {
             ],
             guildOnly: true,
             args: [ listAction, bnetServer, bnetId ]
-            // argsPromptLimit: 0
         })
     }
 
@@ -47,7 +46,11 @@ module.exports = class QuestCommand extends Command {
             this.args[1].default = ''
         }
         if (args.listAction === 'add') {
-            let villager = await Villager.find(msg.guild.id, msg.author.id, args.bnetServer).catch(winston.error)
+            let villager = await Villager.findOne({ where: {
+                guildId: msg.guild.id,
+                userId: msg.author.id,
+                bnetServer: args.bnetServer
+            } }).catch(winston.error)
             if (villager) {
                 args.bnetId = villager.bnetId
             } else if (!args.bnetId) {
@@ -56,48 +59,82 @@ module.exports = class QuestCommand extends Command {
                 this.args[2].default = ''
             }
         }
-        
         await MessageManager.deleteArgumentPromptMessages(msg)
-        if (!msg.channel.typing) { msg.channel.startTyping() }
-
-        let result, reply
+        
+        const listName = `${args.bnetServer.capitalizeFirstLetter()} 80g Quest`
+        let reply
+        let result = await Quest.findOne({ where: {
+            guildId: msg.guild.id,
+            userId: msg.author.id,
+            bnetServer: args.bnetServer
+        } }).catch(winston.error)
         switch (args.listAction) {
         case 'add':
-            result = await Quest.add(msg.guild.id, msg.author.id, args.bnetServer, args.bnetId).catch(winston.error)
-            reply = 'sorry, there was an error adding you to the'
-            if (result === 'added') { reply = 'added you to the' }
-            else if (result === 'updated') { reply = 'updated your entry in the' }
-            reply += ` Battle.net ${args.bnetServer.capitalizeFirstLetter()} 80g Quest list on this discord server.`
-            break
+            if (result) {
+                reply = `already have you on the ${listName} list`
+                if (result.bnetId !== args.bnetId) {
+                    await Quest.update({
+                        bnetId: args.bnetId
+                    }, { where: {
+                        guildId: msg.guild.id,
+                        userId: msg.author.id,
+                        bnetServer: args.bnetServer
+                    } }).then(() => { reply += ', updated your entry.' })
+                    .catch(err => {
+                        winston.error(err)
+                        reply += ', but there was an error updating your entry.'
+                    })
+                } else {
+                    reply += '.'
+                }
+            } else {
+                await Quest.create({
+                    guildId: msg.guild.id,
+                    userId: msg.author.id,
+                    bnetServer: args.bnetServer,
+                    bnetId: args.bnetId
+                }).then(() => { reply = `added you to the ${listName} list.` })
+                .catch(err => {
+                    winston.error(err)
+                    reply = `sorry, there was an error adding you to the ${listName} list.`
+                })
+            }
+            return msg.reply(reply)
+                .then(m => { m.delete(RESPONSE_DELETE_TIME) })
+                .catch(winston.error)
         case 'remove':
-            result = await Quest.remove(msg.guild.id, msg.author.id, args.bnetServer).catch(winston.error)
-            reply = 'sorry, there was an error removing you from the'
-            if (result === 1) { reply = 'removed you from the' }
-            reply += ` Battle.net ${args.bnetServer.capitalizeFirstLetter()} 80g Quest list on this discord server.`
-            break
+            if (!result) {
+                reply = `you're not on the ${listName} list.`
+            } else {
+                await Quest.destroy({ where: {
+                    guildId: msg.guild.id,
+                    userId: msg.author.id,
+                    bnetServer: args.bnetServer
+                }}).then(() => { reply = `removed you from the ${listName} list.` })
+                .catch(err => {
+                    winston.error(err)
+                    reply = `sorry, there was an error removing you from the ${listName} list.`
+                })
+            }
+            return msg.reply(reply)
+                .then(m => { m.delete(RESPONSE_DELETE_TIME) })
+                .catch(winston.error)
         default:
-            result = await Quest.getAll().catch(winston.error)
-            result = result.filter(q => { return q.guildId === parseInt(msg.guild.id) && q.bnetServer === args.bnetServer })
-            reply = `**${msg.guild.name} - Battle.net ${args.bnetServer.capitalizeFirstLetter()} - 80g Quest**\n` +
+            result = await Quest.findAll({ where: {
+                guildId: msg.guild.id,
+                bnetServer: args.bnetServer
+            } }).catch(winston.error)
+            return msg.say(`**${msg.guild.name} - ${listName}**\n` +
                 `These folks have the Hearthstone Play a Friend (aka 80g) quest on the Battle.net ${args.bnetServer.capitalizeFirstLetter()} server.\n` +
-                'If you also have the quest, they would would love to trade!\n\n'
-            if (result.length < 1) { reply += '_No users on this list._' }
-            result.forEach(quest => {
-                let member = msg.guild.members.find(m => parseInt(m.id) === quest.userId)
-                if (!member) { return }
-                reply += `**${member.user.username}** - _${quest.bnetId}_\n`
-            })
-            return msg.say(reply)
-            .then(m => {
-                if (m.channel.typing) { m.channel.stopTyping() }
-                m.delete(RESPONSE_DELETE_TIME)
-            }).catch(winston.error)
+                'If you also have the quest, they would would love to trade!\n\n' +
+                (result.length < 1 ? '_No users on this list._' :
+                    result.map(v => {
+                        let member = msg.guild.members.get(v.userId)
+                        if (!member) { return '' }
+                        return `**${member.user.username}** - _${v.bnetId}_`
+                    }).join('\n'))
+            ).then(m => { m.delete(RESPONSE_DELETE_TIME) })
+            .catch(winston.error)
         }
-        
-        return msg.reply(reply)
-        .then(m => {
-            if (m.channel.typing) { m.channel.stopTyping() }
-            m.delete(RESPONSE_DELETE_TIME)
-        }).catch(winston.error)
     }
 }
