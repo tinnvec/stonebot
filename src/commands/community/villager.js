@@ -30,7 +30,6 @@ module.exports = class VillagerCommand extends Command {
             ],
             guildOnly: true,
             args: [ listAction, bnetServer, bnetId ]
-            // argsPromptLimit: 0
         })
     }
 
@@ -50,47 +49,81 @@ module.exports = class VillagerCommand extends Command {
             args.bnetId = await this.args[2].obtain(msg).catch(winston.error)
             this.args[2].default = ''
         }
-        
         await MessageManager.deleteArgumentPromptMessages(msg).catch(winston.error)
-        if (!msg.channel.typing) { msg.channel.startTyping() }
-
-        let result, reply
+        
+        const listName = `Battle.net ${args.bnetServer.capitalizeFirstLetter()}`
+        let reply
+        let result = await Villager.findOne({ where: {
+            guildId: msg.guild.id,
+            userId: msg.author.id,
+            bnetServer: args.bnetServer
+        } }).catch(winston.error)
         switch (args.listAction) {
         case 'add':
-            result = await Villager.add(msg.guild.id, msg.author.id, args.bnetServer, args.bnetId).catch(winston.error)
-            reply = 'sorry, there was an error adding you to the'
-            if (result === 'added') { reply = 'added you to the' }
-            else if (result === 'updated') { reply = 'updated your entry in the' }
-            reply += ` Battle.net ${args.bnetServer.capitalizeFirstLetter()} list on this discord server.`
-            break
+            if (result) {
+                reply = `already have you on the ${listName} list`
+                if (result.bnetId !== args.bnetId) {
+                    await Villager.update({
+                        bnetId: args.bnetId
+                    }, { where: {
+                        guildId: msg.guild.id,
+                        userId: msg.author.id,
+                        bnetServer: args.bnetServer
+                    } }).then(() => { reply += ', updated your entry.' })
+                    .catch(err => {
+                        winston.error(err)
+                        reply += ', but there was an error updating your entry.'
+                    })
+                } else {
+                    reply += '.'
+                }
+            } else {
+                await Villager.create({
+                    guildId: msg.guild.id,
+                    userId: msg.author.id,
+                    bnetServer: args.bnetServer,
+                    bnetId: args.bnetId
+                }).then(() => { reply = `added you to the ${listName} list.` })
+                .catch(err => {
+                    winston.error(err)
+                    reply = `sorry, there was an error adding you to the ${listName} list.`
+                })
+            }
+            return msg.reply(reply)
+                .then(m => { m.delete(RESPONSE_DELETE_TIME) })
+                .catch(winston.error)
         case 'remove':
-            result = await Villager.remove(msg.guild.id, msg.author.id, args.bnetServer).catch(winston.error)
-            reply = 'sorry, there was an error removing you from the'
-            if (result === 1) { reply = 'removed you from the' }
-            reply += ` Battle.net ${args.bnetServer.capitalizeFirstLetter()} list on this discord server.`
-            break
+            if (!result) {
+                reply = `you're not on the ${listName} list.`
+            } else {
+                await Villager.destroy({ where: {
+                    guildId: msg.guild.id,
+                    userId: msg.author.id,
+                    bnetServer: args.bnetServer
+                }}).then(() => { reply = `removed you from the ${listName} list.` })
+                .catch(err => {
+                    winston.error(err)
+                    reply = `sorry, there was an error removing you from the ${listName} list.`
+                })
+            }
+            return msg.reply(reply)
+                .then(m => { m.delete(RESPONSE_DELETE_TIME) })
+                .catch(winston.error)
         default:
-            result = await Villager.getAll().catch(winston.error)
-            result = result.filter(v => { return v.guildId === parseInt(msg.guild.id) && v.bnetServer === args.bnetServer })
-            reply = `**${msg.guild.name} - Battle.net ${args.bnetServer.capitalizeFirstLetter()}**\n` +
-                `These folks play games on the Battle.net ${args.bnetServer.capitalizeFirstLetter()} server and would love to be your friend!\n\n`
-            if (result.length < 1) { reply += '_No users on this list._' }
-            result.forEach(villager => {
-                let member = msg.guild.members.find(m => parseInt(m.id) === villager.userId)
-                if (!member) { return }
-                reply += `**${member.user.username}** - _${villager.bnetId}_\n`
-            })
-            return msg.say(reply)
-                .then(m => {
-                    if (m.channel.typing) { m.channel.stopTyping() }
-                    m.delete(RESPONSE_DELETE_TIME)
-                }).catch(winston.error)
+            result = await Villager.findAll({ where: {
+                guildId: msg.guild.id,
+                bnetServer: args.bnetServer
+            } }).catch(winston.error)
+            return msg.say(`**${msg.guild.name} - ${listName}**\n` +
+                `These folks play games on the Battle.net ${args.bnetServer} server and would love to be your friend!\n\n` +
+                (result.length < 1 ? '_No users on this list._' :
+                    result.map(v => {
+                        let member = msg.guild.members.get(v.userId)
+                        if (!member) { return '' }
+                        return `**${member.user.username}** - _${v.bnetId}_`
+                    }).join('\n'))
+            ).then(m => { m.delete(RESPONSE_DELETE_TIME) })
+            .catch(winston.error)
         }
-        
-        return msg.reply(reply)
-            .then(m => {
-                if (m.channel.typing) { m.channel.stopTyping() }
-                m.delete(RESPONSE_DELETE_TIME)
-            }).catch(winston.error)
     }
 }
