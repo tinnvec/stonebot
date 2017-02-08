@@ -1,8 +1,9 @@
 import Commando from 'discord.js-commando'
-import Community from './community/community'
+import CommunityManager from './community/community-manager'
+import PostgreSQL from './postgresql/postgresql'
+import SequelizeProvider from './postgresql/sequelize-provider'
 
 import path from 'path'
-import sqlite from 'sqlite'
 import winston from 'winston'
 
 import config from '/data/config.json'
@@ -12,31 +13,32 @@ String.prototype.capitalizeFirstLetter = function() { return this.charAt(0).toUp
 winston.remove(winston.transports.Console)
 winston.add(winston.transports.Console, { level: config.logLevel })
 
+const postgresql = new PostgreSQL(config.database)
+postgresql.init()
+
 const client = new Commando.Client({ owner: config.owner, commandPrefix: config.prefix })
+const communityManager = new CommunityManager(client)
 
-client.on('debug', winston.debug)
-client.on('warn', winston.warn)
-client.on('error', winston.error)
+client
+    .on('debug', winston.debug)
+    .on('warn', winston.warn)
+    .on('error', winston.error)
+    .on('disconnect', event => { winston.warn(`Disconnected [${event.code}]: ${event.reason || 'Unknown reason'}`) })
+    .on('reconnecting', () => { winston.info('Reconnecting...') })
+    .on('guildCreate', guild => { winston.verbose(`Joined Guild: ${guild.name}.`) })
+    .on('guildDelete', guild => {
+        winston.verbose(`Departed Guild: ${guild.name}.`)
+        communityManager.handleGuildDepart(guild.id)
+    })
+    .on('guildMemberRemove', guildMember => { communityManager.handleMemberDepart(guildMember.guild.id, guildMember.id) })
+    .on('ready', async () => {
+        communityManager.start()
+        winston.info('Client Ready.')
+        winston.verbose(`Current Guilds (${client.guilds.size}): ${client.guilds.map(guild => { return guild.name }).join('; ')}.`)
+        client.user.setGame('Hearthstone')
+    })
 
-client.on('guildCreate', guild => { winston.info(`Joined Guild: ${guild.name}.`) })
-client.on('guildDelete', guild => { winston.info(`Departed Guild: ${guild.name}.`) })
-
-client.on('guildMemberRemove', guildMember => { Community.dropDepartedMember(guildMember.guild.id, guildMember.id) })
-
-client.on('disconnect', event => { winston.warn(`Disconnected [${event.code}]: ${event.reason || 'Unknown reason'}`)} )
-client.on('reconnecting', () => { winston.info('Reconnecting...')})
-
-
-client.on('ready', async () => {
-    await Community.init(client).catch(winston.error)
-    winston.info('Client Ready.')
-    winston.verbose(`Current Guilds (${client.guilds.size}): ${client.guilds.map(guild => { return guild.name }).join('; ')}.`)
-    client.user.setGame('Hearthstone')
-})
-
-client.setProvider(
-    sqlite.open('/data/settings.sqlite3').then(db => new Commando.SQLiteProvider(db))
-).catch(winston.error)
+client.setProvider(new SequelizeProvider(postgresql.db)).catch(winston.error)
 
 client.registry
     .registerDefaultTypes()
