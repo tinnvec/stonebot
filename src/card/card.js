@@ -143,7 +143,7 @@ export default class Card {
         // alternate: http://media.services.zam.com/v1/media/byName/hs/sounds/enus
         const urlBase = 'http://media-hearth.cursecdn.com/audio/card-sounds/sound'
         const extension = 'ogg'
-        return `${urlBase}/${filename}.${extension}`
+        return encodeURI(`${urlBase}/${filename}.${extension}`)
     }
 
     static getAll() {
