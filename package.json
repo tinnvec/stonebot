@@ -1,6 +1,6 @@
 {
   "name": "stonebot",
-  "version": "1.8.2",
+  "version": "1.8.3",
   "main": "app.js",
   "scripts": {
     "cleanup": "rm -rf bin",
