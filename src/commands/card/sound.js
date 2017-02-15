@@ -66,7 +66,7 @@ module.exports = class SoundCommand extends Command {
         
         let reply, connection
         const file = await card.getSound(soundKind).catch(winston.error)
-        if (!file) { reply = `sorry, I don't know the ${soundKind} sound for ${card.name}.` }
+        if (!file) { reply = `sorry, I wasn't able to get the ${soundKind} sound for ${card.name}.` }
         else {
             connection = await this.joinVoiceChannel(message.member.voiceChannel).catch(winston.error)
             if (!connection || typeof connection === 'string') {
