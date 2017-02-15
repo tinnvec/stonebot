@@ -23,7 +23,7 @@ module.exports = class ImageArtCommand extends Command {
     async run(msg, args) {
         if (!msg.channel.typing) { msg.channel.startTyping() }
         let reply, filename
-        const card = await Card.findByName(args.cardName)
+        const card = await Card.findByName(args.cardName).catch(winston.error)
         if (!card) { reply = `sorry, I couldn't find a card with a name like '${args.cardName}'` }
         else {
             filename = await card.getImage('art').catch(winston.error)
