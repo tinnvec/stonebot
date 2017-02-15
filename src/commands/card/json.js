@@ -1,6 +1,5 @@
 import Card from '../../card/card'
 import { Command } from 'discord.js-commando'
-import MessageManager from '../../message-manager'
 
 import { cardName } from '../../command-arguments'
 import winston from 'winston'
@@ -18,7 +17,6 @@ module.exports = class JSONCommand extends Command {
     }
 
     async run(msg, args) {
-        await MessageManager.deleteArgumentPromptMessages(msg).catch(winston.error)
         if (!msg.channel.typing) { msg.channel.startTyping() }
         const card = await Card.findByName(args.cardName).catch(winston.error)
         return (card ?

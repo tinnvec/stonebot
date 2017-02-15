@@ -1,12 +1,10 @@
 import { Command } from 'discord.js-commando'
-import MessageManager from '../../message-manager'
 import Villager from '../../community/villager'
 
 import { bnetId, bnetServer, listAction } from '../../command-arguments'
 import winston from 'winston'
 
 const LIST_ACTIONS = ['list', 'add', 'remove']
-const RESPONSE_DELETE_TIME = 10 * 60 * 1000
 
 module.exports = class VillagerCommand extends Command {
     constructor(client) {
@@ -49,7 +47,6 @@ module.exports = class VillagerCommand extends Command {
             args.bnetId = await this.args[2].obtain(msg).catch(winston.error)
             this.args[2].default = ''
         }
-        await MessageManager.deleteArgumentPromptMessages(msg).catch(winston.error)
         
         const listName = `Battle.net ${args.bnetServer.capitalizeFirstLetter()}`
         let reply
@@ -89,9 +86,7 @@ module.exports = class VillagerCommand extends Command {
                     reply = `sorry, there was an error adding you to the ${listName} list.`
                 })
             }
-            return msg.reply(reply)
-                .then(m => { m.delete(RESPONSE_DELETE_TIME) })
-                .catch(winston.error)
+            return msg.reply(reply).catch(winston.error)
         case 'remove':
             if (!result) {
                 reply = `you're not on the ${listName} list.`
@@ -106,9 +101,7 @@ module.exports = class VillagerCommand extends Command {
                     reply = `sorry, there was an error removing you from the ${listName} list.`
                 })
             }
-            return msg.reply(reply)
-                .then(m => { m.delete(RESPONSE_DELETE_TIME) })
-                .catch(winston.error)
+            return msg.reply(reply).catch(winston.error)
         default:
             result = await Villager.findAll({ where: {
                 guildId: msg.guild.id,
@@ -122,8 +115,7 @@ module.exports = class VillagerCommand extends Command {
                         if (!member) { return '' }
                         return `**${member.user.username}** - _${v.bnetId}_`
                     }).join('\n'))
-            ).then(m => { m.delete(RESPONSE_DELETE_TIME) })
-            .catch(winston.error)
+            ).catch(winston.error)
         }
     }
 }
