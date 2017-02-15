@@ -1,10 +1,10 @@
-import Sequelize from 'sequelize'
+const Sequelize = require('sequelize')
 
-import winston from 'winston'
+const winston = require('winston')
 
-import config from '/data/config.json'
+const config = require('/data/config.json')
 
-export default class PostgreSQL {
+class PostgreSQL {
     constructor() {
         this.database = new Sequelize(config.database.name, config.database.username, config.database.password, {
             host: config.database.host || 'localhost',
@@ -24,3 +24,5 @@ export default class PostgreSQL {
             .catch(err => { winston.error(`Error connecting to database: ${err}`) })
     }
 }
+
+module.exports = PostgreSQL

@@ -1,10 +1,10 @@
-import { Command } from 'discord.js-commando'
-import Discord from 'discord.js'
+const { Command } = require('discord.js-commando')
+const Discord = require('discord.js')
 
-import moment from 'moment'
-import winston from 'winston'
+const moment = require('moment')
+const winston = require('winston')
 
-module.exports = class StatsCommand extends Command {
+class StatsCommand extends Command {
     constructor(client) {
         super(client, {
             name: 'stats',
@@ -32,3 +32,5 @@ module.exports = class StatsCommand extends Command {
         ).catch(winston.error)
     }
 }
+
+module.exports = StatsCommand

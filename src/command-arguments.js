@@ -1,10 +1,10 @@
-export const cardName = {
+const cardName = {
     key: 'cardName',
     prompt: 'what card are you searching for?\n',
     type: 'string'
 }
 
-export const soundKind = {
+const soundKind = {
     key: 'soundKind',
     prompt: '',
     type: 'string',
@@ -12,7 +12,7 @@ export const soundKind = {
     default: 'play'
 }
 
-export const listAction = {
+const listAction = {
     key: 'listAction',
     prompt: '',
     type: 'string',
@@ -21,7 +21,7 @@ export const listAction = {
 }
 
 const bnetServerChoices = ['americas', 'america', 'na', 'europe', 'eu', 'asia']
-export const bnetServer = {
+const bnetServer = {
     key: 'bnetServer',
     prompt: 'which battle.net server do you play on?\n',
     type: 'string',
@@ -38,7 +38,7 @@ export const bnetServer = {
     default: ''
 }
 
-export const bnetId = {
+const bnetId = {
     key: 'bnetId',
     prompt: 'what is your battle.net id?\n',
     type: 'string',
@@ -48,3 +48,5 @@ export const bnetId = {
     },
     default: ''
 }
+
+module.exports = { cardName, soundKind, listAction, bnetServer, bnetId }

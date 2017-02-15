@@ -1,12 +1,12 @@
-import Card from '../../card/card'
-import { Command } from 'discord.js-commando'
+const Card = require('../../card/card')
+const { Command } = require('discord.js-commando')
 
-import { soundKind, cardName } from '../../command-arguments'
-import winston from 'winston'
+const { soundKind, cardName } = require('../../command-arguments')
+const winston = require('winston')
 
 const SOUND_KINDS = ['play', 'attack', 'trigger', 'death']
 
-module.exports = class SoundCommand extends Command {
+class SoundCommand extends Command {
     constructor(client) {
         const nameWithDefault = { default: '' }
         Object.assign(nameWithDefault, cardName)
@@ -99,3 +99,5 @@ module.exports = class SoundCommand extends Command {
         return await voiceChannel.join().catch(err => { return err.message.replace('You', 'I') })
     }
 }
+
+module.exports = SoundCommand

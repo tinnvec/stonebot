@@ -1,5 +1,5 @@
-import PostgreSQL from '../postgresql/postgresql'
-import Sequelize from 'sequelize'
+const PostgreSQL = require('../postgresql/postgresql')
+const Sequelize = require('sequelize')
 
 const postgresql = new PostgreSQL()
 const Villager = postgresql.db.define('villager', {
@@ -9,4 +9,4 @@ const Villager = postgresql.db.define('villager', {
     bnetId: { type: Sequelize.STRING }
 })
 Villager.sync()
-export default Villager
+module.exports = Villager

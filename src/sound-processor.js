@@ -1,8 +1,8 @@
-import ffmpeg from 'fluent-ffmpeg'
-import mkdirp from 'mkdirp'
-import path from 'path'
+const ffmpeg = require('fluent-ffmpeg')
+const mkdirp = require('mkdirp')
+const path = require('path')
 
-export default class SoundProcessor {
+class SoundProcessor {
     static mergeSounds(sounds, filename) {
         const cmd = ffmpeg()
         return new Promise((resolve, reject) => {
@@ -24,3 +24,5 @@ export default class SoundProcessor {
         })
     }
 }
+
+module.exports = SoundProcessor

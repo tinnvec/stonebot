@@ -1,13 +1,13 @@
-import { Command } from 'discord.js-commando'
-import Quest from '../../community/quest'
-import Villager from '../../community/villager'
+const { Command } = require('discord.js-commando')
+const Quest = require('../../community/quest')
+const Villager = require('../../community/villager')
 
-import { bnetId, bnetServer, listAction } from '../../command-arguments'
-import winston from 'winston'
+const { bnetId, bnetServer, listAction } = require('../../command-arguments')
+const winston = require('winston')
 
 const LIST_ACTIONS = ['list', 'add', 'remove']
 
-module.exports = class QuestCommand extends Command {
+class QuestCommand extends Command {
     constructor(client) {
         super(client, {
             name: 'quest',
@@ -130,3 +130,5 @@ module.exports = class QuestCommand extends Command {
         }
     }
 }
+
+module.exports = QuestCommand

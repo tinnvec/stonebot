@@ -1,10 +1,10 @@
-import Card from '../../card/card'
-import { Command } from 'discord.js-commando'
+const Card = require('../../card/card')
+const { Command } = require('discord.js-commando')
 
-import { cardName } from '../../command-arguments'
-import winston from 'winston'
+const { cardName } = require('../../command-arguments')
+const winston = require('winston')
 
-module.exports = class GoldCommand extends Command {
+class GoldCommand extends Command {
     constructor(client) {
         super(client, {
             name: 'gold',
@@ -36,3 +36,5 @@ module.exports = class GoldCommand extends Command {
         .catch(winston.error)
     }
 }
+
+module.exports = GoldCommand

@@ -1,12 +1,12 @@
-import { Command } from 'discord.js-commando'
-import Villager from '../../community/villager'
+const { Command } = require('discord.js-commando')
+const Villager = require('../../community/villager')
 
-import { bnetId, bnetServer, listAction } from '../../command-arguments'
-import winston from 'winston'
+const { bnetId, bnetServer, listAction } = require('../../command-arguments')
+const winston = require('winston')
 
 const LIST_ACTIONS = ['list', 'add', 'remove']
 
-module.exports = class VillagerCommand extends Command {
+class VillagerCommand extends Command {
     constructor(client) {
         super(client, {
             name: 'villager',
@@ -119,3 +119,5 @@ module.exports = class VillagerCommand extends Command {
         }
     }
 }
+
+module.exports = VillagerCommand

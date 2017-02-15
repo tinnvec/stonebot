@@ -1,5 +1,5 @@
-import PostgreSQL from '../postgresql/postgresql'
-import Sequelize from 'sequelize'
+const PostgreSQL = require('../postgresql/postgresql')
+const Sequelize = require('sequelize')
 
 const postgresql = new PostgreSQL()
 const Quest = postgresql.db.define('quest', {
@@ -9,4 +9,4 @@ const Quest = postgresql.db.define('quest', {
     bnetId: { type: Sequelize.STRING }
 })
 Quest.sync()
-export default Quest
+module.exports = Quest

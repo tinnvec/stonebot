@@ -1,13 +1,13 @@
-import FileManager from '../file-manager'
-import Fuse from 'fuse.js'
-import HearthstoneJSON from 'hearthstonejson'
-import SoundProcessor from '../sound-processor'
+const FileManager = require('../file-manager')
+const Fuse = require('fuse.js')
+const HearthstoneJSON = require('hearthstonejson').default
+const SoundProcessor = require('../sound-processor')
 
-import fs from 'fs'
-import toMarkdown from 'to-markdown'
-import winston from 'winston'
+const fs = require('fs')
+const toMarkdown = require('to-markdown')
+const winston = require('winston')
 
-import cardSoundsById from './card-sounds-by-id'
+const cardSoundsById = require('./card-sounds-by-id')
 
 const CLASS_COLORS = {
     'WARRIOR': 12852795, // #C41E3B
@@ -22,7 +22,7 @@ const CLASS_COLORS = {
     'NEUTRAL': 8421504 //#808080
 }
 
-export default class Card {
+class Card {
     constructor(obj) {
         this.json = obj
         // Identifiers
@@ -193,3 +193,5 @@ export default class Card {
         return foundCollectible[0].item
     }
 }
+
+module.exports = Card

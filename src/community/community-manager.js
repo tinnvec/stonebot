@@ -1,9 +1,9 @@
-import Quest from './quest'
-import Villager from './villager'
+const Quest = require('./quest')
+const Villager = require('./villager')
 
-import winston from 'winston'
+const winston = require('winston')
 
-export default class CommunityManager {
+class CommunityManager {
     constructor(client) {
         this.client = client
     }
@@ -84,3 +84,5 @@ export default class CommunityManager {
             .catch(winston.error)
     }
 }
+
+module.exports = CommunityManager
