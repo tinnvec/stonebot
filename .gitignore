@@ -50,7 +50,7 @@ jspm_packages
 bin
 
 # Config files
-src/config.json
+config.json
 
 # Database
 *.sqlite*

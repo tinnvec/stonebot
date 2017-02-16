@@ -1,7 +1,7 @@
-const FileManager = require('../file-manager')
+const FileManager = require('./file-manager')
 const Fuse = require('fuse.js')
 const HearthstoneJSON = require('hearthstonejson').default
-const SoundProcessor = require('../sound-processor')
+const SoundProcessor = require('./sound-processor')
 
 const fs = require('fs')
 const toMarkdown = require('to-markdown')
