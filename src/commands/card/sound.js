@@ -1,15 +1,12 @@
 const Card = require('../../card/card')
 const { Command } = require('discord.js-commando')
 
-const { soundKind, cardName } = require('../../command-arguments')
 const winston = require('winston')
 
 const SOUND_KINDS = ['play', 'attack', 'trigger', 'death']
 
 class SoundCommand extends Command {
     constructor(client) {
-        const nameWithDefault = { default: '' }
-        Object.assign(nameWithDefault, cardName)
         super(client, {
             name: 'sound',
             aliases: ['snd', 's'],
@@ -25,7 +22,21 @@ class SoundCommand extends Command {
                 'snd death refreshment vendor',
                 's trigger antonaidas'
             ],
-            args: [ soundKind, nameWithDefault ]
+            args: [
+                {
+                    key: 'soundKind',
+                    prompt: '',
+                    type: 'string',
+                    parse: value => { return value.toLowerCase() },
+                    default: 'play'
+                },
+                {
+                    key: 'cardName',
+                    prompt: 'what card are you searching for?\n',
+                    type: 'string',
+                    default: ''
+                }
+            ]
         })
         this.queue = []
     }

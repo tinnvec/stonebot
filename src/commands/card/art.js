@@ -1,7 +1,6 @@
 const Card = require('../../card/card')
 const { Command } = require('discord.js-commando')
 
-const { cardName } = require('../../command-arguments')
 const winston = require('winston')
 
 class ImageArtCommand extends Command {
@@ -16,7 +15,13 @@ class ImageArtCommand extends Command {
                 'art raza',
                 'a secretkeeper'
             ],
-            args: [ cardName ]
+            args: [
+                {
+                    key: 'cardName',
+                    prompt: 'what card are you searching for?\n',
+                    type: 'string'
+                }
+            ]
         })
     }
 
