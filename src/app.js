@@ -19,14 +19,10 @@ client
     .on('debug', winston.debug)
     .on('warn', winston.warn)
     .on('error', winston.error)
-    .on('disconnect', event => { winston.warn(`Disconnected [${event.code}]: ${event.reason || 'Unknown reason'}`) })
+    .on('disconnect', event => { winston.warn(`Disconnected [${event.code}]: ${event.reason || 'Unknown reason'}.`) })
     .on('reconnecting', () => { winston.info('Reconnecting...') })
     .on('guildCreate', guild => { winston.verbose(`Joined Guild: ${guild.name}.`) })
-    .on('guildDelete', guild => {
-        winston.verbose(`Departed Guild: ${guild.name}.`)
-        communityManager.handleGuildDepart(guild.id)
-    })
-    .on('guildMemberRemove', guildMember => { communityManager.handleMemberDepart(guildMember.guild.id, guildMember.id) })
+    .on('guildDelete', guild => { winston.verbose(`Departed Guild: ${guild.name}.`) })
     .on('ready', async () => {
         communityManager.start()
         winston.info('Client Ready.')
