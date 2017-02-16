@@ -51,7 +51,7 @@ tmp
 bin
 
 # Config files
-src/config.json
+config.json
 
 # Jekyll stuff
 _site/
