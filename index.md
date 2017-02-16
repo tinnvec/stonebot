@@ -122,43 +122,18 @@ Displays JSON inormation for card.
 
 # Community
 
-## villager
-
-List of community members with battle.net ids. (Usable only in servers)
-
-You'll be are removed from the list if you leave the discord server.  
-Responses from this command will be removed automatically after 10 minutes.  
-`[action]` can be one of `list`, `add`, `remove`. Default: `list`.  
-`<bnetServer>` can be one of `americas|america|na`, `europe|eu`, `asia`.  
-`[bnetId]` is your battle.net id. Required only for `add` action.
-
-**Format**: `!villager [action] <bnetServer> [bnetId]`  
-**Aliases**: villagers, v, bnet, b  
-**Examples**
-
-- `!villager list americas`
-- `!v na`
-- `!bnet add europe User#1234`
-- `!b remove asia`
-
 ## quest
 
-Lists community members with the Hearhtstone Play a Friend (aka 80g) quest. (Usable only in servers)
+Finds other players looking to trade the Play a Friend (aka 80g) quest.
 
-Quests are removed (expire) after 24 hours or if you leave the discord server.  
-Responses from this command will be removed automatically after 10 minutes.  
-`[action]` can be one of `list`, `add`, `remove`. Default: `list`.  
-`<bnetServer>` can be one of `americas|america|na`, `europe|eu`, `asia`.  
-`[bnetId]` is your battle.net id. Required only for `add` action, optional if you are on the villagers list.
+Makes matches when players share a Discord server and Battle.net server region.
 
-**Format**: `!quest [action] <bnetServer> [bnetId]`  
-**Aliases**: quests, q, 80g  
+**Format**: `!quest <bnetServer>`  
+**Aliases**: 80g  
 **Examples**
 
-- `!quest list americas`
-- `!q na`
-- `!80g add europe User#1234`
-- `!q remove asia`
+- `!quest americas`
+- `!80g eu`
 
 # Utility
 
