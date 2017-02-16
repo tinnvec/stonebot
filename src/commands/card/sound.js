@@ -40,6 +40,7 @@ class SoundCommand extends Command {
             args.cardName = await this.args[1].obtain(msg).catch(winston.error)
             this.args[1].default = ''
         }
+        if (!args.soundKind || !args.cardName) { return msg.reply('cancelled command.').catch(winston.error) }
         
         if (!msg.channel.typing) { msg.channel.startTyping() }
         let reply, sounds
