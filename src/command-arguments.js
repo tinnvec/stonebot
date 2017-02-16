@@ -34,8 +34,7 @@ const bnetServer = {
     validate: value => {
         if (bnetServerChoices.includes(value.toLowerCase())) { return true }
         return `please choose a server from \`${bnetServerChoices.join('`, `')}\`.\n`
-    },
-    default: ''
+    }
 }
 
 const bnetId = {

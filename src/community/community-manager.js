@@ -24,11 +24,6 @@ class CommunityManager {
                 .then(() => winston.debug('Removed all quests, not in any guilds or couldn\'t find any guild members.'))
                 .catch(winston.error)
         } else {
-            const allGuildIds = this.client.guilds.map(g => g.id)
-            await Quest.destroy({ where: { guildId: { notIn: allGuildIds } } })
-                .then(changed => { winston.debug(`Cleaned ${changed} quest${changed === 1 ? '' : 's'} from departed guilds.`) })
-                .catch(winston.error)
-            
             const allUserIds = this.client.guilds.map(g => g.members.map(m => m.id)).reduce((a, b) => a.concat(b), [])
             await Quest.destroy({ where: { userId: { notIn: allUserIds } } })
                 .then(changed => { winston.debug(`Cleaned ${changed} quest${changed === 1 ? '' : 's'} from users not found in current guilds.`) })
