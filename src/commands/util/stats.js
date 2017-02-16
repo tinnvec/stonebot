@@ -16,7 +16,7 @@ class StatsCommand extends Command {
     }
 
     hasPermission(msg) {
-        return this.isOwner(msg.author)
+        return this.client.isOwner(msg.author)
     }
 
     async run(msg) {
