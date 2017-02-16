@@ -1,11 +1,9 @@
-import Card from '../../card/card'
-import { Command } from 'discord.js-commando'
-import MessageManager from '../../message-manager'
+const Card = require('../../card/card')
+const { Command } = require('discord.js-commando')
 
-import { cardName } from '../../command-arguments'
-import winston from 'winston'
+const winston = require('winston')
 
-module.exports = class GoldCommand extends Command {
+class GoldCommand extends Command {
     constructor(client) {
         super(client, {
             name: 'gold',
@@ -17,12 +15,17 @@ module.exports = class GoldCommand extends Command {
                 'gold twisting nether',
                 'g dragonfire potion'
             ],
-            args: [ cardName ]
+            args: [
+                {
+                    key: 'cardName',
+                    prompt: 'what card are you searching for?\n',
+                    type: 'string'
+                }
+            ]
         })
     }
 
     async run(msg, args) {
-        await MessageManager.deleteArgumentPromptMessages(msg).catch(winston.error)
         if (!msg.channel.typing) { msg.channel.startTyping() }
         let reply, filename
         const card = await Card.findByName(args.cardName).catch(winston.error)
@@ -38,3 +41,5 @@ module.exports = class GoldCommand extends Command {
         .catch(winston.error)
     }
 }
+
+module.exports = GoldCommand

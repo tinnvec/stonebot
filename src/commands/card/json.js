@@ -1,11 +1,9 @@
-import Card from '../../card/card'
-import { Command } from 'discord.js-commando'
-import MessageManager from '../../message-manager'
+const Card = require('../../card/card')
+const { Command } = require('discord.js-commando')
 
-import { cardName } from '../../command-arguments'
-import winston from 'winston'
+const winston = require('winston')
 
-module.exports = class JSONCommand extends Command {
+class JSONCommand extends Command {
     constructor(client) {
         super(client, {
             name: 'json',
@@ -13,12 +11,17 @@ module.exports = class JSONCommand extends Command {
             memberName: 'json',
             description: 'Displays JSON inormation for card.',
             examples: ['json jade golem'],
-            args: [ cardName ]
+            args: [
+                {
+                    key: 'cardName',
+                    prompt: 'what card are you searching for?\n',
+                    type: 'string'
+                }
+            ]
         })
     }
 
     async run(msg, args) {
-        await MessageManager.deleteArgumentPromptMessages(msg).catch(winston.error)
         if (!msg.channel.typing) { msg.channel.startTyping() }
         const card = await Card.findByName(args.cardName).catch(winston.error)
         return (card ?
@@ -28,3 +31,5 @@ module.exports = class JSONCommand extends Command {
         .catch(winston.error)
     }
 }
+
+module.exports = JSONCommand

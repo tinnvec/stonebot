@@ -1,140 +1,115 @@
-import { Command } from 'discord.js-commando'
-import MessageManager from '../../message-manager'
-import Quest from '../../community/quest'
-import Villager from '../../community/villager'
+const { Command } = require('discord.js-commando')
+const Quest = require('../../community/quest')
 
-import { bnetId, bnetServer, listAction } from '../../command-arguments'
-import winston from 'winston'
+const winston = require('winston')
 
-const LIST_ACTIONS = ['list', 'add', 'remove']
-const RESPONSE_DELETE_TIME = 10 * 60 * 1000
-
-module.exports = class QuestCommand extends Command {
+class QuestCommand extends Command {
     constructor(client) {
         super(client, {
             name: 'quest',
-            aliases: ['quests', 'q', '80g'],
+            aliases: ['80g'],
             group: 'community',
             memberName: 'quest',
-            description: 'List of community members with the Hearthstone Play a Friend (aka 80g) quest.',
-            format: '[action] <bnetServer> [bnetId]',
-            details: 'Quests are removed (expire) after 24 hours or if you leave the discord server.\n' +
-                'Responses from this command will be removed automatically after 10 minutes.\n' +
-                '`[action]` can be one of `list`, `add`, `remove`. Default: `list`.\n' +
-                '`<bnetServer>` can be one of `americas|america|na`, `europe|eu`, `asia`.\n' +
-                '`[bnetId]` is your battle.net id. Required only for add action, optional if you are on the villagers list.',
+            description: 'Finds other players looking to trade the Play a Friend (aka 80g) quest.',
+            details: 'Makes matches when players share a Discord server and Battle.net server region.',
             examples: [
-                'quest list americas',
-                'q na',
-                '80g add europe User#1234',
-                'q remove asia'
+                'quest americas',
+                '80g eu'
             ],
-            guildOnly: true,
-            args: [ listAction, bnetServer, bnetId ]
+            args: [{
+                key: 'bnetServer',
+                prompt: 'which battle.net server do you play on?\n',
+                type: 'string',
+                parse: value => {
+                    value = value.toLowerCase()
+                    if (value === 'na' || value === 'america') { return 'americas' }
+                    if (value === 'eu') { return 'europe'}
+                    return value
+                },
+                validate: value => {
+                    value = value.toLowerCase()
+                    if (value == 'complete') { return true }
+                    if (['americas', 'america', 'na', 'europe', 'eu', 'asia'].includes(value)) { return true }
+                    return 'please choose a server from `americas`, `na`, `europe`, `eu`, `asia`.\n' +
+                        'You may also say `complete` if you recently finished your quest.\n'
+                }
+            }]
         })
     }
 
     async run(msg, args) {
-        if (!LIST_ACTIONS.includes(args.listAction)) {
-            args.bnetId = this.args[2].parse(args.bnetServer, msg)
-            args.bnetServer = this.args[1].parse(args.listAction, msg)
-            args.listAction = 'list'
-        }
-        if (!args.bnetServer) {
-            this.args[1].default = null
-            args.bnetServer = await this.args[1].obtain(msg).catch(winston.error)
-            this.args[1].default = ''
-        }
-        if (args.listAction === 'add') {
-            let villager = await Villager.findOne({ where: {
-                guildId: msg.guild.id,
-                userId: msg.author.id,
-                bnetServer: args.bnetServer
-            } }).catch(winston.error)
-            if (villager) {
-                args.bnetId = villager.bnetId
-            } else if (!args.bnetId) {
-                this.args[2].default = null
-                args.bnetId = await this.args[2].obtain(msg).catch(winston.error)
-                this.args[2].default = ''
-            }
-        }
-        await MessageManager.deleteArgumentPromptMessages(msg)
-        
-        const listName = `${args.bnetServer.capitalizeFirstLetter()} 80g Quest`
-        let reply
-        let result = await Quest.findOne({ where: {
-            guildId: msg.guild.id,
-            userId: msg.author.id,
-            bnetServer: args.bnetServer
-        } }).catch(winston.error)
-        switch (args.listAction) {
-        case 'add':
-            if (result) {
-                reply = `already have you on the ${listName} list`
-                if (result.bnetId !== args.bnetId) {
-                    await Quest.update({
-                        bnetId: args.bnetId
-                    }, { where: {
-                        guildId: msg.guild.id,
-                        userId: msg.author.id,
-                        bnetServer: args.bnetServer
-                    } }).then(() => { reply += ', updated your entry.' })
-                    .catch(err => {
-                        winston.error(err)
-                        reply += ', but there was an error updating your entry.'
-                    })
-                } else {
-                    reply += '.'
-                }
-            } else {
-                await Quest.create({
-                    guildId: msg.guild.id,
-                    userId: msg.author.id,
-                    bnetServer: args.bnetServer,
-                    bnetId: args.bnetId
-                }).then(() => { reply = `added you to the ${listName} list.` })
-                .catch(err => {
-                    winston.error(err)
-                    reply = `sorry, there was an error adding you to the ${listName} list.`
-                })
-            }
-            return msg.reply(reply)
-                .then(m => { m.delete(RESPONSE_DELETE_TIME) })
-                .catch(winston.error)
-        case 'remove':
-            if (!result) {
-                reply = `you're not on the ${listName} list.`
-            } else {
-                await Quest.destroy({ where: {
-                    guildId: msg.guild.id,
-                    userId: msg.author.id,
-                    bnetServer: args.bnetServer
-                }}).then(() => { reply = `removed you from the ${listName} list.` })
-                .catch(err => {
-                    winston.error(err)
-                    reply = `sorry, there was an error removing you from the ${listName} list.`
-                })
-            }
-            return msg.reply(reply)
-                .then(m => { m.delete(RESPONSE_DELETE_TIME) })
-                .catch(winston.error)
-        default:
-            result = await Quest.findAll({ where: {
-                guildId: msg.guild.id,
-                bnetServer: args.bnetServer
-            } }).catch(winston.error)
-            return msg.say(`**${msg.guild.name} - ${listName}**\n` +
-                `These folks have the Hearthstone Play a Friend (aka 80g) quest on the Battle.net ${args.bnetServer.capitalizeFirstLetter()} server.\n` +
-                'If you also have the quest, they would would love to trade!\n\n' +
-                (result.length < 1 ? '_No users on this list._' :
-                    result.map(v => {
-                        let member = msg.guild.members.get(v.userId)
-                        if (!member) { return '' }
-                        return `**${member.user.username}** - _${v.bnetId}_`
-                    }).join('\n'))
-            ).then(m => { m.delete(RESPONSE_DELETE_TIME) })
+        let result = await Quest
+            .findOne({ where: { userId: msg.author.id } })
             .catch(winston.error)
+        
+        // Are they completing?
+        if (args.bnetServer == 'complete') {
+            if (result) {
+                await Quest
+                    .destroy({ where: { userId: msg.author.id } })
+                    .catch(winston.error)
+                return msg
+                    .reply('congratulations! Removed your entry from those looking to trade quests.')
+                    .catch(winston.error)
+            }
+            return msg
+                .reply('sorry, don\'t have you as looking to trade quests.')
+                .catch(winston.error)
         }
+        
+        const bnetServerDisplay = `Battle.net ${args.bnetServer.capitalizeFirstLetter()} server`
+        // Check if they're on the list
+        if (result) {
+            if (result.bnetServer == args.bnetServer) {
+                return msg
+                    .reply(`already have you as looking to trade quests on the ${bnetServerDisplay}.`)
+                    .catch(winston.error)
+            }
+            // Update entry to new server if different
+            await Quest
+                .update({ bnetServer: args.bnetServer }, { where: { userId: msg.author.id } })
+                .catch(winston.error)
+            return msg
+                .reply(`updated your entry, now have you as looking to trade quests on the ${bnetServerDisplay}.`)
+                .catch(winston.error)
+        } 
+
+        // Check if another on the list shares a bnet and discord server
+        result = await Quest
+            .findAll({ where: { bnetServer: args.bnetServer } })
+            .catch(winston.error)
+        if (result) {
+            // Get only quests where users share a guild
+            result = result.filter(q => {
+                return this.client.guilds.some(g => {
+                    return g.members.has(msg.author.id) && g.members.has(q.userId)
+                })
+            })
+            if (result && result.length > 0) {
+                const requestor = this.client.users.get(msg.author.id)
+                const questHaver = this.client.users.get(result[0].userId)
+                await questHaver
+                    .send('Hello! I have you on my list of people looking to trade Hearthstone quests. ' +
+                        `${requestor} just told me they are also looking to trade on the ${bnetServerDisplay}. ` +
+                        'Just contact them and enjoy your gold!\n\n' +
+                        'When you\'re all done, just tell me `quest complete`.')
+                    .catch(winston.error)
+                return msg
+                    .reply('looks like someone you share a Discord server with is also looking to trade quests ' +
+                        `on the ${bnetServerDisplay}! They should be contacting you soon.`)
+                    .catch(winston.error)
+            }
+        }
+
+        // Add them to the list
+        result = await Quest
+            .create({ userId: msg.author.id, bnetServer: args.bnetServer })
+            .catch(winston.error)
+        return msg
+            .reply('can\'t find a match for you right now, but will let you know as soon as ' +
+                `someone you share a Discord server with is also looking to trade quests on the ${bnetServerDisplay}.`)
+            .catch(winston.error)
     }
 }
+
+module.exports = QuestCommand

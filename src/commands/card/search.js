@@ -1,13 +1,13 @@
-import Card from '../../card/card'
-import { Command } from 'discord.js-commando'
-import Discord from 'discord.js'
+const Card = require('../../card/card')
+const { Command } = require('discord.js-commando')
+const Discord = require('discord.js')
 
-import winston from 'winston'
+const winston = require('winston')
 
 const SET_KEYWORDS = [ 'nax', 'naxx', 'gvg', 'brm', 'tgt', 'loe', 'tog', 'wog', 'wotog', 'kara', 'msg', 'msog']
 const MAX_RESULTS = 10
 
-module.exports = class SearchCommand extends Command {
+class SearchCommand extends Command {
     constructor(client) {
         super(client, {
             name: 'search',
@@ -167,3 +167,5 @@ module.exports = class SearchCommand extends Command {
         return false
     }
 }
+
+module.exports = SearchCommand

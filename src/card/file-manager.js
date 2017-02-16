@@ -1,10 +1,10 @@
-import fs from 'fs'
-import mkdirp from 'mkdirp'
-import path from 'path'
-import request from 'request'
-import winston from 'winston'
+const fs = require('fs')
+const mkdirp = require('mkdirp')
+const path = require('path')
+const request = require('request')
+const winston = require('winston')
 
-export default class FileManager {
+class FileManager {
     static downloadFile(uri, filename) {
         return new Promise((resolve, reject) => {
             winston.debug(`Requesting file from ${uri}`)
@@ -33,3 +33,5 @@ export default class FileManager {
         })
     }
 }
+
+module.exports = FileManager

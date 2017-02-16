@@ -21,7 +21,6 @@ COPY yarn.lock /usr/src/app/
 RUN yarn
 
 # Copy app source
-COPY .babelrc /usr/src/app/
 COPY src /usr/src/app/src
 
 CMD yarn start

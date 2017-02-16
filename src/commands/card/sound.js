@@ -1,16 +1,12 @@
-import Card from '../../card/card'
-import { Command } from 'discord.js-commando'
-import MessageManager from '../../message-manager'
+const Card = require('../../card/card')
+const { Command } = require('discord.js-commando')
 
-import { soundKind, cardName } from '../../command-arguments'
-import winston from 'winston'
+const winston = require('winston')
 
 const SOUND_KINDS = ['play', 'attack', 'trigger', 'death']
 
-module.exports = class SoundCommand extends Command {
+class SoundCommand extends Command {
     constructor(client) {
-        const nameWithDefault = { default: '' }
-        Object.assign(nameWithDefault, cardName)
         super(client, {
             name: 'sound',
             aliases: ['snd', 's'],
@@ -26,7 +22,21 @@ module.exports = class SoundCommand extends Command {
                 'snd death refreshment vendor',
                 's trigger antonaidas'
             ],
-            args: [ soundKind, nameWithDefault ]
+            args: [
+                {
+                    key: 'soundKind',
+                    prompt: '',
+                    type: 'string',
+                    parse: value => { return value.toLowerCase() },
+                    default: 'play'
+                },
+                {
+                    key: 'cardName',
+                    prompt: 'what card are you searching for?\n',
+                    type: 'string',
+                    default: ''
+                }
+            ]
         })
         this.queue = []
     }
@@ -41,10 +51,9 @@ module.exports = class SoundCommand extends Command {
             args.cardName = await this.args[1].obtain(msg).catch(winston.error)
             this.args[1].default = ''
         }
-
-        await MessageManager.deleteArgumentPromptMessages(msg)
+        if (!args.soundKind || !args.cardName) { return msg.reply('cancelled command.').catch(winston.error) }
+        
         if (!msg.channel.typing) { msg.channel.startTyping() }
-
         let reply, sounds
         const card = await Card.findByName(args.cardName).catch(winston.error)
         if (!card) { reply = `sorry, I couldn't find a card with a name like '${args.cardName}'` }
@@ -69,7 +78,7 @@ module.exports = class SoundCommand extends Command {
         
         let reply, connection
         const file = await card.getSound(soundKind).catch(winston.error)
-        if (!file) { reply = `sorry, I don't know the ${soundKind} sound for ${card.name}.` }
+        if (!file) { reply = `sorry, I wasn't able to get the ${soundKind} sound for ${card.name}.` }
         else {
             connection = await this.joinVoiceChannel(message.member.voiceChannel).catch(winston.error)
             if (!connection || typeof connection === 'string') {
@@ -102,3 +111,5 @@ module.exports = class SoundCommand extends Command {
         return await voiceChannel.join().catch(err => { return err.message.replace('You', 'I') })
     }
 }
+
+module.exports = SoundCommand

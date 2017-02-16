@@ -1,11 +1,9 @@
-import Card from '../../card/card'
-import { Command } from 'discord.js-commando'
-import MessageManager from '../../message-manager'
+const Card = require('../../card/card')
+const { Command } = require('discord.js-commando')
 
-import { cardName } from '../../command-arguments'
-import winston from 'winston'
+const winston = require('winston')
 
-module.exports = class ImageArtCommand extends Command {
+class ImageArtCommand extends Command {
     constructor(client) {
         super(client, {
             name: 'art',
@@ -17,15 +15,20 @@ module.exports = class ImageArtCommand extends Command {
                 'art raza',
                 'a secretkeeper'
             ],
-            args: [ cardName ]
+            args: [
+                {
+                    key: 'cardName',
+                    prompt: 'what card are you searching for?\n',
+                    type: 'string'
+                }
+            ]
         })
     }
 
     async run(msg, args) {
-        await MessageManager.deleteArgumentPromptMessages(msg).catch(winston.error)
         if (!msg.channel.typing) { msg.channel.startTyping() }
         let reply, filename
-        const card = await Card.findByName(args.cardName)
+        const card = await Card.findByName(args.cardName).catch(winston.error)
         if (!card) { reply = `sorry, I couldn't find a card with a name like '${args.cardName}'` }
         else {
             filename = await card.getImage('art').catch(winston.error)
@@ -38,3 +41,5 @@ module.exports = class ImageArtCommand extends Command {
         .catch(winston.error)
     }
 }
+
+module.exports = ImageArtCommand
