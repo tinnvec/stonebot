@@ -26,11 +26,10 @@ class JSONCommand extends Command {
 
         if (!msg.channel.typing) { msg.channel.startTyping() }
         const card = await Card.findByName(args.cardName).catch(winston.error)
-        return (card ?
-            msg.code('json', JSON.stringify(card.json, null, '  ')) :
-            msg.reply(`sorry, I couldn't find a card with a name like '${args.cardName}'`)
-        ).then(m => { if (m.channel.typing) { m.channel.stopTyping() } })
-        .catch(winston.error)
+        if (msg.channel.typing) { msg.channel.stopTyping() }
+
+        if (!card) { return msg.reply(`sorry, I couldn't find a card with a name like '${args.cardName}'`).catch(winston.error) }
+        return msg.code('json', JSON.stringify(card.json, null, '  ')).catch(winston.error)
     }
 }
 
