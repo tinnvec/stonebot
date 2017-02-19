@@ -34,17 +34,6 @@ class Card {
         return this._artist || '_[unknown]_'
     }
 
-    get text() {
-        if (this._collectionText) { return toMarkdown(this._collectionText) }
-        if (this._text) { return toMarkdown(this._text) }
-        return '_[blank]_'
-    }
-
-    get flavor() {
-        if (this._flavor) { return toMarkdown(this._flavor) }
-        return '_[blank]_'
-    }
-
     get classColor() {
         return new Map([
             ['WARRIOR', '#C41E3B'],
@@ -67,6 +56,17 @@ class Card {
         desc += ` ${this.playerClass.toLowerCase().capitalizeFirstLetter()}`
         desc += ` ${this.type.toLowerCase().capitalizeFirstLetter()}`
         return desc
+    }
+
+    get flavor() {
+        if (this._flavor) { return toMarkdown(this._flavor) }
+        return '_[blank]_'
+    }
+
+    get text() {
+        if (this._collectionText) { return toMarkdown(this._collectionText) }
+        if (this._text) { return toMarkdown(this._text) }
+        return '_[blank]_'
     }
 
     get url() {
@@ -144,24 +144,18 @@ class Card {
         return encodeURI(`${urlBase}/${filename}.${extension}`)
     }
 
-    static getAll() {
-        const hsjson = new HearthstoneJSON()
-        return new Promise((resolve, reject) => {
-            try { hsjson.getLatest(cards => { resolve(cards) }) }
-            catch (ex) { reject(ex) }
-        })
-    }
-
     static async findByName(name) {
         const res = await this.search(name, ['name']).catch(winston.error)
         if (!res) { return null }
         return new Card(res)
     }
 
-    static async findById(id) {
-        const res = await this.search(id, ['id']).catch(winston.error)
-        if (!res) { return null }
-        return new Card(res)
+    static getAll() {
+        const hsjson = new HearthstoneJSON()
+        return new Promise((resolve, reject) => {
+            try { hsjson.getLatest(cards => { resolve(cards) }) }
+            catch (ex) { reject(ex) }
+        })
     }
 
     static async search(pattern, keys) {
