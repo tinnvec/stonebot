@@ -31,16 +31,20 @@ class TextCommand extends Command {
     async run(msg, args) {
         if (!msg.channel.typing) { msg.channel.startTyping() }
         const card = await Card.findByName(args.cardName).catch(winston.error)
-        return (card ?
-            msg.embed(new Discord.RichEmbed()
+        if (msg.channel.typing) { msg.channel.stopTyping() }
+
+        if (!card) { return msg.reply(`sorry, I couldn't find a card with a name like '${args.cardName}'`).catch(winston.error) }
+        if (msg.channel.type !== 'dm' && !msg.channel.permissionsFor(this.client.user).hasPermission('EMBED_LINKS')) {
+            return msg.say(`**${card.name}**\n${card.description}\n\n**Text**\n${card.text}\n\n${card.url}`).catch(winston.error)
+        }
+        return msg.embed(
+            new Discord.RichEmbed()
                 .setTitle(card.name)
                 .setDescription(card.description)
                 .setURL(card.url)
                 .setColor(card.classColor)
-                .addField('Text', card.text)) :
-            msg.reply(`sorry, I couldn't find a card with a name like '${args.cardName}'`)
-        ).then(m => { if (m.channel.typing) { m.channel.stopTyping() } })
-        .catch(winston.error)
+                .addField('Text', card.text)
+        ).catch(winston.error)
     }
 }
 
