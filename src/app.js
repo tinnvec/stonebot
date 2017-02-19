@@ -13,7 +13,6 @@ const Commando = require('discord.js-commando')
 const client = new Commando.Client({ owner: config.owner, commandPrefix: config.prefix })
 
 const CommunityManager = require('./community/community-manager')
-const communityManager = new CommunityManager(client)
 
 client
     .on('debug', winston.debug)
@@ -24,9 +23,9 @@ client
     .on('guildCreate', guild => { winston.verbose(`Joined Guild: ${guild.name}.`) })
     .on('guildDelete', guild => { winston.verbose(`Departed Guild: ${guild.name}.`) })
     .on('ready', async () => {
-        communityManager.start()
         winston.info('Client Ready.')
         winston.verbose(`Current Guilds (${client.guilds.size}): ${client.guilds.map(guild => { return guild.name }).join('; ')}.`)
+        CommunityManager.start()
         client.user.setGame('Hearthstone')
     })
 
