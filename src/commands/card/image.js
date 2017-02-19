@@ -35,10 +35,10 @@ class ImageCommand extends Command {
         const card = await Card.findByName(args.cardName).catch(winston.error)
         if (msg.channel.typing) { msg.channel.stopTyping() }
         
-        if (!card) { return msg.reply(`sorry, I couldn't find a card with a name like '${args.cardName}'`) }
+        if (!card) { return msg.reply(`sorry, I couldn't find a card with a name like '${args.cardName}'`).catch(winston.error) }
 
         const filename = await card.getImage().catch(winston.error)
-        if (!filename) { return msg.reply(`sorry, there was a problem getting the image for ${card.name}`) }
+        if (!filename) { return msg.reply(`sorry, there was a problem getting the image for ${card.name}`).catch(winston.error) }
 
         return msg.say('', { file: { attachment: filename } }).catch(winston.error)
     }

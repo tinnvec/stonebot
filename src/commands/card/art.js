@@ -38,7 +38,7 @@ class ImageArtCommand extends Command {
         if (!card) { return msg.reply(`sorry, I couldn't find a card with a name like '${args.cardName}'`).catch(winston.error) }
 
         const filename = await card.getImage('art').catch(winston.error)
-        if (!filename) { return msg.reply(`sorry, there was a problem getting the art for ${card.name}`) }
+        if (!filename) { return msg.reply(`sorry, there was a problem getting the art for ${card.name}`).catch(winston.error) }
 
         return msg.say(`**${card.name}**\n**Artist**: ${card.artist}`, { file: { attachment: filename } }).catch(winston.error)
     }
