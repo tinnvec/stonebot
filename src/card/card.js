@@ -9,19 +9,6 @@ const winston = require('winston')
 
 const cardSoundsById = require('./card-sounds-by-id')
 
-const CLASS_COLORS = {
-    'WARRIOR': 12852795, // #C41E3B
-    'SHAMAN': 31454, // #007ADE
-    'ROGUE': 0, // #000000
-    'PALADIN': 16774505, // #FFF569
-    'HUNTER': 11261043, // #ABD473
-    'DRUID': 13081710, // #C79C6E
-    'WARLOCK': 9732809, // #9482C9
-    'MAGE': 6933744, // #69CCF0
-    'PRIEST': 16777215, // #FFFFFF
-    'NEUTRAL': 8421504 //#808080
-}
-
 class Card {
     constructor(obj) {
         this.json = obj
@@ -59,7 +46,18 @@ class Card {
     }
 
     get classColor() {
-        return CLASS_COLORS[this.playerClass]
+        return new Map([
+            ['WARRIOR', '#C41E3B'],
+            ['SHAMAN',  '#007ADE'],
+            ['ROGUE',   '#000000'],
+            ['PALADIN', '#FFF569'],
+            ['HUNTER',  '#ABD473'],
+            ['DRUID',   '#C79C6E'],
+            ['WARLOCK', '#9482C9'],
+            ['MAGE',    '#69CCF0'],
+            ['PRIEST',  '#FFFFFF'],
+            ['NEUTRAL', '#808080']
+        ]).get(this.playerClass)
     }
 
     get description() {
