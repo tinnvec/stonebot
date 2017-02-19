@@ -22,6 +22,8 @@ class JSONCommand extends Command {
     }
 
     async run(msg, args) {
+        if (msg.channel.type !== 'dm' && !msg.channel.permissionsFor(this.client.user).hasPermission('SEND_MESSAGES')) { return }
+
         if (!msg.channel.typing) { msg.channel.startTyping() }
         const card = await Card.findByName(args.cardName).catch(winston.error)
         return (card ?
