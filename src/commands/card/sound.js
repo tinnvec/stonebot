@@ -38,7 +38,6 @@ class SoundCommand extends Command {
                 }
             ]
         })
-        this.queue = []
     }
 
     async run(msg, args) {
@@ -66,12 +65,17 @@ class SoundCommand extends Command {
             .then(m => { if (m.channel.typing) { m.channel.stopTyping() } })
             .then(() => {
                 if (reply) { return }
-                this.queue.push({ message: msg, card: card, soundKind: args.soundKind })
-                if (this.queue.length === 1) { this.handleSound().catch(winston.error) }
+                SoundCommand.queue.push({ message: msg, card: card, soundKind: args.soundKind })
+                if (SoundCommand.queue.length === 1) { SoundCommand.playSound(this.client).catch(winston.error) }
             }).catch(winston.error)
     }
 
-    async handleSound() {
+    static get queue() {
+        if (!this._queue) { this._queue = [] }
+        return this._queue
+    }
+
+    static async playSound(client) {
         const message = this.queue[0].message
         const card = this.queue[0].card
         const soundKind = this.queue[0].soundKind
@@ -91,7 +95,7 @@ class SoundCommand extends Command {
             return message.reply(reply)
                 .then(() => {
                     this.queue.shift()
-                    if (this.queue.length > 0) { this.handleSound() }
+                    if (this.queue.length > 0) { this.playSound(client) }
                 }).catch(winston.error)
         }
 
@@ -99,7 +103,7 @@ class SoundCommand extends Command {
             this.queue.shift()
             if (this.queue.length > 0) {
                 if (this.queue[0].message.member.voiceChannel !== connection.channel) { connection.channel.leave() }
-                this.handleSound()
+                this.playSound(client)
             } else { connection.channel.leave() }
         })
     }
