@@ -40,7 +40,13 @@ class SearchCommand extends Command {
     }
 
     async run(msg, args) {
+        if (msg.channel.type !== 'dm' && !msg.channel.permissionsFor(this.client.user).hasPermission('SEND_MESSAGES')) { return }
+
         if (!msg.channel.typing) { msg.channel.startTyping() }
+        winston.debug('Fetching all cards.')
+        let cards = await Card.getAll().catch(winston.error)
+        if (msg.channel.typing) { msg.channel.stopTyping() }
+
 
         let valueKeywords = []
         let words = []
@@ -49,11 +55,9 @@ class SearchCommand extends Command {
             if (arg.includes(':')) { valueKeywords.push(arg) }
             else { words.push(arg) }
         }, this)
-
-        const searchEmbed = new Discord.RichEmbed()
-        winston.debug('Fetching all cards.')
-        let cards = await Card.getAll().catch(winston.error)
+        
         cards = cards.filter(card => card.collectible && card.type !== 'HERO')
+        const searchEmbed = new Discord.RichEmbed()
 
         if (valueKeywords.length > 0) {
             valueKeywords.forEach(vk => {
@@ -63,32 +67,32 @@ class SearchCommand extends Command {
                 let filter
                 if (key === 'artist') {
                     winston.debug(`Filtering cards for artist name that includes '${value}'.`)
-                    searchEmbed.addField('Artist', `Name contains '${value}'`, true)
                     filter = card => card.artist && card.artist.toLowerCase().includes(value.toLowerCase())
+                    searchEmbed.addField('Artist', `Name contains '${value}'`, true)
                 }
                 else {
                     if (value.endsWith('+')) {
                         const num = parseInt(value.slice(0, -1))
                         winston.debug(`Filtering cards for '${key}' >= '${num}'.`)
-                        searchEmbed.addField(key.capitalizeFirstLetter(), `${num} or more`, true)
                         filter = card => card[key] >= num
+                        searchEmbed.addField(key.capitalizeFirstLetter(), `${num} or more`, true)
                     }
                     else if (value.endsWith('-')) {
                         const num = parseInt(value.slice(0, -1))
                         winston.debug(`Filtering cards for '${key}' <= '${num}'.`)
-                        searchEmbed.addField(key.capitalizeFirstLetter(), `${num} or less`, true)
                         filter = card => card[key] <= num
+                        searchEmbed.addField(key.capitalizeFirstLetter(), `${num} or less`, true)
                     }
                     else if (value.includes('-')) {
                         const min = parseInt(value.split('-')[0])
                         const max = parseInt(value.split('-')[1])
                         winston.debug(`Filtering cards for '${key}' between '${min}' and '${max}'.`)
-                        searchEmbed.addField(key.capitalizeFirstLetter(), `Between ${min} and ${max}`, true)
                         filter = card => card[key] >= min && card[key] <= max
+                        searchEmbed.addField(key.capitalizeFirstLetter(), `Between ${min} and ${max}`, true)
                     } else {
                         winston.debug(`Filtering cards for '${key}' == '${value}'.`)
-                        searchEmbed.addField(key.capitalizeFirstLetter(), `Equal to ${value}`, true)
                         filter = card => card[key] == parseInt(value)
+                        searchEmbed.addField(key.capitalizeFirstLetter(), `Equal to ${value}`, true)
                     }
                 }
                 cards = cards.filter(filter)
@@ -99,11 +103,11 @@ class SearchCommand extends Command {
             const searchTerm = words.join(' ').toLowerCase()
             const searchKeys = ['name', 'playerClass', 'race', 'rarity', 'text', 'type']
             winston.debug(`Searching cards for '${searchTerm}'.`)
-            searchEmbed.addField('Search Term', searchTerm, true)
             cards = cards.filter(card => {
                 return (searchKeys.some(key => key in card && card[key].toLowerCase().includes(searchTerm)) ||
                 (card.set && this.cardSetMatches(card.set, searchTerm)))
             })
+            searchEmbed.addField('Search Term', searchTerm, true)
         }
         
         winston.debug('Sorting cards by name')
@@ -115,6 +119,27 @@ class SearchCommand extends Command {
             return 0
         })
 
+        if (msg.channel.type !== 'dm' && !msg.channel.permissionsFor(this.client.user).hasPermission('EMBED_LINKS')) {
+            return msg.say(
+                valueKeywords.map(vk => {
+                    let k = vk.split(':')[0]
+                    let v = vk.split(':')[1]
+                    if (k === 'artist') { return `**Artist**\nName contains '${v}'` }
+                    if (v.endsWith('+')) { return `**${k.capitalizeFirstLetter()}**\n${v.slice(0, -1)} or more`}
+                    if (v.endsWith('-')) { return `**${k.capitalizeFirstLetter()}**\n${v.slice(0, -1)} or less`}
+                    if (v.includes('-')) { return `**${k.capitalizeFirstLetter()}**\nBetween ${v.split('-')[0]} and ${v.split('-')[1]}`}
+                    return `**${k.capitalizeFirstLetter()}**\nEqual to ${v}`
+                }).join('\n') + '\n' +
+                (words.length > 0 ? `**Search Term**\n${words.join(' ').toLowerCase()}\n` : '') +
+                '\n**Results**\n' +
+                (cards.length > 0 ?
+                    `_Found ${cards.length} card${cards.length === 1 ? '' : 's'} that match${cards.length === 1 ? 'es' : ''}._` +
+                    (cards.length > MAX_RESULTS ? ` _Here are the first ${MAX_RESULTS}._\n` : '\n') +
+                    cards.slice(0, MAX_RESULTS).map(c => c.name).join(' | ') :
+                    '_Sorry, got nothing_')
+            ).catch(winston.error)
+        }
+
         let results = '_Sorry, got nothing_'
         if (cards.length > 0) {
             results = `_Found ${cards.length} card${cards.length === 1 ? '' : 's'} that match${cards.length === 1 ? 'es' : ''}._`
@@ -123,10 +148,7 @@ class SearchCommand extends Command {
             results += `\n${cardNames.map(n => `[${n}](http://hearthstone.gamepedia.com/${n.replace(/\s/g, '_')})`).join(' | ')}`
         }
         searchEmbed.addField('Results', results)
-
-        return msg.embed(searchEmbed)
-            .then(m => { if (m.channel.typing) { m.channel.stopTyping() } })
-            .catch(winston.error)
+        return msg.embed(searchEmbed).catch(winston.error)
     }
 
     cardSetMatches(set, searchTerm) {
