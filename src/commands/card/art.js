@@ -26,6 +26,11 @@ class ImageArtCommand extends Command {
     }
 
     async run(msg, args) {
+        if (msg.channel.type !== 'dm' && !msg.channel.permissionsFor(this.client.user).hasPermission('SEND_MESSAGES')) { return }
+        if (msg.channel.type !== 'dm' && !msg.channel.permissionsFor(this.client.user).hasPermission('ATTACH_FILES')) {
+            return msg.reply('sorry, I don\'t have permission to attach files here, so I can\'t show card art.').catch(winston.error)
+        }
+
         if (!msg.channel.typing) { msg.channel.startTyping() }
         let reply, filename
         const card = await Card.findByName(args.cardName).catch(winston.error)
