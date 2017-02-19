@@ -37,6 +37,6 @@ client.registry
     ])
     .registerDefaultGroups()
     .registerCommandsIn(path.join(__dirname, 'commands'))
-    .registerDefaultCommands({ eval_: false, commandState: false })
+    .registerDefaultCommands({ eval_: false })
 
 client.login(config.token)
