@@ -10,8 +10,8 @@ class StatsCommand extends Command {
             name: 'stats',
             group: 'util',
             memberName: 'stats',
-            description: 'Displays bot statistics. Bot owner only.',
-            guildOnly: true
+            description: 'Displays bot statistics.',
+            details: 'Only the bot owner(s) may use this command.'
         })
     }
 
