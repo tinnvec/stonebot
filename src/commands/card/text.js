@@ -37,7 +37,7 @@ class TextCommand extends Command {
 
         if (!card) { return msg.reply(`sorry, I couldn't find a card with a name like '${args.cardName}'`).catch(winston.error) }
         if (msg.channel.type !== 'dm' && !msg.channel.permissionsFor(this.client.user).hasPermission('EMBED_LINKS')) {
-            return msg.say(`**${card.name}**\n${card.description}\n\n**Text**\n${card.text}\n\n${card.url}`).catch(winston.error)
+            return msg.say(`**${card.name}**\n${card.description}\n**Text**\n${card.text}\n${card.url}`).catch(winston.error)
         }
         return msg.embed(
             new Discord.RichEmbed()
