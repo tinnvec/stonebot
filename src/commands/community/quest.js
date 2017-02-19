@@ -10,11 +10,14 @@ class QuestCommand extends Command {
             aliases: ['80g'],
             group: 'community',
             memberName: 'quest',
-            description: 'Finds other players looking to trade the Play a Friend (aka 80g) quest.',
-            details: 'Makes matches when players share a Discord server and Battle.net server region.',
+            description: 'Helps find other players looking to trade the Play a Friend (aka 80g) quest.',
+            details: 'Makes matches when players share a Discord server and Battle.net server region.\n' +
+                '`<bnetServer>` may be one of `americas`, `na`, `europe`, `eu`, `asia`.\n' +
+                'Using `!quest complete` will remove you from the pool of those looking to trade.',
             examples: [
                 'quest americas',
-                '80g eu'
+                '80g eu',
+                'quest complete'
             ],
             args: [{
                 key: 'bnetServer',
