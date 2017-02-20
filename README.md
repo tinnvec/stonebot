@@ -253,8 +253,8 @@ If no prefix is provided, the current prefix will be shown. If the prefix is "de
 
 [![Add Stonebot to your Server][discord-add-badge]][discord-oauth-link]
 
-[discord-oauth-link]: https://discordapp.com/oauth2/authorize?client_id=181041901225377793&scope=bot&permissions=3206144
+[discord-oauth-link]: https://discordapp.com/oauth2/authorize?client_id=181041901225377793&scope=bot&permissions=3197952
 [discord-add-badge]: https://img.shields.io/badge/Discord-Invite%20Stonebot-7289DA.svg?style=flat-square
 
 Want to add stonebot to your server? I run a public version that you can invite to your server with the button at the top of this section, or the following url:  
-https://discordapp.com/oauth2/authorize?client_id=181041901225377793&scope=bot&permissions=3206144
+https://discordapp.com/oauth2/authorize?client_id=181041901225377793&scope=bot&permissions=3197952
