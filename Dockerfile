@@ -18,6 +18,7 @@ WORKDIR /usr/src/app
 # Install app dependencies
 COPY package.json /usr/src/app/
 COPY yarn.lock /usr/src/app/
+COPY .yarnclean /usr/src/app/
 RUN yarn
 
 # Copy app source

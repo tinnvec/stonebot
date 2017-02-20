@@ -26,19 +26,21 @@ class ImageArtCommand extends Command {
     }
 
     async run(msg, args) {
-        if (!msg.channel.typing) { msg.channel.startTyping() }
-        let reply, filename
-        const card = await Card.findByName(args.cardName).catch(winston.error)
-        if (!card) { reply = `sorry, I couldn't find a card with a name like '${args.cardName}'` }
-        else {
-            filename = await card.getImage('art').catch(winston.error)
-            if (!filename) { reply = `sorry, there was a problem getting the art for ${card.name}` }
+        if (msg.channel.type !== 'dm' && !msg.channel.permissionsFor(this.client.user).hasPermission('SEND_MESSAGES')) { return }
+        if (msg.channel.type !== 'dm' && !msg.channel.permissionsFor(this.client.user).hasPermission('ATTACH_FILES')) {
+            return msg.reply('sorry, I don\'t have permission to attach files here, so I can\'t show card art.').catch(winston.error)
         }
-        return (reply ?
-            msg.reply(reply) :
-            msg.say(`**${card.name}**\n**Artist**: ${card.artist}`, { file: { attachment: filename } })
-        ).then(m => { if (m.channel.typing) { m.channel.stopTyping() } })
-        .catch(winston.error)
+
+        if (!msg.channel.typing) { msg.channel.startTyping() }
+        const card = await Card.findByName(args.cardName).catch(winston.error)
+        if (msg.channel.typing) { msg.channel.stopTyping() }
+        
+        if (!card) { return msg.reply(`sorry, I couldn't find a card with a name like '${args.cardName}'`).catch(winston.error) }
+
+        const filename = await card.getImage('art').catch(winston.error)
+        if (!filename) { return msg.reply(`sorry, there was a problem getting the art for ${card.name}`).catch(winston.error) }
+
+        return msg.say(`**${card.name}**\n**Artist**: ${card.artist}`, { file: { attachment: filename } }).catch(winston.error)
     }
 }
 

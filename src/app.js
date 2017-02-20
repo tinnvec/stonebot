@@ -1,39 +1,34 @@
-String.prototype.capitalizeFirstLetter = function() { return this.charAt(0).toUpperCase() + this.slice(1) }
+const Commando = require('discord.js-commando')
+const CommunityManager = require('./community/community-manager')
+const PostgreSQL = require('./postgresql/postgresql')
+const SequelizeProvider = require('./postgresql/sequelize-provider')
+
+const path = require('path')
+const winston = require('winston')
+
 const config = require('/data/config.json')
 
-const winston = require('winston')
-winston.remove(winston.transports.Console)
-winston.add(winston.transports.Console, { level: config.logLevel })
+winston.level = config.logLevel
+String.prototype.capitalizeFirstLetter = function() { return this.charAt(0).toUpperCase() + this.slice(1) }
 
-const PostgreSQL = require('./postgresql/postgresql')
-const postgresql = new PostgreSQL(config.database)
-postgresql.init()
-
-const Commando = require('discord.js-commando')
 const client = new Commando.Client({ owner: config.owner, commandPrefix: config.prefix })
-
-const CommunityManager = require('./community/community-manager')
-const communityManager = new CommunityManager(client)
-
-client
     .on('debug', winston.debug)
     .on('warn', winston.warn)
     .on('error', winston.error)
     .on('disconnect', event => { winston.warn(`Disconnected [${event.code}]: ${event.reason || 'Unknown reason'}.`) })
     .on('reconnecting', () => { winston.info('Reconnecting...') })
-    .on('guildCreate', guild => { winston.verbose(`Joined Guild: ${guild.name}.`) })
-    .on('guildDelete', guild => { winston.verbose(`Departed Guild: ${guild.name}.`) })
-    .on('ready', async () => {
-        communityManager.start()
-        winston.info('Client Ready.')
-        winston.verbose(`Current Guilds (${client.guilds.size}): ${client.guilds.map(guild => { return guild.name }).join('; ')}.`)
+    .on('guildCreate', guild => { winston.verbose(`Joined guild ${guild.name}.`) })
+    .on('guildDelete', guild => { winston.verbose(`Departed guild ${guild.name}.`) })
+    .on('ready', () => {
+        CommunityManager.start()
         client.user.setGame('Hearthstone')
+        winston.info(`Client ready. Currently in ${client.guilds.size} guilds.`)
     })
 
-const SequelizeProvider = require('./postgresql/sequelize-provider')
+const postgresql = new PostgreSQL(config.database)
+postgresql.init()
 client.setProvider(new SequelizeProvider(postgresql.db)).catch(winston.error)
 
-const path = require('path')
 client.registry
     .registerDefaultTypes()
     .registerGroups([
@@ -42,6 +37,6 @@ client.registry
     ])
     .registerDefaultGroups()
     .registerCommandsIn(path.join(__dirname, 'commands'))
-    .registerDefaultCommands({ eval_: false, commandState: false })
+    .registerDefaultCommands({ eval_: false })
 
 client.login(config.token)

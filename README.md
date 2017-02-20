@@ -124,9 +124,11 @@ Displays JSON inormation for card.
 
 ## quest
 
-Finds other players looking to trade the Play a Friend (aka 80g) quest.
+Helps find other players looking to trade the Play a Friend (aka 80g) quest.
 
-Makes matches when players share a Discord server and Battle.net server region.
+Makes matches when players share a Discord server and Battle.net server region.  
+`<bnetServer>` may be one of `americas`, `na`, `europe`, `eu`, `asia`.  
+Using `!quest complete` will remove you from the pool of those looking to trade.
 
 **Format**: `!quest <bnetServer>`  
 **Aliases**: 80g  
@@ -134,12 +136,80 @@ Makes matches when players share a Discord server and Battle.net server region.
 
 - `!quest americas`
 - `!80g eu`
+- `!quest complete`
+
+# Command Management
+
+## groups
+
+Lists all command groups. Administrators only.
+
+The argument must be the name/ID (partial or whole) of a command or command group.
+
+**Format**: `!groups`  
+**Aliases**: list-groups, show-groups, listgroups, showgroups
+
+## enable
+
+Enables a command or command group. Administrators only.
+
+**Format**: `!enable <command/group>`  
+**Aliases**: enable-command, cmd-on, command-on, enablecommand, cmdon, commandon  
+**Examples**
+
+- `!enable util`
+- `!enable Utility`
+- `!enable prefix`
+
+## disable
+
+Disables a command or command group. Administrators only.
+
+The argument must be the name/ID (partial or whole) of a command or command group.
+
+**Format**: `!disable <command/group>`  
+**Aliases**: disable-command, cmd-off, command-off, disablecommand, cmdoff, commandoff  
+**Examples**
+
+- `!disable util`
+- `!disable Utility`
+- `!disable prefix`
+
+## reload
+
+Reloads a command or command group. Bot owner(s) only.
+
+The argument must be the name/ID (partial or whole) of a command or command group. Providing a command group will reload all of the commands in that group.
+
+**Format**: `!reload <command/group>`  
+**Aliases**: reload-command, reloadcommand  
+**Example**: `!reload some-command`
+
+## load
+
+Loads a new command. Bot owner(s) only.
+
+The argument must be full name of the command in the format of `group:memberName`.
+
+**Format**: `!load <command>`  
+**Alias**: load-command, loadcommand  
+**Example**: `!load some-command`
+
+## unload
+
+Unloads a command. Bot owner(s) only.
+
+The argument must be the name/ID (partial or whole) of a command.
+
+**Format**: `!unload <command>`  
+**Aliases**: unload-command, unloadcommand  
+**Example**: `!unload some-command`
 
 # Utility
 
 ## stats
 
-Displays bot statistics. Bot owner only. (Usable only in servers)
+Displays bot statistics. Bot owner(s) only.
 
 **Format**: `!stats`
 
@@ -164,7 +234,7 @@ Checks the bot's ping to the Discord server.
 
 ## prefix
 
-Shows or sets the command prefix.
+Shows or sets the command prefix. Administrators only.
 
 If no prefix is provided, the current prefix will be shown. If the prefix is "default", the prefix will be reset to the bot's default prefix. If the prefix is "none", the prefix will be removed entirely, only allowing mentions to run commands. Only administrators may change the prefix.
 
@@ -183,8 +253,8 @@ If no prefix is provided, the current prefix will be shown. If the prefix is "de
 
 [![Add Stonebot to your Server][discord-add-badge]][discord-oauth-link]
 
-[discord-oauth-link]: https://discordapp.com/oauth2/authorize?client_id=181041901225377793&scope=bot&permissions=3206144
+[discord-oauth-link]: https://discordapp.com/oauth2/authorize?client_id=181041901225377793&scope=bot&permissions=3197952
 [discord-add-badge]: https://img.shields.io/badge/Discord-Invite%20Stonebot-7289DA.svg?style=flat-square
 
 Want to add stonebot to your server? I run a public version that you can invite to your server with the button at the top of this section, or the following url:  
-https://discordapp.com/oauth2/authorize?client_id=181041901225377793&scope=bot&permissions=3206144
+https://discordapp.com/oauth2/authorize?client_id=181041901225377793&scope=bot&permissions=3197952
