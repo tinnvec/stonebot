@@ -1,6 +1,6 @@
 {
   "name": "stonebot",
-  "version": "1.9.2",
+  "version": "1.9.3",
   "main": "app.js",
   "scripts": {
     "start": "node --harmony src/app.js"
