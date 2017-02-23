@@ -19,6 +19,30 @@ const client = new Commando.Client({ owner: config.owner, commandPrefix: config.
     .on('reconnecting', () => { winston.info('Reconnecting...') })
     .on('guildCreate', guild => { winston.verbose(`Joined guild ${guild.name}.`) })
     .on('guildDelete', guild => { winston.verbose(`Departed guild ${guild.name}.`) })
+    .on('commandBlocked', (msg, reason) => {
+        winston.info(
+            `Command ${msg.command ? `${msg.command.groupID}:${msg.command.memberName}` : ''} blocked.` +
+            ` User: ${msg.author.username}#${msg.author.discriminator}. Reason: ${reason}.`
+        )
+    })
+    .on('commandError', (command, error) => {
+        if (error instanceof Commando.FriendlyError) { return }
+        winston.error(`Error in command ${command.groupID}:${command.memberName}`, error)
+    })
+    .on('commandPrefixChange', (guild, prefix) => {
+        winston.info(`Prefix changed to ${prefix || 'the default'} ${guild ? `in guild ${guild.name}` : 'globally'}.`)
+    })
+    .on('commandRun', (command, promise, msg, args) => {
+        winston.verbose(
+            `${command.groupID}:${command.memberName} run by ${msg.author.username}#${msg.author.discriminator}` +
+            ` in ${msg.guild ? `${msg.guild.name}` : 'DM'}.${Object.values(args)[0] !== '' ? ` Arguments: ${Object.values(args)}` : ''}.`)
+    })
+    .on('commandStatusChange', (guild, command, enabled) => {
+        winston.info(`Command ${command.groupID}:${command.memberName} ${enabled ? 'enabled' : 'disabled'} ${guild ? `in guild ${guild.name}` : 'globally'}.`)
+    })
+    .on('groupStatusChange', (guild, group, enabled) => {
+        winston.info(`Group ${group.id} ${enabled ? 'enabled' : 'disabled'} ${guild ? `in guild ${guild.name}` : 'globally'}.`)
+    })
     .on('ready', () => {
         CommunityManager.start()
         client.user.setGame('Hearthstone')
