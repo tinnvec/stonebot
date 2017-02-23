@@ -82,7 +82,7 @@ class Card {
         winston.debug('Image does not exist, downloading it.')
         const res = await FileManager.downloadFile(this.getImageUrl(imageType), filename).catch(winston.error)
         if (!res || !res.startsWith('/data')) {
-            winston.debug(`Error downloading image: ${res}`)
+            winston.error(`Error downloading image: ${res}`)
             return null
         }
         return res
