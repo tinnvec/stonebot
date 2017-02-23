@@ -22,8 +22,7 @@ const client = new Commando.Client({ owner: config.owner, commandPrefix: config.
     .on('commandBlocked', (msg, reason) => {
         winston.info(
             `Command ${msg.command ? `${msg.command.groupID}:${msg.command.memberName}` : ''} blocked.` +
-            ` User: ${msg.author.username}#${msg.author.discriminator}. Reason: ${reason}.`
-        )
+            ` User: ${msg.author.username}#${msg.author.discriminator}. Reason: ${reason}.`)
     })
     .on('commandError', (command, error) => {
         if (error instanceof Commando.FriendlyError) { return }
@@ -34,8 +33,8 @@ const client = new Commando.Client({ owner: config.owner, commandPrefix: config.
     })
     .on('commandRun', (command, promise, msg, args) => {
         winston.verbose(
-            `${command.groupID}:${command.memberName} run by ${msg.author.username}#${msg.author.discriminator}` +
-            ` in ${msg.guild ? `${msg.guild.name}` : 'DM'}.${Object.values(args)[0] !== '' ? ` Arguments: ${Object.values(args)}` : ''}.`)
+            `Command ${command.groupID}:${command.memberName} run by ${msg.author.username}#${msg.author.discriminator}` +
+            ` in ${msg.guild ? `${msg.guild.name}` : 'DM'}.${Object.values(args)[0] ? ` Arguments: ${Object.values(args)}.` : ''}`)
     })
     .on('commandStatusChange', (guild, command, enabled) => {
         winston.info(`Command ${command.groupID}:${command.memberName} ${enabled ? 'enabled' : 'disabled'} ${guild ? `in guild ${guild.name}` : 'globally'}.`)
