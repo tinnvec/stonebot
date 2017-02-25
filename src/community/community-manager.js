@@ -18,7 +18,7 @@ class CommunityManager {
         const oneDayAgo = new Date()
         oneDayAgo.setDate(oneDayAgo.getDate() - 1)
         await Quest.destroy({ where: { createdAt: { lt: oneDayAgo } } })
-            .then(changed => { winston.verbose(`Removed ${changed} quest entr${changed === 1 ? 'y' : 'ies'} that are older than one day.`) })
+            .then(changed => { winston.debug(`Removed ${changed} quest entr${changed === 1 ? 'y' : 'ies'} that are older than one day.`) })
             .catch(winston.error)
     }
 }

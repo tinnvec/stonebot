@@ -20,7 +20,7 @@ const client = new Commando.Client({ owner: config.owner, commandPrefix: config.
     .on('guildCreate', guild => { winston.verbose(`Joined guild ${guild.name}.`) })
     .on('guildDelete', guild => { winston.verbose(`Departed guild ${guild.name}.`) })
     .on('commandBlocked', (msg, reason) => {
-        winston.info(
+        winston.verbose(
             `Command ${msg.command ? `${msg.command.groupID}:${msg.command.memberName}` : ''} blocked.` +
             ` User: ${msg.author.username}#${msg.author.discriminator}. Reason: ${reason}.`)
     })
@@ -29,7 +29,7 @@ const client = new Commando.Client({ owner: config.owner, commandPrefix: config.
         winston.error(`Error in command ${command.groupID}:${command.memberName}`, error)
     })
     .on('commandPrefixChange', (guild, prefix) => {
-        winston.info(`Prefix changed to ${prefix || 'the default'} ${guild ? `in guild ${guild.name}` : 'globally'}.`)
+        winston.verbose(`Prefix changed to ${prefix || 'the default'} ${guild ? `in guild ${guild.name}` : 'globally'}.`)
     })
     .on('commandRun', (command, promise, msg, args) => {
         winston.verbose(
@@ -37,10 +37,10 @@ const client = new Commando.Client({ owner: config.owner, commandPrefix: config.
             ` in ${msg.guild ? `${msg.guild.name}` : 'DM'}.${Object.values(args)[0] ? ` Arguments: ${Object.values(args)}.` : ''}`)
     })
     .on('commandStatusChange', (guild, command, enabled) => {
-        winston.info(`Command ${command.groupID}:${command.memberName} ${enabled ? 'enabled' : 'disabled'} ${guild ? `in guild ${guild.name}` : 'globally'}.`)
+        winston.verbose(`Command ${command.groupID}:${command.memberName} ${enabled ? 'enabled' : 'disabled'} ${guild ? `in guild ${guild.name}` : 'globally'}.`)
     })
     .on('groupStatusChange', (guild, group, enabled) => {
-        winston.info(`Group ${group.id} ${enabled ? 'enabled' : 'disabled'} ${guild ? `in guild ${guild.name}` : 'globally'}.`)
+        winston.verbose(`Group ${group.id} ${enabled ? 'enabled' : 'disabled'} ${guild ? `in guild ${guild.name}` : 'globally'}.`)
     })
     .on('ready', () => {
         CommunityManager.start()
