@@ -10,7 +10,7 @@ class CommunityManager {
     }
 
     static doChores() {
-        winston.verbose('Community manager doing chores.')
+        winston.debug('Community manager doing chores.')
         this.cleanQuests()
     }
 
