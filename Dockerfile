@@ -16,12 +16,10 @@ RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 
 # Install app dependencies
-COPY package.json /usr/src/app/
-COPY yarn.lock /usr/src/app/
-COPY .yarnclean /usr/src/app/
+COPY package.json tsconfig.json yarn.lock .yarnclean ./
 RUN yarn
 
 # Copy app source
-COPY src /usr/src/app/src
+COPY src ./src
 
 CMD yarn start
