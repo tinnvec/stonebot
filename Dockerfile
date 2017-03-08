@@ -16,7 +16,12 @@ RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 
 # Install app dependencies
-COPY package.json tsconfig.json yarn.lock .yarnclean ./
+COPY package.json \
+    yarn.lock \
+    .yarnclean \
+    gulpfile.js \
+    tsconfig.json \
+    ./
 RUN yarn
 
 # Copy app source

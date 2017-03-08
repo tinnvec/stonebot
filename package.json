@@ -18,8 +18,7 @@
     "url": "https://github.com/tinnvec/stonebot/issues"
   },
   "scripts": {
-    "prebuild": "rm -rf build/*",
-    "build": "tsc",
+    "build": "gulp build",
     "prestart": "yarn run build",
     "start": "node build/app.js"
   },
@@ -42,7 +41,10 @@
     "winston": "^2.3.1"
   },
   "devDependencies": {
+    "del": "^2.2.2",
     "eslint": "^3.15.0",
+    "gulp": "^3.9.1",
+    "gulp-typescript": "^3.1.5",
     "typescript": "^2.2.1"
   },
   "engines": {
