@@ -1,8 +1,17 @@
 const del = require('del')
 const gulp = require('gulp')
 const gulpTypescript = require('gulp-typescript')
+const gulpTsLint = require('gulp-tslint')
 
 const project = gulpTypescript.createProject('tsconfig.json')
+
+gulp.task('lint', () => {
+    gulp.src('./src/**/*.ts')
+        .pipe(gulpTsLint({
+            formatter: 'prose'
+        }))
+        .pipe(gulpTsLint.report())
+})
 
 gulp.task('build', () => {
     del.sync(['./built/**/*.*'])
