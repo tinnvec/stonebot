@@ -47,7 +47,7 @@ jspm_packages
 .yarn-integrity
 
 # Additional directories
-build
+built/
 
 # Config files
 config.json
