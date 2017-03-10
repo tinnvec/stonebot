@@ -1,5 +1,10 @@
 {
     "extends": [
         "tslint:recommended"
-    ]
+    ],
+    "rules": {
+        "quotemark": [ true, "single", "avoid-escape" ],
+        "semicolon": [ true, "never" ],
+        "prefer-const": true
+    }
 }
