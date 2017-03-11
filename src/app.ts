@@ -22,8 +22,7 @@ winston.configure({
     transports: [
         new (winston.transports.Console)({
             level: config.logLevel,
-            prettyPrint: true,
-            timestamp: () => moment().format('YYYY-MM-DD HH:mm:ss.SSS')
+            prettyPrint: true
         }),
         new (winston.transports.File)({
             filename: '/data/logs/debug.log',
