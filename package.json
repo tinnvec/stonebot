@@ -1,17 +1,33 @@
 {
   "name": "stonebot",
   "version": "1.9.4",
-  "main": "app.js",
-  "scripts": {
-    "start": "node --harmony src/app.js"
-  },
-  "repository": "https://github.com/tinnvec/stonebot.git",
-  "author": "Alex Hanna <tinnvec@gmail.com>",
+  "description": "Hearthstone Bot for Discord",
+  "keywords": [
+    "discord",
+    "hearthstone",
+    "bot"
+  ],
   "license": "MIT",
+  "author": "Alex Hanna <tinnvec@gmail.com>",
+  "homepage": "https://tinnvec.github.io/stonebot",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tinnvec/stonebot.git"
+  },
+  "bugs": {
+    "url": "https://github.com/tinnvec/stonebot/issues"
+  },
+  "scripts": {
+    "lint": "gulp lint",
+    "build": "gulp build",
+    "prestart": "npm run build",
+    "start": "node built/app.js"
+  },
   "dependencies": {
-    "discord.js": "^11.0.0",
-    "discord.js-commando": "^0.9.0",
-    "erlpack": "hammerandchisel/erlpack",
+    "bufferutil": "^2.0.0",
+    "discord.js": "github:hydrabolt/discord.js",
+    "discord.js-commando": "github:gawdl3y/discord.js-commando",
+    "erlpack": "github:hammerandchisel/erlpack",
     "fluent-ffmpeg": "^2.1.0",
     "fuse.js": "^2.6.1",
     "hearthstonejson": "^0.2.1",
@@ -23,10 +39,24 @@
     "request": "^2.79.0",
     "sequelize": "^3.30.2",
     "to-markdown": "^3.0.3",
-    "uws": "^0.12.0",
     "winston": "^2.3.1"
   },
   "devDependencies": {
-    "eslint": "^3.15.0"
+    "@types/common-tags": "^1.2.5",
+    "@types/fluent-ffmpeg": "0.0.2",
+    "@types/mkdirp": "^0.3.29",
+    "@types/node": "^7.0.8",
+    "@types/request": "0.0.41",
+    "@types/sequelize": "^4.0.44",
+    "@types/winston": "^2.2.0",
+    "del": "^2.2.2",
+    "gulp": "^3.9.1",
+    "gulp-tslint": "^7.1.0",
+    "gulp-typescript": "^3.1.5",
+    "tslint": "^4.5.1",
+    "typescript": "^2.2.1"
+  },
+  "engines": {
+    "node": ">=7.6.0"
   }
 }
