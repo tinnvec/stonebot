@@ -1,7 +1,7 @@
 {
   "name": "stonebot",
   "version": "1.9.4",
-  "description": "",
+  "description": "Hearthstone Bot for Discord",
   "keywords": [
     "discord",
     "hearthstone",
