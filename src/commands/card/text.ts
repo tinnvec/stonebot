@@ -1,16 +1,20 @@
-const Card = require('../../card/card')
-const { Command } = require('discord.js-commando')
-const Discord = require('discord.js')
+import { Message, RichEmbed, TextChannel } from 'discord.js'
+import { Command, CommandMessage, CommandoClient } from 'discord.js-commando'
+import winston = require('winston')
 
-const winston = require('winston')
+import Card from '../../card/card'
 
-class TextCommand extends Command {
-    constructor(client) {
+export default class TextCommand extends Command {
+    constructor(client: CommandoClient) {
         super(client, {
-            name: 'text',
             aliases: ['txt', 't', 'card', 'c'],
-            group: 'card',
-            memberName: 'text',
+            args: [
+                {
+                    key: 'cardName',
+                    prompt: 'what card are you searching for?\n',
+                    type: 'string'
+                }
+            ],
             description: 'Displays card text.',
             examples: [
                 'text frostbolt',
@@ -18,36 +22,32 @@ class TextCommand extends Command {
                 'card yshaarj',
                 'c tinyfin'
             ],
-            args: [
-                {
-                    key: 'cardName',
-                    prompt: 'what card are you searching for?\n',
-                    type: 'string'
-                }
-            ]
+            group: 'card',
+            memberName: 'text',
+            name: 'text'
         })
     }
 
-    async run(msg, args) {
-        if (msg.channel.type !== 'dm' && !msg.channel.permissionsFor(this.client.user).hasPermission('SEND_MESSAGES')) { return }
+    public async run(msg: CommandMessage, args: { cardName: string }): Promise<Message | Message[]> {
+        if (msg.channel instanceof TextChannel &&
+            !msg.channel.permissionsFor(this.client.user).hasPermission('SEND_MESSAGES')) { return }
 
         if (!msg.channel.typing) { msg.channel.startTyping() }
-        const card = await Card.findByName(args.cardName).catch(winston.error)
+        const card = await Card.findByName(args.cardName)
         if (msg.channel.typing) { msg.channel.stopTyping() }
 
-        if (!card) { return msg.reply(`sorry, I couldn't find a card with a name like '${args.cardName}'`).catch(winston.error) }
-        if (msg.channel.type !== 'dm' && !msg.channel.permissionsFor(this.client.user).hasPermission('EMBED_LINKS')) {
-            return msg.say(`**${card.name}**\n${card.description}\n**Text**\n${card.text}\n${card.url}`).catch(winston.error)
+        if (!card) { return msg.reply(`sorry, I couldn't find a card with a name like '${args.cardName}'`) }
+        if (msg.channel instanceof TextChannel &&
+            !msg.channel.permissionsFor(this.client.user).hasPermission('EMBED_LINKS')) {
+            return msg.say(`**${card.name}**\n${card.description}\n**Text**\n${card.text}\n${card.url}`)
         }
         return msg.embed(
-            new Discord.RichEmbed()
+            new RichEmbed()
                 .setTitle(card.name)
                 .setDescription(card.description)
                 .setURL(card.url)
                 .setColor(card.classColor)
                 .addField('Text', card.text)
-        ).catch(winston.error)
+        )
     }
 }
-
-module.exports = TextCommand

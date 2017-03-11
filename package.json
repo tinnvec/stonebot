@@ -19,7 +19,6 @@
   },
   "scripts": {
     "lint": "gulp lint",
-    "prebuild": "npm run lint",
     "build": "gulp build",
     "prestart": "npm run build",
     "start": "node built/app.js"

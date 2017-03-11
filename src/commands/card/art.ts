@@ -1,47 +1,46 @@
-const Card = require('../../card/card')
-const { Command } = require('discord.js-commando')
+import { Message, TextChannel } from 'discord.js'
+import { Command, CommandMessage, CommandoClient } from 'discord.js-commando'
+import winston from 'winston'
 
-const winston = require('winston')
+import Card from '../../card/card'
 
 class ImageArtCommand extends Command {
-    constructor(client) {
+    constructor(client: CommandoClient) {
         super(client, {
-            name: 'art',
             aliases: ['a', 'art-image'],
-            group: 'card',
-            memberName: 'art',
+            args: [{
+                key: 'cardName',
+                prompt: 'what card are you searching for?\n',
+                type: 'string'
+            }],
             description: 'Displays the artist and full art from the card.',
             examples: [
                 'art raza',
                 'a secretkeeper'
             ],
-            args: [
-                {
-                    key: 'cardName',
-                    prompt: 'what card are you searching for?\n',
-                    type: 'string'
-                }
-            ]
+            group: 'card',
+            memberName: 'art',
+            name: 'art'
         })
     }
 
-    async run(msg, args) {
-        if (msg.channel.type !== 'dm' && !msg.channel.permissionsFor(this.client.user).hasPermission('SEND_MESSAGES')) { return }
-        if (msg.channel.type !== 'dm' && !msg.channel.permissionsFor(this.client.user).hasPermission('ATTACH_FILES')) {
-            return msg.reply('sorry, I don\'t have permission to attach files here, so I can\'t show card art.').catch(winston.error)
+    public async run(msg: CommandMessage, args: { cardName: string }): Promise<Message | Message[]> {
+        if (msg.channel instanceof TextChannel &&
+            !msg.channel.permissionsFor(this.client.user).hasPermission('SEND_MESSAGES')) { return }
+        if (msg.channel instanceof TextChannel &&
+            !msg.channel.permissionsFor(this.client.user).hasPermission('ATTACH_FILES')) {
+            return msg.reply('sorry, I don\'t have permission to attach files here, so I can\'t show card art.')
         }
 
         if (!msg.channel.typing) { msg.channel.startTyping() }
-        const card = await Card.findByName(args.cardName).catch(winston.error)
+        const card: Card = await Card.findByName(args.cardName)
         if (msg.channel.typing) { msg.channel.stopTyping() }
-        
-        if (!card) { return msg.reply(`sorry, I couldn't find a card with a name like '${args.cardName}'`).catch(winston.error) }
 
-        const filename = await card.getImage('art').catch(winston.error)
-        if (!filename) { return msg.reply(`sorry, there was a problem getting the art for ${card.name}`).catch(winston.error) }
+        if (!card) { return msg.reply(`sorry, I couldn't find a card with a name like '${args.cardName}'`) }
 
-        return msg.say(`**${card.name}**\n**Artist**: ${card.artist}`, { file: { attachment: filename } }).catch(winston.error)
+        const filename: string = await card.getImage('art')
+        if (!filename) { return msg.reply(`sorry, there was a problem getting the art for ${card.name}`) }
+
+        return msg.say(`**${card.name}**\n**Artist**: ${card.artist}`, { file: { attachment: filename } })
     }
 }
-
-module.exports = ImageArtCommand

@@ -5,6 +5,7 @@
     "rules": {
         "quotemark": [ true, "single", "avoid-escape" ],
         "semicolon": [ true, "never" ],
-        "prefer-const": true
+        "prefer-const": true,
+        "trailing-comma": [ true, { "multiline": "never", "singleLine": "never"} ]
     }
 }

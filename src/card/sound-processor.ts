@@ -1,28 +1,23 @@
-const ffmpeg = require('fluent-ffmpeg')
-const mkdirp = require('mkdirp')
-const path = require('path')
+import ffmpeg = require('fluent-ffmpeg')
+import * as mkdirp from 'mkdirp'
+import * as path from 'path'
 
-class SoundProcessor {
-    static mergeSounds(sounds, filename) {
+export default class SoundProcessor {
+    public static mergeSounds(sounds: Array<{ name: string, delay: number}>, filename: string): Promise<string> {
         const cmd = ffmpeg()
         return new Promise((resolve, reject) => {
-            mkdirp(path.dirname(filename), error => {
+            mkdirp(path.dirname(filename), (error) => {
                 if (error) { return reject(error) }
-                cmd.on('error', err => { reject(err) })
+                cmd.on('error', (err: string) => { reject(err) })
                 cmd.on('end', () => { resolve(filename) })
 
-                sounds.forEach(sound => {
+                sounds.forEach((sound) => {
                     cmd.input(sound.name)
                     cmd.inputOption(`-itsoffset ${sound.delay}`)
                 })
-                cmd.complexFilter([{
-                    filter: 'amix',
-                    options: { inputs: sounds.length }
-                }])
+                cmd.complexFilter(`amix=inputs=${sounds.length}`, null)
                 cmd.audioCodec('libvorbis').save(filename)
             })
         })
     }
 }
-
-module.exports = SoundProcessor
