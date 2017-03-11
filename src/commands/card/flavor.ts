@@ -5,7 +5,7 @@ import * as winston from 'winston'
 
 import Card from '../../card/card'
 
-class FlavorCommand extends Command {
+export default class FlavorCommand extends Command {
     constructor(client: CommandoClient) {
         super(client, {
             aliases: ['f', 'flavor-text'],
@@ -61,5 +61,3 @@ class FlavorCommand extends Command {
         )
     }
 }
-
-module.exports = FlavorCommand

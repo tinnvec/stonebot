@@ -4,7 +4,7 @@ import { Command, CommandMessage, CommandoClient } from 'discord.js-commando'
 import * as winston from 'winston'
 import Card from '../../card/card'
 
-class SoundCommand extends Command {
+export default class SoundCommand extends Command {
     public static get queue(): Array<{message: CommandMessage, card: Card, soundKind: string}> {
         if (!this._queue) { this._queue = [] }
         return this._queue

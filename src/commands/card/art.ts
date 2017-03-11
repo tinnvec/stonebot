@@ -4,7 +4,7 @@ import * as winston from 'winston'
 
 import Card from '../../card/card'
 
-class ImageArtCommand extends Command {
+export default class ImageArtCommand extends Command {
     constructor(client: CommandoClient) {
         super(client, {
             aliases: ['a', 'art-image'],

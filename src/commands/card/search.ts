@@ -8,7 +8,7 @@ import Card, { HearthstoneJSONCard } from '../../card/card'
 const SET_KEYWORDS = [ 'nax', 'naxx', 'gvg', 'brm', 'tgt', 'loe', 'tog', 'wog', 'wotog', 'kara', 'msg', 'msog']
 const MAX_RESULTS = 10
 
-class SearchCommand extends Command {
+export default class SearchCommand extends Command {
     constructor(client: CommandoClient) {
         super(client, {
             aliases: ['find'],
