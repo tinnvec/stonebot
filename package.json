@@ -31,7 +31,6 @@
     "fluent-ffmpeg": "^2.1.0",
     "fuse.js": "^2.6.1",
     "hearthstonejson": "^0.2.1",
-    "mkdirp": "^0.5.1",
     "moment": "^2.17.1",
     "node-opus": "^0.2.4",
     "pg": "^6.1.2",
@@ -44,7 +43,6 @@
   "devDependencies": {
     "@types/common-tags": "^1.2.5",
     "@types/fluent-ffmpeg": "0.0.2",
-    "@types/mkdirp": "^0.3.29",
     "@types/node": "^7.0.8",
     "@types/request": "0.0.41",
     "@types/sequelize": "^4.0.44",
