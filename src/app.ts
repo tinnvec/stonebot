@@ -2,6 +2,7 @@ import { oneLine } from 'common-tags'
 import { Guild } from 'discord.js'
 import { Command, CommandGroup, CommandMessage, CommandoClient, FriendlyError } from 'discord.js-commando'
 import * as fs from 'fs'
+import * as moment from 'moment'
 import * as path from 'path'
 import * as winston from 'winston'
 
@@ -11,12 +12,31 @@ import * as SequelizeProvider from './providers/sequelize-provider'
 
 import * as config from '/data/config.json'
 
-winston.default.level = config.logLevel
 if (!fs.existsSync('/data/logs')) { fs.mkdirSync('/data/logs') }
 if (!fs.existsSync('/data/sounds')) { fs.mkdirSync('/data/sounds') }
 if (!fs.existsSync('/data/images')) { fs.mkdirSync('/data/images') }
 if (!fs.existsSync('/data/images/art')) { fs.mkdirSync('/data/images/art') }
 if (!fs.existsSync('/data/images/gold')) { fs.mkdirSync('/data/images/gold') }
+
+winston.configure({
+    transports: [
+        new (winston.transports.Console)({
+            level: config.logLevel,
+            prettyPrint: true,
+            timestamp: () => moment().format('YYYY-MM-DD HH:mm:ss.SSS')
+        }),
+        new (winston.transports.File)({
+            filename: '/data/logs/debug.log',
+            json: false,
+            level: 'debug',
+            maxFiles: 5,
+            maxSize: 1000000,
+            prettyPrint: true,
+            tailable: true,
+            timestamp: () => moment().format('YYYY-MM-DD HH:mm:ss.SSS')
+        })
+    ]
+})
 
 const client: CommandoClient = new CommandoClient({
     commandPrefix: config.prefix,
