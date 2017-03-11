@@ -12,11 +12,10 @@ import * as SequelizeProvider from './providers/sequelize-provider'
 
 import * as config from '/data/config.json'
 
-if (!fs.existsSync('/data/logs')) { fs.mkdirSync('/data/logs') }
-if (!fs.existsSync('/data/sounds')) { fs.mkdirSync('/data/sounds') }
-if (!fs.existsSync('/data/images')) { fs.mkdirSync('/data/images') }
-if (!fs.existsSync('/data/images/art')) { fs.mkdirSync('/data/images/art') }
-if (!fs.existsSync('/data/images/gold')) { fs.mkdirSync('/data/images/gold') }
+['logs', 'sounds', 'images', 'images/art', 'images/gold'].forEach((folder: string) => {
+    const fpath = `/data/${folder}`
+    if (!fs.existsSync(fpath)) { fs.mkdirSync(fpath) }
+})
 
 winston.configure({
     transports: [
