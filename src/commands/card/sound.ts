@@ -66,15 +66,13 @@ export default class SoundCommand extends Command {
 
         connection.playFile(file).on('end', () => {
             this.queue.shift()
-            if (connection instanceof VoiceConnection) {
-                if (this.queue.length > 0) {
-                    if (this.queue[0].message.member.voiceChannel !== connection.channel) {
-                        connection.channel.leave()
-                    }
-                    this.playSound(client)
-                } else {
+            if (this.queue.length > 0) {
+                if (this.queue[0].message.member.voiceChannel !== connection.channel) {
                     connection.channel.leave()
                 }
+                this.playSound(client)
+            } else {
+                connection.channel.leave()
             }
         })
     }
