@@ -1,5 +1,5 @@
 import { oneLine } from 'common-tags'
-import winston  from 'winston'
+import * as winston  from 'winston'
 
 import Quest from '../database/models/quest'
 

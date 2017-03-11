@@ -1,7 +1,7 @@
 import { oneLine } from 'common-tags'
 import { Message, TextChannel } from 'discord.js'
 import { Command, CommandMessage, CommandoClient } from 'discord.js-commando'
-import winston from 'winston'
+import * as winston from 'winston'
 
 import Card from '../../card/card'
 

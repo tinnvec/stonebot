@@ -2,7 +2,7 @@ import { oneLine } from 'common-tags'
 import { Guild } from 'discord.js'
 import { Command, CommandGroup, CommandMessage, CommandoClient, FriendlyError } from 'discord.js-commando'
 import * as path from 'path'
-import winston from 'winston'
+import * as winston from 'winston'
 
 import CommunityManager from './community/community-manager'
 import PostgreSQL from './database/postgresql'
@@ -10,7 +10,7 @@ import * as SequelizeProvider from './providers/sequelize-provider'
 
 import * as config from '/data/config.json'
 
-winston.level = config.logLevel
+winston.default.level = config.logLevel
 
 const client: CommandoClient = new CommandoClient({
     commandPrefix: config.prefix,

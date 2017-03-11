@@ -2,7 +2,7 @@ import * as fs from 'fs'
 import * as mkdirp from 'mkdirp'
 import * as path from 'path'
 import * as request from 'request'
-import winston from 'winston'
+import * as winston from 'winston'
 
 export default class FileManager {
     public static downloadFile(uri: string, filename: string): Promise<string> {

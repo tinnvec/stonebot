@@ -2,7 +2,7 @@ import { oneLine } from 'common-tags'
 import { Guild, Message, RichEmbed, TextChannel } from 'discord.js'
 import { Command, CommandMessage, CommandoClient } from 'discord.js-commando'
 import * as moment from 'moment'
-import winston from 'winston'
+import * as winston from 'winston'
 
 export default class StatsCommand extends Command {
     constructor(client: CommandoClient) {

@@ -1,8 +1,8 @@
 import * as fs from 'fs'
 import * as Fuse from 'fuse.js'
 import HearthstoneJSON from 'hearthstonejson'
-import toMarkdown from 'to-markdown'
-import winston from 'winston'
+import * as toMarkdown from 'to-markdown'
+import * as winston from 'winston'
 
 import FileManager from './file-manager'
 import SoundProcessor from './sound-processor'
