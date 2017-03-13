@@ -6,9 +6,9 @@ import * as moment from 'moment'
 import * as path from 'path'
 import * as winston from 'winston'
 
-import CommunityManager from './community/community-manager'
 import PostgreSQL from './database/postgresql'
 import * as SequelizeProvider from './providers/sequelize-provider'
+import CommunityManager from './structures/community-manager'
 
 import * as config from '/data/config.json'
 
