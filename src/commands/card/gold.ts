@@ -3,7 +3,8 @@ import { Message, TextChannel } from 'discord.js'
 import { Command, CommandMessage, CommandoClient } from 'discord.js-commando'
 import * as winston from 'winston'
 
-import Card from '../../card/card'
+import Card from '../../structures/card'
+import CardData from '../../structures/card-data'
 
 export default class GoldCommand extends Command {
     constructor(client: CommandoClient) {
@@ -39,14 +40,15 @@ export default class GoldCommand extends Command {
         }
 
         if (!msg.channel.typing) { msg.channel.startTyping() }
-        const card: Card = await Card.findByName(args.cardName)
+        const card: Card = await CardData.findOne(args.cardName)
+        let filename: string
+        if (card) { filename = await card.getImageFile('gold') }
         if (msg.channel.typing) { msg.channel.stopTyping() }
 
         if (!card) {
             return msg.reply(`sorry, I couldn't find a card with a name like '${args.cardName}'`)
         }
 
-        const filename: string = await card.getImage('gold')
         if (!filename) {
             return msg.reply(`sorry, there was a problem getting the golden image for ${card.name}`)
         }

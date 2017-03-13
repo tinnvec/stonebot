@@ -3,7 +3,8 @@ import { Message, RichEmbed, TextChannel} from 'discord.js'
 import { Command, CommandMessage, CommandoClient } from 'discord.js-commando'
 import * as winston from 'winston'
 
-import Card, { HearthstoneJSONCard } from '../../card/card'
+import Card from '../../structures/card'
+import CardData from '../../structures/card-data'
 
 const SET_KEYWORDS = [ 'nax', 'naxx', 'gvg', 'brm', 'tgt', 'loe', 'tog', 'wog', 'wotog', 'kara', 'msg', 'msog']
 const MAX_RESULTS = 10
@@ -50,7 +51,7 @@ export default class SearchCommand extends Command {
 
         if (!msg.channel.typing) { msg.channel.startTyping() }
         winston.debug('Fetching all cards.')
-        let cards: HearthstoneJSONCard[] = await Card.getAll()
+        let cards: Card[] = await CardData.getLatest()
         if (msg.channel.typing) { msg.channel.stopTyping() }
 
         const valueKeywords: string[] = []
@@ -75,7 +76,7 @@ export default class SearchCommand extends Command {
                 let filter
                 if (key === 'artist') {
                     winston.debug(`Filtering cards for artist name that includes '${value}'.`)
-                    filter = (card: HearthstoneJSONCard) => {
+                    filter = (card: Card) => {
                         return card.artist && card.artist.toLowerCase().includes(value.toLowerCase())
                     }
                     searchEmbed.addField('Artist', `Name contains '${value}'`, true)
@@ -83,22 +84,22 @@ export default class SearchCommand extends Command {
                     if (value.endsWith('+')) {
                         const num: Number = parseInt(value.slice(0, -1), 10)
                         winston.debug(`Filtering cards for '${key}' >= '${num}'.`)
-                        filter = (card: HearthstoneJSONCard) => card[key] >= num
+                        filter = (card: Card) => card[key] >= num
                         searchEmbed.addField(key, `${num} or more`, true)
                     } else if (value.endsWith('-')) {
                         const num: Number = parseInt(value.slice(0, -1), 10)
                         winston.debug(`Filtering cards for '${key}' <= '${num}'.`)
-                        filter = (card: HearthstoneJSONCard) => card[key] <= num
+                        filter = (card: Card) => card[key] <= num
                         searchEmbed.addField(key, `${num} or less`, true)
                     } else if (value.includes('-')) {
                         const min: Number = parseInt(value.split('-')[0], 10)
                         const max: Number = parseInt(value.split('-')[1], 10)
                         winston.debug(`Filtering cards for '${key}' between '${min}' and '${max}'.`)
-                        filter = (card: HearthstoneJSONCard) => card[key] >= min && card[key] <= max
+                        filter = (card: Card) => card[key] >= min && card[key] <= max
                         searchEmbed.addField(key, `Between ${min} and ${max}`, true)
                     } else {
                         winston.debug(`Filtering cards for '${key}' == '${value}'.`)
-                        filter = (card: HearthstoneJSONCard) => card[key] === parseInt(value, 10)
+                        filter = (card: Card) => card[key] === parseInt(value, 10)
                         searchEmbed.addField(key, `Equal to ${value}`, true)
                     }
                 }
@@ -110,7 +111,7 @@ export default class SearchCommand extends Command {
             const searchTerm: string = words.join(' ').toLowerCase()
             const searchKeys: string[] = ['name', 'playerClass', 'race', 'rarity', 'text', 'type']
             winston.debug(`Searching cards for '${searchTerm}'.`)
-            cards = cards.filter((card: HearthstoneJSONCard) => {
+            cards = cards.filter((card: Card) => {
                 return (searchKeys.some((key: string) => key in card && card[key].toLowerCase().includes(searchTerm)) ||
                 (card.set && this.cardSetMatches(card.set, searchTerm)))
             })
@@ -156,7 +157,7 @@ export default class SearchCommand extends Command {
                 that match${cards.length === 1 ? 'es' : ''}._
             `
             if (cards.length > MAX_RESULTS) { results += ` _Here are the first ${MAX_RESULTS}._` }
-            const cardNames: string[] = cards.slice(0, MAX_RESULTS).map((c: HearthstoneJSONCard) => c.name)
+            const cardNames: string[] = cards.slice(0, MAX_RESULTS).map((c: Card) => c.name)
             results += '\n' + cardNames.map((n) => {
                 return `[${n}](http://hearthstone.gamepedia.com/${n.replace(/\s/g, '_')})`
             }).join(' | ')

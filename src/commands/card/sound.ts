@@ -2,7 +2,9 @@ import { oneLine } from 'common-tags'
 import { Message, TextChannel, VoiceChannel, VoiceConnection } from 'discord.js'
 import { Command, CommandMessage, CommandoClient } from 'discord.js-commando'
 import * as winston from 'winston'
-import Card from '../../card/card'
+
+import Card from '../../structures/card'
+import CardData from '../../structures/card-data'
 
 export default class SoundCommand extends Command {
     public static get queue(): Array<{message: CommandMessage, card: Card, soundKind: string}> {
@@ -15,7 +17,7 @@ export default class SoundCommand extends Command {
         const card: Card = this.queue[0].card
         const soundKind: string = this.queue[0].soundKind
 
-        const file: string = await card.getSound(soundKind)
+        const file: string = await card.getSoundFile(soundKind)
         if (!file) {
             return message
                 .reply(`sorry, I wasn't able to get the ${soundKind} sound for ${card.name}.`)
@@ -63,8 +65,8 @@ export default class SoundCommand extends Command {
                     if (this.queue.length > 0) { this.playSound(client) }
                 })
         }
-
         connection.playFile(file).on('end', () => {
+            connection = connection as VoiceConnection
             this.queue.shift()
             if (this.queue.length > 0) {
                 if (this.queue[0].message.member.voiceChannel !== connection.channel) {
@@ -133,21 +135,16 @@ export default class SoundCommand extends Command {
         if (!args.soundKind || !args.cardName) { return msg.reply('cancelled command.') }
 
         if (!msg.channel.typing) { msg.channel.startTyping() }
-        const card: Card = await Card.findByName(args.cardName)
+        const card: Card = await CardData.findOne(args.cardName)
         if (msg.channel.typing) { msg.channel.stopTyping() }
 
         if (!card) {
             return msg.reply(`sorry, I couldn't find a card with a name like '${args.cardName}'`)
         }
 
-        const sounds: Array<{name: string, delay: Number}> = card.getSoundParts(args.soundKind)
-        if (!sounds || sounds.length < 1) {
-            return msg.reply(`sorry, I don't know the ${args.soundKind} sound for ${card.name}.`)
-        }
-
-        return msg.reply(oneLine`
-            I'll join your voice channel and play the ${args.soundKind} sound for ${card.name} in a moment.
-        `).then(() => {
+        return msg.reply(
+            `I'll join your voice channel and play the ${args.soundKind} sound for ${card.name} in a moment.`
+        ).then(() => {
             SoundCommand.queue.push({ message: msg, card, soundKind: args.soundKind })
             if (SoundCommand.queue.length === 1) { SoundCommand.playSound(this.client).catch(winston.error) }
         })
