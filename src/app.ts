@@ -12,17 +12,21 @@ import CommunityManager from './structures/community-manager'
 
 import * as config from '/data/config.json'
 
+// Create data folder structure
 ['logs', 'sounds', 'images', 'images/art', 'images/gold'].forEach((folder: string) => {
     const fpath = `/data/${folder}`
     if (!fs.existsSync(fpath)) { fs.mkdirSync(fpath) }
 })
 
+// Set winston config
 winston.configure({
     transports: [
+        // Console logging
         new (winston.transports.Console)({
             level: config.logLevel,
             prettyPrint: true
         }),
+        // Rotated file logging
         new (winston.transports.File)({
             filename: '/data/logs/debug.log',
             json: false,
@@ -36,14 +40,18 @@ winston.configure({
     ]
 })
 
+// Instantiate commando client
 const client: CommandoClient = new CommandoClient({
     commandPrefix: config.prefix,
     owner: config.owner
 })
 
+// Start db connection
 PostgreSQL.start()
+// Use db as client settings provider
 client.setProvider(new SequelizeProvider(PostgreSQL.db)).catch(winston.error)
 
+// Listen to client events
 client.on('debug', winston.debug)
     .on('warn', winston.warn)
     .on('error', winston.error)
@@ -102,6 +110,7 @@ client.on('debug', winston.debug)
         winston.info(`Client ready. Currently in ${client.guilds.size} guilds.`)
     })
 
+// Register types, groups and commands with client
 client.registry
     .registerDefaultTypes()
     .registerGroups([
@@ -112,4 +121,5 @@ client.registry
     .registerCommandsIn(path.join(__dirname, 'commands'))
     .registerDefaultCommands({ eval_: false })
 
+// Connect to Discord
 client.login(config.token)
