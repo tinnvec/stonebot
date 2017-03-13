@@ -10,13 +10,26 @@ import PostgreSQL from './database/postgresql'
 import * as SequelizeProvider from './providers/sequelize-provider'
 import CommunityManager from './structures/community-manager'
 
-import * as config from '/data/config.json'
-
 // Create data folder structure
 ['logs', 'sounds', 'images', 'images/art', 'images/gold'].forEach((folder: string) => {
     const fpath = `/data/${folder}`
     if (!fs.existsSync(fpath)) { fs.mkdirSync(fpath) }
 })
+
+// Read config
+const config: {
+    token: string,
+    owner: string | string[],
+    prefix: string,
+    logLevel: 'error' | 'warn' | 'info' | 'verbose' | 'debug' | 'silly',
+    database: {
+        host: string,
+        port: number,
+        username: string,
+        password: string,
+        name: string
+    }
+} = require ('/data/config.json')
 
 // Set winston config
 winston.configure({
