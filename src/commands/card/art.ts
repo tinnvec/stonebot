@@ -1,3 +1,4 @@
+import { stripIndents } from 'common-tags'
 import { Message, TextChannel } from 'discord.js'
 import { Command, CommandMessage, CommandoClient } from 'discord.js-commando'
 import * as winston from 'winston'
@@ -41,7 +42,9 @@ export default class ImageArtCommand extends Command {
 
         if (!card) { return msg.reply(`sorry, I couldn't find a card with a name like '${args.cardName}'`) }
         if (!filename) { return msg.reply(`sorry, there was a problem getting the art for ${card.name}`) }
-
-        return msg.say(`**${card.name}**\n**Artist**: ${card.artist}`, { file: { attachment: filename } })
+        return msg.say(stripIndents`
+            **${card.name}**
+            **Artist**: ${card.artist}
+        `, { file: { attachment: filename } })
     }
 }

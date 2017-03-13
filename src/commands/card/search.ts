@@ -1,4 +1,4 @@
-import { oneLine } from 'common-tags'
+import { oneLine, stripIndents } from 'common-tags'
 import { Message, RichEmbed, TextChannel} from 'discord.js'
 import { Command, CommandMessage, CommandoClient } from 'discord.js-commando'
 import * as winston from 'winston'
@@ -15,17 +15,17 @@ export default class SearchCommand extends Command {
             aliases: ['find'],
             argsType: 'multiple',
             description: 'Searches for Hearthstone cards.',
-            details: oneLine`
-                Works like Hearthstone collection searching.\n
-                General search accross most visible card text in addition to several keywords.\n
-                Set keywords: \`${SET_KEYWORDS.join('`, `')}\`.\n
-                Value keywords: \`attack\`, \`health\`, \`mana\`, \`artist\`.\n
-                Value keywords take the form of \`<keyword>:<value>\`.\n
-                The \`artist\` keyword only accepts text without spaces.\n
-                All other keywords use a numeric \`<value>\` with range options.\n
-                \`<value>\` alone means exact value.\n
-                \`<value>-\` means value or lower.\n
-                \`<value>+\` means value or higher.\n
+            details: stripIndents`
+                Works like Hearthstone collection searching.
+                General search accross most visible card text in addition to several keywords.
+                Set keywords: \`${SET_KEYWORDS.join('`, `')}\`.
+                Value keywords: \`attack\`, \`health\`, \`mana\`, \`artist\`.
+                Value keywords take the form of \`<keyword>:<value>\`.
+                The \`artist\` keyword only accepts text without spaces.
+                All other keywords use a numeric \`<value>\` with range options.
+                \`<value>\` alone means exact value.
+                \`<value>-\` means value or lower.
+                \`<value>+\` means value or higher.
                 \`<value1>-<value2>\` means between value1 and value2.
             `,
             examples: [
@@ -141,12 +141,11 @@ export default class SearchCommand extends Command {
                 }).join('\n') + '\n' +
                 (words.length > 0 ? `**Search Term**\n${words.join(' ').toLowerCase()}\n` : '') +
                 '\n**Results**\n' +
-                (cards.length > 0 ?
-                    `_Found ${cards.length} card${cards.length === 1 ? '' : 's'}` +
-                    ` that match${cards.length === 1 ? 'es' : ''}._` +
-                    (cards.length > MAX_RESULTS ? ` _Here are the first ${MAX_RESULTS}._\n` : '\n') +
-                    cards.slice(0, MAX_RESULTS).map((c) => c.name).join(' | ') :
-                    '_Sorry, got nothing_')
+                (cards.length > 0 ? stripIndents`
+                    _Found ${cards.length} card${cards.length === 1 ? '' : 's'} that match${cards.length === 1 ? 'es' : ''}._
+                    ${(cards.length > MAX_RESULTS ? ` _Here are the first ${MAX_RESULTS}._` : '')}
+                    ${cards.slice(0, MAX_RESULTS).map((c) => c.name).join(' | ')}
+                ` : '_Sorry, got nothing_')
             ).catch(winston.error)
         }
 

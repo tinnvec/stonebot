@@ -31,10 +31,7 @@ export default class JSONCommand extends Command {
         const card: Card = await CardData.findOne(args.cardName)
         if (msg.channel.typing) { msg.channel.stopTyping() }
 
-        if (!card) {
-            return msg.reply(`sorry, I couldn't find a card with a name like '${args.cardName}'`)
-        }
-
-        return msg.code('json', JSON.stringify(card.json, null, '  '))
+        if (!card) { return msg.reply(`sorry, I couldn't find a card with a name like '${args.cardName}'`) }
+        return msg.code('json', JSON.stringify(card.json, undefined, '  '))
     }
 }

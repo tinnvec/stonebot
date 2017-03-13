@@ -1,4 +1,4 @@
-import { oneLine } from 'common-tags'
+import { oneLine, stripIndents } from 'common-tags'
 import { Message } from 'discord.js'
 import { Command, CommandMessage, CommandoClient } from 'discord.js-commando'
 import * as winston from 'winston'
@@ -23,16 +23,16 @@ export default class QuestCommand extends Command {
                     value = value.toLowerCase()
                     if (value === 'complete') { return true }
                     if (['americas', 'america', 'na', 'europe', 'eu', 'asia'].includes(value)) { return true }
-                    return oneLine`
-                        please choose a server from \`americas\`, \`na\`, \`europe\`, \`eu\`, \`asia\`.\n
-                        You may also say \`complete\` if you recently finished your quest.\n
+                    return stripIndents`
+                        please choose a server from \`americas\`, \`na\`, \`europe\`, \`eu\`, \`asia\`.
+                        You may also say \`complete\` if you recently finished your quest.
                     `
                 }
             }],
             description: 'Helps find other players looking to trade the Play a Friend (aka 80g) quest.',
-            details: oneLine`
-                Makes matches when players share a Discord server and Battle.net server region.\n
-                \`<bnetServer>\` may be one of \`americas\`, \`na\`, \`europe\`, \`eu\`, \`asia\`.\n
+            details: stripIndents`
+                Makes matches when players share a Discord server and Battle.net server region.
+                \`<bnetServer>\` may be one of \`americas\`, \`na\`, \`europe\`, \`eu\`, \`asia\`.
                 Using \`!quest complete\` will remove you from the pool of those looking to trade.
             `,
             examples: [

@@ -1,4 +1,4 @@
-import { oneLine } from 'common-tags'
+import { oneLine, stripIndents } from 'common-tags'
 import { Guild, Message, RichEmbed, TextChannel } from 'discord.js'
 import { Command, CommandMessage, CommandoClient } from 'discord.js-commando'
 import * as moment from 'moment'
@@ -21,21 +21,27 @@ export default class StatsCommand extends Command {
 
     public async run(msg: CommandMessage): Promise<Message | Message[]> {
         if (msg.channel instanceof TextChannel &&
-            !msg.channel.permissionsFor(this.client.user).hasPermission('SEND_MESSAGES')) { return }
+            !msg.channel.permissionsFor(this.client.user).hasPermission('SEND_MESSAGES')) {
+            return
+        }
 
-        const statsDisplay = oneLine`
-            Guilds: ${this.client.guilds.size}\n
-            Channels: ${this.client.channels.size}\n
+        const statsDisplay = stripIndents`
+            Guilds: ${this.client.guilds.size}
+            Channels: ${this.client.channels.size}
             Users: ${this.client.guilds.map((g: Guild) => g.memberCount).reduce((a, b) => a + b)}
         `
 
         if (msg.channel instanceof TextChannel &&
             !msg.channel.permissionsFor(this.client.user).hasPermission('EMBED_LINKS')) {
-            return msg.say(oneLine`
-                **${this.client.user.username} Statistics**\n\n
-                **Uptime**\n${moment.duration(this.client.uptime).humanize()}\n
-                **Memory Usage**\n${Math.round(process.memoryUsage().heapUsed / 1024 / 1024)}MB\n
-                **General Stats**\n${statsDisplay}
+            return msg.say(stripIndents`
+                **${this.client.user.username} Statistics**
+                
+                **Uptime**
+                ${moment.duration(this.client.uptime).humanize()}
+                **Memory Usage**
+                ${Math.round(process.memoryUsage().heapUsed / 1024 / 1024)}MB
+                **General Stats**
+                ${statsDisplay}
             `)
         }
 

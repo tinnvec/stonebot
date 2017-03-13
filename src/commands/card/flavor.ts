@@ -1,4 +1,4 @@
-import { oneLine } from 'common-tags'
+import { stripIndents } from 'common-tags'
 import { Message, RichEmbed, TextChannel } from 'discord.js'
 import { Command, CommandMessage, CommandoClient } from 'discord.js-commando'
 import * as winston from 'winston'
@@ -40,14 +40,14 @@ export default class FlavorCommand extends Command {
 
         if (msg.channel instanceof TextChannel &&
             !msg.channel.permissionsFor(this.client.user).hasPermission('EMBED_LINKS')) {
-            return msg.say(oneLine`
-                **${card.name}**\n
-                ${card.description}\n
-                **Text**\n
-                ${card.text}\n
-                **Flavor**\n
-                ${card.flavor}\n
-                ${card.url}
+            return msg.say(stripIndents`
+                **${card.name}**
+                ${card.description}
+                **Text**
+                ${card.text}
+                **Flavor**
+                ${card.flavor}
+                ${card.wikiUrl}
             `)
         }
 

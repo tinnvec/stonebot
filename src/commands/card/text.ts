@@ -1,3 +1,4 @@
+import { stripIndents } from 'common-tags'
 import { Message, RichEmbed, TextChannel } from 'discord.js'
 import { Command, CommandMessage, CommandoClient } from 'discord.js-commando'
 import * as winston from 'winston'
@@ -9,13 +10,11 @@ export default class TextCommand extends Command {
     constructor(client: CommandoClient) {
         super(client, {
             aliases: ['txt', 't', 'card', 'c'],
-            args: [
-                {
-                    key: 'cardName',
-                    prompt: 'what card are you searching for?\n',
-                    type: 'string'
-                }
-            ],
+            args: [{
+                key: 'cardName',
+                prompt: 'what card are you searching for?\n',
+                type: 'string'
+            }],
             description: 'Displays card text.',
             examples: [
                 'text frostbolt',
@@ -40,7 +39,13 @@ export default class TextCommand extends Command {
         if (!card) { return msg.reply(`sorry, I couldn't find a card with a name like '${args.cardName}'`) }
         if (msg.channel instanceof TextChannel &&
             !msg.channel.permissionsFor(this.client.user).hasPermission('EMBED_LINKS')) {
-            return msg.say(`**${card.name}**\n${card.description}\n**Text**\n${card.text}\n${card.url}`)
+            return msg.say(stripIndents`
+                **${card.name}**
+                ${card.description}
+                **Text**
+                ${card.text}
+                ${card.wikiUrl}
+            `)
         }
         return msg.embed(
             new RichEmbed()

@@ -192,8 +192,7 @@ export default class Card {
                 winston.debug(`Adding sound from ${sound.url} with delay of ${sound.delay}`)
                 ffmpegCmd.input(sound.url).inputOption(`-itsoffset ${sound.delay}`)
             })
-            ffmpegCmd
-                .complexFilter(`amix=inputs=${sndUrls.length}`, undefined)
+            ffmpegCmd.complexFilter(`amix=inputs=${sndUrls.length}`, undefined)
                 .audioCodec('libvorbis')
                 .on('error', (err: Error) => {
                     winston.error(`Error creating sound file: ${err}`)

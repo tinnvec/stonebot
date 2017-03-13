@@ -41,15 +41,8 @@ export default class ImageCommand extends Command {
         if (card) { filename = await card.getImageFile() }
         if (msg.channel.typing) { msg.channel.stopTyping() }
 
-        if (!card) {
-            return msg.reply(`sorry, I couldn't find a card with a name like '${args.cardName}'`)
-        }
-
-        const filename: string = await card.getImage()
-        if (!filename) {
-            return msg.reply(`sorry, there was a problem getting the image for ${card.name}`)
-        }
-
+        if (!card) { return msg.reply(`sorry, I couldn't find a card with a name like '${args.cardName}'`) }
+        if (!filename) { return msg.reply(`sorry, there was a problem getting the image for ${card.name}`) }
         return msg.say('', { file: { attachment: filename } })
     }
 }
