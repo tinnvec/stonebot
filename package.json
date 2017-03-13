@@ -35,7 +35,7 @@
     "node-opus": "^0.2.4",
     "pg": "^6.1.2",
     "pg-hstore": "^2.3.2",
-    "request": "^2.79.0",
+    "request": "^2.81.0",
     "sequelize": "^3.30.2",
     "to-markdown": "^3.0.3",
     "winston": "^2.3.1"
