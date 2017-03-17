@@ -91,10 +91,10 @@ export default class Card {
 
     public get description(): string {
         return oneLine`
-            ${this.cost ? `${this.cost} Mana` : ''}
+            ${this.cost !== undefined ? `${this.cost} Mana` : ''}
             ${this.attack ? `${this.attack}/${this.health || this.durability}` : ''}
-            ${this.playerClass.toLowerCase()}
-            ${this.type.toLowerCase()}
+            ${this.rarity ? this.rarity === 'FREE' ? 'Basic' :
+                this.capitalizeFirstLetter(this.rarity.toLowerCase()) : ''}
             ${this.capitalizeFirstLetter(this.playerClass.toLowerCase())}
             ${this.capitalizeFirstLetter(this.type.toLowerCase())}
         `
