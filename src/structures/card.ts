@@ -3,7 +3,6 @@ import ffmpeg = require('fluent-ffmpeg')
 import * as fs from 'fs'
 import { IncomingMessage } from 'http'
 import * as request from 'request'
-import * as toMarkdown from 'to-markdown'
 import * as winston from 'winston'
 
 import { HearthstoneJSONCard } from './card-data'
@@ -53,12 +52,12 @@ export default class Card {
 
         this.artist = obj.artist || '_unknown_'
         this.collectible = obj.collectible || false
-        this.flavor = obj.flavor ? toMarkdown(obj.flavor) : '_blank_'
+        this.flavor = obj.flavor ? this.cardTextToMarkdown(obj.flavor) : '_blank_'
         this.json = obj
-        this.text = obj.text ? toMarkdown(obj.text) : '_blank_'
+        this.text = obj.text ? this.cardTextToMarkdown(obj.text) : '_blank_'
 
         this.attack = obj.attack
-        this.collectionText = obj.collectionText ? toMarkdown(obj.collectionText) : undefined
+        this.collectionText = obj.collectionText ? this.cardTextToMarkdown(obj.collectionText) : undefined
         this.cost = obj.cost
         this.durability = obj.durability
         this.elite = obj.elite
@@ -204,5 +203,15 @@ export default class Card {
                 })
                 .save(filename)
         })
+    }
+
+    private cardTextToMarkdown(text: string): string {
+        return text
+            .replace(/\[x\]/gi, '')
+            .replace(/<\/?b>/gi, '**')
+            .replace(/<\/?i>/gi, '_')
+            .replace(/\n/g, ' ')
+            .replace(/\s\s/g, ' ')
+            .trim()
     }
 }
