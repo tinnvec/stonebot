@@ -6,23 +6,23 @@ import * as winston from 'winston'
 import Card from '../../structures/card'
 import CardData from '../../structures/card-data'
 
-export default class FlavorCommand extends Command {
+export default class TextCommand extends Command {
     constructor(client: CommandoClient) {
         super(client, {
-            aliases: ['f', 'flavor-text'],
+            aliases: ['c'],
             args: [{
                 key: 'cardName',
                 prompt: 'what card are you searching for?\n',
                 type: 'string'
             }],
-            description: 'Displays card text and flavor text.',
+            description: 'Displays card information.',
             examples: [
-                'flavor devolve',
-                'f small time recruits'
+                'card tinyfin',
+                'c frostbolt'
             ],
             group: 'card',
-            memberName: 'flavor',
-            name: 'flavor'
+            memberName: 'card',
+            name: 'card'
         })
     }
 
@@ -37,27 +37,22 @@ export default class FlavorCommand extends Command {
         if (msg.channel.typing) { msg.channel.stopTyping() }
 
         if (!card) { return msg.reply(`sorry, I couldn't find a card with a name like '${args.cardName}'`) }
-
         if (msg.channel instanceof TextChannel &&
             !msg.channel.permissionsFor(this.client.user).hasPermission('EMBED_LINKS')) {
             return msg.say(stripIndents`
                 **${card.name}**
                 ${card.description}
-                **Text**
                 ${card.text}
-                **Flavor**
-                ${card.flavor}
+                **Flavor:** ${card.flavor}
                 ${card.wikiUrl}
             `)
         }
-
         return msg.embed(
             new RichEmbed()
                 .setTitle(card.name)
-                .setDescription(card.description)
                 .setURL(card.wikiUrl)
                 .setColor(card.classColor)
-                .addField('Text', card.text)
+                .setDescription(`${card.description}\n${card.text}`)
                 .addField('Flavor', card.flavor)
         )
     }
