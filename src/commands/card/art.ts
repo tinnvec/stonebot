@@ -1,6 +1,7 @@
 import { stripIndents } from 'common-tags'
-import { Message, TextChannel } from 'discord.js'
+import { Message, RichEmbed, TextChannel } from 'discord.js'
 import { Command, CommandMessage, CommandoClient } from 'discord.js-commando'
+import * as path from 'path'
 import * as winston from 'winston'
 
 import Card from '../../structures/card'
@@ -42,9 +43,24 @@ export default class ImageArtCommand extends Command {
 
         if (!card) { return msg.reply(`sorry, I couldn't find a card with a name like '${args.cardName}'`) }
         if (!filename) { return msg.reply(`sorry, there was a problem getting the art for ${card.name}`) }
-        return msg.say(stripIndents`
-            **${card.name}**
-            **Artist**: ${card.artist}
-        `, { file: { attachment: filename } })
+
+        if (msg.channel instanceof TextChannel &&
+            !msg.channel.permissionsFor(this.client.user).hasPermission('EMBED_LINKS')) {
+            return msg.say(stripIndents`
+                **${card.name}**
+                **Artist**: ${card.artist}
+                ${card.wikiUrl}
+            `, { file: { attachment: filename } })
+        }
+        const cleanFilename = path.basename(filename).replace('_', '')
+        return msg.embed(
+            new RichEmbed()
+                .setTitle(card.name)
+                .setURL(card.wikiUrl)
+                .setColor(card.classColor)
+                .addField('Artist', card.artist)
+                .attachFile({ attachment: filename, name: cleanFilename })
+                .setImage(`attachment://${cleanFilename}`)
+        )
     }
 }
