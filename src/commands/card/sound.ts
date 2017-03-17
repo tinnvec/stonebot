@@ -1,6 +1,6 @@
 import { oneLine } from 'common-tags'
 import { Message, TextChannel, VoiceChannel, VoiceConnection } from 'discord.js'
-import { Command, CommandMessage, CommandoClient } from 'discord.js-commando'
+import { ArgumentCollectorResult, Command, CommandMessage, CommandoClient } from 'discord.js-commando'
 import * as winston from 'winston'
 
 import Card from '../../structures/card'
@@ -128,9 +128,12 @@ export default class SoundCommand extends Command {
         }
 
         if (!args.cardName) {
-            this.args[1].default = null
-            args.cardName = await this.args[1].obtain(msg).catch(winston.error)
-            this.args[1].default = ''
+            this.argsCollector.args[1].default = null
+            args.cardName = await this.argsCollector
+                .obtain(msg, [args.soundKind])
+                .then((res: ArgumentCollectorResult) => res.values.cardName)
+            winston.debug(args.cardName)
+            this.argsCollector.args[1].default = ''
         }
         if (!args.soundKind || !args.cardName) { return msg.reply('cancelled command.') }
 

@@ -41,8 +41,8 @@ export type CardFuseResult = {
 }
 
 export default class CardData {
-    public static findOne(pattern: string, keys: string[] = ['name']): Promise<Card | undefined> {
-        return new Promise<Card | undefined>((resolve, reject) => {
+    public static findOne(pattern: string, keys: string[] = ['name']): Promise<Card> {
+        return new Promise<Card>((resolve, reject) => {
             this.getLatest().then((cards: Card[]) => {
                 const uncollectibleFuse: Fuse = new Fuse(
                     cards.filter((c: Card) => !c.collectible),
