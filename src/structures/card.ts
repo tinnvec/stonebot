@@ -108,8 +108,13 @@ export default class Card {
         return `http://hearthstone.gamepedia.com/${this.name.replace(/\s/g, '_')}`
     }
 
-    public getImageFile(imgType: 'art' | 'gold' | 'image' = 'image'): Promise<string> {
-        return new Promise<string>((resolve, reject) => {
+    public getImageFile(imgType: 'art' | 'gold' | 'image' = 'image'): Promise<string | undefined> {
+        const baseArtUrl = 'http://art.hearthstonejson.com/v1/512x'
+        const baseGoldUrl = 'http://media.services.zam.com/v1/media/byName/hs/cards/enus/animated'
+        const baseImageUrl = `http://media.services.zam.com/v1/media/byName/hs/cards/enus`
+        // alternate: `http://art.hearthstonejson.com/v1/render/latest/enUS/512x/${this.id}.png`
+
+        return new Promise<string | undefined>((resolve, reject) => {
             const imgTypeExt = imgType === 'gold' ? 'gif' : imgType === 'art' ? 'jpg' : 'png'
             const filename = `/data/images/${imgType === 'image' ? '' : imgType}/${this.id}.${imgTypeExt}`
             if (fs.existsSync(filename)) {
@@ -117,12 +122,11 @@ export default class Card {
                 return resolve(filename)
             }
 
-            const imgBaseUrl = imgType === 'art' ?
-                'http://art.hearthstonejson.com/v1/512x' :
-                'http://media.services.zam.com/v1/media/byName/hs/cards/enus'
-            const imgUrl = imgType === 'gold' ?
-                `${imgBaseUrl}/animated/${this.id}_premium.gif` :
-                imgType === 'art' ? `${imgBaseUrl}/${this.id}.jpg` : `${imgBaseUrl}/${this.id}.png`
+            const imgUrl = imgType === 'art' ?
+                `${baseArtUrl}/${this.id}.jpg` :
+                imgType === 'gold' ?
+                    `${baseGoldUrl}/${this.id}_premium.gif` :
+                    `${baseImageUrl}/${this.id}.png`
 
             winston.debug(`Creating file at ${filename}`)
             let requestClosedClean: boolean = false
