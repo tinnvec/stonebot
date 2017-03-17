@@ -95,6 +95,8 @@ export default class Card {
             ${this.attack ? `${this.attack}/${this.health || this.durability}` : ''}
             ${this.playerClass.toLowerCase()}
             ${this.type.toLowerCase()}
+            ${this.capitalizeFirstLetter(this.playerClass.toLowerCase())}
+            ${this.capitalizeFirstLetter(this.type.toLowerCase())}
         `
     }
 
@@ -213,5 +215,9 @@ export default class Card {
             .replace(/\n/g, ' ')
             .replace(/\s\s/g, ' ')
             .trim()
+    }
+
+    private capitalizeFirstLetter(input: string): string {
+        return `${input.charAt(0).toUpperCase()}${input.slice(1)}`
     }
 }
