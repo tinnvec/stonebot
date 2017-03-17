@@ -124,31 +124,31 @@ export default class Card {
                 `${imgBaseUrl}/animated/${this.id}_premium.gif` :
                 imgType === 'art' ? `${imgBaseUrl}/${this.id}.jpg` : `${imgBaseUrl}/${this.id}.png`
 
+            winston.debug(`Creating file at ${filename}`)
             let requestClosedClean: boolean = false
-            winston.debug(`Creating writeStream at ${filename}`)
             const writeStream: fs.WriteStream = fs.createWriteStream(filename)
                 .on('error', (err: Error) => {
-                    winston.error(`Error in writeStream: ${err}`)
+                    winston.error(`Error in file creation: ${err}`)
                     fs.unlink(filename, resolve.bind(undefined, undefined))
                 })
                 .on('finish', () => {
                     if (requestClosedClean) {
-                        winston.debug('Finished writeStream successfully.')
+                        winston.debug('Created file successfully.')
                         resolve(filename)
                     } else {
                         fs.unlink(filename, resolve.bind(undefined, undefined))
                     }
                 })
 
-            winston.debug(`Requesting file from ${imgUrl}`)
+            winston.debug(`Downloading from ${imgUrl}`)
             request.get(imgUrl, { timeout: 5000 })
                 .on('error', (err: Error) => {
-                    winston.error(`Error downloading file: ${err.message || 'unknown'}`)
+                    winston.error(`Error downloading: ${err.message || 'unknown'}`)
                     fs.unlink(filename, resolve.bind(undefined, undefined))
                 })
                 .on('response', (response: IncomingMessage) => {
                     if (response.statusCode !== 200) {
-                        winston.error(`Error downloading file: ${response.statusCode} - ${response.statusMessage}`)
+                        winston.error(`Error downloading: ${response.statusCode} - ${response.statusMessage}`)
                     } else {
                         requestClosedClean = true
                     }
