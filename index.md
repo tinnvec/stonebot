@@ -14,29 +14,16 @@ Stonebot is a [node.js](https://nodejs.org/) [Discord](https://discordapp.com/) 
 
 Stonebot uses a fuzzy search when matching card names and returns the highest scoring result, favoring collectible cards over uncollectible ones. Using `@` before `<cardName>` will search uncollectible cards only.
 
-## text
+## card
 
-Displays card text.  
+Displays card information.  
 
 **Format**: `!text <cardName>`  
-**Aliases**: txt, t, card, c  
+**Aliases**: c  
 **Examples**
 
-- `!text frostbolt`
-- `!t gadgetzan auctioneer`
-- `!card yshaarj`
+- `!card frostbolt`
 - `!c tinyfin`
-
-## flavor
-
-Displays card text and flavor text.
-
-**Format**: `!flavor <cardName>`  
-**Aliases**: f, flavor-text, flavortext  
-**Examples**
-
-- `!flavor devolve`
-- `!f small time recruits`
 
 ## image
 
@@ -128,7 +115,8 @@ Helps find other players looking to trade the Play a Friend (aka 80g) quest.
 
 Makes matches when players share a Discord server and Battle.net server region.  
 `<bnetServer>` may be one of `americas`, `na`, `europe`, `eu`, `asia`.  
-Using `!quest complete` will remove you from the pool of those looking to trade.
+Using `!quest complete` will remove you from the pool of those looking to trade.  
+Quests expire after 24 hours.
 
 **Format**: `!quest <bnetServer>`  
 **Aliases**: 80g  
