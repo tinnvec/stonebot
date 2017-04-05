@@ -29,7 +29,7 @@ const config: {
         password: string,
         name: string
     }
-} = require ('/data/config.json')
+} = require('/data/config.json')
 
 // Set winston config
 winston.configure({
