@@ -18,7 +18,7 @@ Stonebot uses a fuzzy search when matching card names and returns the highest sc
 
 Displays card information.  
 
-**Format**: `!text <cardName>`  
+**Format**: `!card <cardName>`  
 **Aliases**: c  
 **Examples**
 
