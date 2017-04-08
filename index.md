@@ -18,7 +18,7 @@ Stonebot uses a fuzzy search when matching card names and returns the highest sc
 
 Displays card information.  
 
-**Format**: `!card <cardName>`  
+**Format**: `!text <cardName>`  
 **Aliases**: c  
 **Examples**
 
@@ -240,9 +240,13 @@ If no prefix is provided, the current prefix will be shown. If the prefix is "de
 # Make Stonebot Your Friend
 
 [![Add Stonebot to your Server][discord-add-badge]][discord-oauth-link]
+[![Join the development Server][discord-devserver-badge]][discord-devserver-link]
 
 [discord-oauth-link]: https://discordapp.com/oauth2/authorize?client_id=181041901225377793&scope=bot&permissions=3197952
 [discord-add-badge]: https://img.shields.io/badge/Discord-Invite%20Stonebot-7289DA.svg?style=flat-square
+
+[discord-devserver-link]: https://discord.gg/5DUe2Qn
+[discord-devserver-badge]: https://img.shields.io/badge/Discord-Join%20Development%20Server-7289DA.svg?style=flat-square
 
 Want to add stonebot to your server? I run a public version that you can invite to your server with the button at the top of this section, or the following url:  
 https://discordapp.com/oauth2/authorize?client_id=181041901225377793&scope=bot&permissions=3197952
