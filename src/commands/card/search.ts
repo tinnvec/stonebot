@@ -112,7 +112,7 @@ export default class SearchCommand extends Command {
             const searchKeys: string[] = ['name', 'playerClass', 'race', 'rarity', 'text', 'type']
             winston.debug(`Searching cards for '${searchTerm}'.`)
             cards = cards.filter((card: Card) => {
-                return (searchKeys.some((key: string) => key in card && card[key].toLowerCase().includes(searchTerm)) ||
+                return (searchKeys.some((key: string) => card[key] && card[key].toLowerCase().includes(searchTerm)) ||
                 (card.set && this.cardSetMatches(card.set, searchTerm)))
             })
             searchEmbed.addField('Search Term', searchTerm, true)
