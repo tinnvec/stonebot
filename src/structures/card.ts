@@ -183,7 +183,7 @@ export default class Card {
                 .map((snd: {name: string, delay: number}) =>
                     new Object({
                         delay: snd.delay,
-                        url: `http://media-hearth.cursecdn.com/audio/card-sounds/sound/${snd.name}.ogg`
+                        url: `http://media-hearth.cursecdn.com/audio/card-sounds/sound/${snd.name.replace(' ', '%20')}.ogg`
                     })
                 )
             if (!sndUrls) {
