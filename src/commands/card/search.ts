@@ -45,7 +45,7 @@ export default class SearchCommand extends Command {
 
     public async run(msg: CommandMessage, args: string[]) {
         if (msg.channel instanceof TextChannel &&
-            !msg.channel.permissionsFor(this.client.user).hasPermission('SEND_MESSAGES')) {
+            !msg.channel.permissionsFor(this.client.user).has('SEND_MESSAGES')) {
             return
         }
 
@@ -128,7 +128,7 @@ export default class SearchCommand extends Command {
         })
 
         if (msg.channel instanceof TextChannel &&
-            !msg.channel.permissionsFor(this.client.user).hasPermission('EMBED_LINKS')) {
+            !msg.channel.permissionsFor(this.client.user).has('EMBED_LINKS')) {
             const pluralize = cards.length !== 1
             return msg.say(
                 valueKeywords.map((vk) => {

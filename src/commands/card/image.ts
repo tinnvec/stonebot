@@ -27,11 +27,11 @@ export default class ImageCommand extends Command {
 
     public async run(msg: CommandMessage, args: { cardName: string }): Promise<Message | Message[]> {
         if (msg.channel instanceof TextChannel &&
-            !msg.channel.permissionsFor(this.client.user).hasPermission('SEND_MESSAGES')) {
+            !msg.channel.permissionsFor(this.client.user).has('SEND_MESSAGES')) {
             return
         }
         if (msg.channel instanceof TextChannel &&
-            !msg.channel.permissionsFor(this.client.user).hasPermission('ATTACH_FILES')) {
+            !msg.channel.permissionsFor(this.client.user).has('ATTACH_FILES')) {
             return msg.reply('sorry, I don\'t have permission to attach files here, so I can\'t show card images.')
         }
 

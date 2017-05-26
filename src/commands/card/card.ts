@@ -28,7 +28,7 @@ export default class TextCommand extends Command {
 
     public async run(msg: CommandMessage, args: { cardName: string }): Promise<Message | Message[]> {
         if (msg.channel instanceof TextChannel &&
-            !msg.channel.permissionsFor(this.client.user).hasPermission('SEND_MESSAGES')) {
+            !msg.channel.permissionsFor(this.client.user).has('SEND_MESSAGES')) {
             return
         }
 
@@ -38,7 +38,7 @@ export default class TextCommand extends Command {
 
         if (!card) { return msg.reply(`sorry, I couldn't find a card with a name like '${args.cardName}'`) }
         if (msg.channel instanceof TextChannel &&
-            !msg.channel.permissionsFor(this.client.user).hasPermission('EMBED_LINKS')) {
+            !msg.channel.permissionsFor(this.client.user).has('EMBED_LINKS')) {
             return msg.say(stripIndents`
                 **${card.name}**
                 ${card.description}

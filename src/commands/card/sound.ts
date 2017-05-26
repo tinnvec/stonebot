@@ -36,7 +36,7 @@ export default class SoundCommand extends Command {
                 })
         }
 
-        if (!message.member.voiceChannel.permissionsFor(client.user).hasPermission('SPEAK')) {
+        if (!message.member.voiceChannel.permissionsFor(client.user).has('SPEAK')) {
             return message
                 .reply('sorry, I don\'t have permission to speak in your voice channel')
                 .then(() => {
@@ -118,7 +118,7 @@ export default class SoundCommand extends Command {
     public async run(msg: CommandMessage, args: { soundKind: string, cardName: string }):
         Promise<Message | Message[] | void> {
         if (msg.channel instanceof TextChannel &&
-            !msg.channel.permissionsFor(this.client.user).hasPermission('SEND_MESSAGES')) {
+            !msg.channel.permissionsFor(this.client.user).has('SEND_MESSAGES')) {
             return
         }
 

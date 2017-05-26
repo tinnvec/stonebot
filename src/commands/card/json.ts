@@ -23,7 +23,7 @@ export default class JSONCommand extends Command {
 
     public async run(msg: CommandMessage, args: { cardName: string }): Promise<Message | Message[]> {
         if (msg.channel instanceof TextChannel &&
-            !msg.channel.permissionsFor(this.client.user).hasPermission('SEND_MESSAGES')) {
+            !msg.channel.permissionsFor(this.client.user).has('SEND_MESSAGES')) {
             return
         }
 
