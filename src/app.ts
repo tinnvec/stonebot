@@ -17,19 +17,8 @@ import CommunityManager from './structures/community-manager'
 })
 
 // Read config
-const config: {
-    token: string,
-    owner: string | string[],
-    prefix: string,
-    logLevel: 'error' | 'warn' | 'info' | 'verbose' | 'debug' | 'silly',
-    database: {
-        host: string,
-        port: number,
-        username: string,
-        password: string,
-        name: string
-    }
-} = require('/data/config.json')
+// tslint:disable-next-line:no-var-requires
+const config: Config = require('/data/config.json')
 
 // Set winston config
 winston.configure({

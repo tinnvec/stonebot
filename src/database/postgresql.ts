@@ -2,19 +2,8 @@ import * as SequelizeStatic from 'sequelize'
 import { Sequelize } from 'sequelize'
 import * as winston from 'winston'
 
-const config: {
-    token: string,
-    owner: string | string[],
-    prefix: string,
-    logLevel: 'error' | 'warn' | 'info' | 'verbose' | 'debug' | 'silly',
-    database: {
-        host: string,
-        port: number,
-        username: string,
-        password: string,
-        name: string
-    }
-} = require('/data/config.json')
+// tslint:disable-next-line:no-var-requires
+const config: Config = require('/data/config.json')
 
 const database: Sequelize = new SequelizeStatic(
     config.database.name,

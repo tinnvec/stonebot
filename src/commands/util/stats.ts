@@ -21,7 +21,7 @@ export default class StatsCommand extends Command {
 
     public async run(msg: CommandMessage): Promise<Message | Message[]> {
         if (msg.channel instanceof TextChannel &&
-            !msg.channel.permissionsFor(this.client.user).hasPermission('SEND_MESSAGES')) {
+            !msg.channel.permissionsFor(this.client.user).has('SEND_MESSAGES')) {
             return
         }
 
@@ -32,10 +32,9 @@ export default class StatsCommand extends Command {
         `
 
         if (msg.channel instanceof TextChannel &&
-            !msg.channel.permissionsFor(this.client.user).hasPermission('EMBED_LINKS')) {
+            !msg.channel.permissionsFor(this.client.user).has('EMBED_LINKS')) {
             return msg.say(stripIndents`
                 **${this.client.user.username} Statistics**
-                
                 **Uptime**
                 ${moment.duration(this.client.uptime).humanize()}
                 **Memory Usage**

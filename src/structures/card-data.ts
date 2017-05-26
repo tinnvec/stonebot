@@ -4,49 +4,13 @@ import * as winston from 'winston'
 
 import Card from './card'
 
-export type HearthstoneJSONCard = {
-    cardClass: string,
-    dbfId: Number,
-    id: string,
-    name: string,
-    playerClass: string,
-    set: string,
-    type: string,
-
-    artist?: string,
-    attack?: Number,
-    collectible?: boolean,
-    collectionText?: string,
-    cost?: Number,
-    durability?: Number,
-    elite?: boolean,
-    entourage?: string[],
-    faction?: string,
-    flavor?: string,
-    health?: Number,
-    hideStats?: boolean,
-    howToEarn?: string,
-    howToEarnGolden?: string,
-    mechanics?: string[],
-    playRequirements?: Object,
-    race?: string,
-    rarity?: string,
-    referencedTags?: string[],
-    text?: string
-}
-
-export type CardFuseResult = {
-    item: Card,
-    score: Number
-}
-
 export default class CardData {
     public static findOne(pattern: string, keys: string[] = ['name']): Promise<Card> {
         return new Promise<Card>((resolve, reject) => {
             this.getLatest().then((cards: Card[]) => {
                 const uncollectibleFuse: Fuse = new Fuse(
                     cards.filter((c: Card) => !c.collectible),
-                    { keys, include: ['score'] }
+                    { keys, includeScore: true }
                 )
 
                 let uncollectibleOnly: boolean = false
@@ -56,11 +20,11 @@ export default class CardData {
                 }
 
                 const foundUncollectible: CardFuseResult[] = uncollectibleFuse.search<CardFuseResult>(pattern)
-                if (uncollectibleOnly) { return resolve(foundUncollectible[0].item || undefined) }
+                if (uncollectibleOnly) { return resolve(foundUncollectible[0].item as Card || undefined) }
 
                 const collectibleFuse = new Fuse(
                     cards.filter((c: Card) => c.collectible),
-                    { keys, include: ['score'] }
+                    { keys, includeScore: true }
                 )
                 const foundCollectible: CardFuseResult[] = collectibleFuse.search<CardFuseResult>(pattern)
 
@@ -77,7 +41,7 @@ export default class CardData {
     public static getLatest(): Promise<Card[]> {
         return new Promise<Card[]>((resolve, reject) => {
             try {
-                this.hsjson.getLatest((jsonCards: HearthstoneJSONCard[]) =>
+                this.hsjson.getLatest().then((jsonCards: HearthstoneJSONCard[]) =>
                     resolve(jsonCards.map((jCard: HearthstoneJSONCard) => new Card(jCard)))
                 )
             } catch (ex) { reject(ex) }

@@ -49,7 +49,7 @@ export default class QuestCommand extends Command {
     public async run(msg: CommandMessage, args: { bnetServer: string }): Promise<Message | Message[]> {
         let result = await Quest
             .findOne({ where: { userId: msg.author.id } })
-            .catch(winston.error)
+            .catch(winston.error) as { bnetServer: string }
 
         // Are they completing?
         if (args.bnetServer === 'complete') {
@@ -76,19 +76,19 @@ export default class QuestCommand extends Command {
         }
 
         // Check if another on the list shares a bnet and discord server
-        result = await Quest
+        let results = await Quest
             .findAll({ where: { bnetServer: args.bnetServer } })
-            .catch(winston.error)
-        if (result) {
+            .catch(winston.error) as Array<{ userId: string, bnetServer: string }>
+        if (results) {
             // Get only quests where users share a guild
-            result = result.filter((q) => {
+            results = results.filter((q) => {
                 return this.client.guilds.some((g) => {
                     return g.members.has(msg.author.id) && g.members.has(q.userId)
                 })
             })
-            if (result && result.length > 0) {
+            if (results && results.length > 0) {
                 const requestor = this.client.users.get(msg.author.id)
-                const questHaver = this.client.users.get(result[0].userId)
+                const questHaver = this.client.users.get(results[0].userId)
                 await questHaver.send(oneLine`
                     Hello! I have you on my list of people looking to trade Hearthstone quests.
                     ${requestor} just told me they are also looking to trade on the ${bnetServerDisplay}.
@@ -96,7 +96,7 @@ export default class QuestCommand extends Command {
                     When you're all done, just tell me \`quest complete\`.
                 `).catch(winston.error)
                 return msg.reply(oneLine`
-                    looks like someone you share a Discord server with is also looking to trade quests 
+                    looks like someone you share a Discord server with is also looking to trade quests
                     on the ${bnetServerDisplay}! They should be contacting you soon.
                 `)
             }
@@ -105,7 +105,7 @@ export default class QuestCommand extends Command {
         // Add them to the list
         result = await Quest
             .create({ userId: msg.author.id, bnetServer: args.bnetServer })
-            .catch(winston.error)
+            .catch(winston.error) as { userId: string, bnetServer: string }
         return msg.reply(oneLine`
             can't find a match for you right now, but will let you know as soon as
             someone you share a Discord server with is also looking to trade quests on the ${bnetServerDisplay}.

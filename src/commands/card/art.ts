@@ -29,9 +29,9 @@ export default class ImageArtCommand extends Command {
 
     public async run(msg: CommandMessage, args: { cardName: string }): Promise<Message | Message[]> {
         if (msg.channel instanceof TextChannel &&
-            !msg.channel.permissionsFor(this.client.user).hasPermission('SEND_MESSAGES')) { return }
+            !msg.channel.permissionsFor(this.client.user).has('SEND_MESSAGES')) { return }
         if (msg.channel instanceof TextChannel &&
-            !msg.channel.permissionsFor(this.client.user).hasPermission('ATTACH_FILES')) {
+            !msg.channel.permissionsFor(this.client.user).has('ATTACH_FILES')) {
             return msg.reply('sorry, I don\'t have permission to attach files here, so I can\'t show card art.')
         }
 
@@ -45,7 +45,7 @@ export default class ImageArtCommand extends Command {
         if (!filename) { return msg.reply(`sorry, there was a problem getting the art for ${card.name}`) }
 
         if (msg.channel instanceof TextChannel &&
-            !msg.channel.permissionsFor(this.client.user).hasPermission('EMBED_LINKS')) {
+            !msg.channel.permissionsFor(this.client.user).has('EMBED_LINKS')) {
             return msg.say(stripIndents`
                 **${card.name}**
                 **Artist**: ${card.artist}
