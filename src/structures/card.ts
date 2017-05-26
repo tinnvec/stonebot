@@ -5,6 +5,7 @@ import { IncomingMessage } from 'http'
 import * as request from 'request'
 import * as winston from 'winston'
 
+// tslint:disable-next-line:no-var-requires
 const cardSoundsById = require('../database/card-sounds-by-id.json')
 
 export default class Card {

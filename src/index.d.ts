@@ -46,6 +46,20 @@ interface CardFuseResult {
     score: number
 }
 
+interface Config {
+    token: string,
+    owner: string | string[],
+    prefix: string,
+    logLevel: 'error' | 'warn' | 'info' | 'verbose' | 'debug' | 'silly',
+    database: {
+        host: string,
+        port: number,
+        username: string,
+        password: string,
+        name: string
+    }
+}
+
 interface HearthstoneJSONCard {
     cardClass: string,
     dbfId: number,
