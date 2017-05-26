@@ -82,18 +82,18 @@ export default class SearchCommand extends Command {
                     searchEmbed.addField('Artist', `Name contains '${value}'`, true)
                 } else {
                     if (value.endsWith('+')) {
-                        const num: Number = parseInt(value.slice(0, -1), 10)
+                        const num: number = parseInt(value.slice(0, -1), 10)
                         winston.debug(`Filtering cards for '${key}' >= '${num}'.`)
                         filter = (card: Card) => card[key] >= num
                         searchEmbed.addField(key, `${num} or more`, true)
                     } else if (value.endsWith('-')) {
-                        const num: Number = parseInt(value.slice(0, -1), 10)
+                        const num: number = parseInt(value.slice(0, -1), 10)
                         winston.debug(`Filtering cards for '${key}' <= '${num}'.`)
                         filter = (card: Card) => card[key] <= num
                         searchEmbed.addField(key, `${num} or less`, true)
                     } else if (value.includes('-')) {
-                        const min: Number = parseInt(value.split('-')[0], 10)
-                        const max: Number = parseInt(value.split('-')[1], 10)
+                        const min: number = parseInt(value.split('-')[0], 10)
+                        const max: number = parseInt(value.split('-')[1], 10)
                         winston.debug(`Filtering cards for '${key}' between '${min}' and '${max}'.`)
                         filter = (card: Card) => card[key] >= min && card[key] <= max
                         searchEmbed.addField(key, `Between ${min} and ${max}`, true)
@@ -129,6 +129,7 @@ export default class SearchCommand extends Command {
 
         if (msg.channel instanceof TextChannel &&
             !msg.channel.permissionsFor(this.client.user).hasPermission('EMBED_LINKS')) {
+            const pluralize = cards.length !== 1
             return msg.say(
                 valueKeywords.map((vk) => {
                     const k: string = vk.split(':')[0]
@@ -142,7 +143,7 @@ export default class SearchCommand extends Command {
                 (words.length > 0 ? `**Search Term**\n${words.join(' ').toLowerCase()}\n` : '') +
                 '\n**Results**\n' +
                 (cards.length > 0 ? stripIndents`
-                    _Found ${cards.length} card${cards.length === 1 ? '' : 's'} that match${cards.length === 1 ? 'es' : ''}._
+                    _Found ${cards.length} card${pluralize ? 's' : ''} that match${pluralize ? '' : 'es'}._
                     ${(cards.length > MAX_RESULTS ? ` _Here are the first ${MAX_RESULTS}._` : '')}
                     ${cards.slice(0, MAX_RESULTS).map((c) => c.name).join(' | ')}
                 ` : '_Sorry, got nothing_')
@@ -185,19 +186,19 @@ export default class SearchCommand extends Command {
         }
         if (set === searchBy) { return true }
 
-        const officialExpansionNames = {
-            'BRM': 'blackrock mountain',
-            'CORE': 'basic',
-            'EXPERT1': 'classic',
-            'GANGS': 'mean streets of gadgetzan',
-            'GVG': 'goblins vs gnomes',
-            'KARA': 'one night in karazhan',
-            'LOE': 'the league of explorers',
-            'NAXX': 'curse of naxxramas',
-            'OG': 'whispers of the old gods',
-            'PROMO': 'promotion',
-            'REWARD': 'reward',
-            'TGT': 'the grand tournament'
+        const officialExpansionNames: {[set: string]: string} = {
+            BRM: 'blackrock mountain',
+            CORE: 'basic',
+            EXPERT1: 'classic',
+            GANGS: 'mean streets of gadgetzan',
+            GVG: 'goblins vs gnomes',
+            KARA: 'one night in karazhan',
+            LOE: 'the league of explorers',
+            NAXX: 'curse of naxxramas',
+            OG: 'whispers of the old gods',
+            PROMO: 'promotion',
+            REWARD: 'reward',
+            TGT: 'the grand tournament'
         }
 
         if (set in officialExpansionNames &&

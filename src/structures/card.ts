@@ -5,13 +5,11 @@ import { IncomingMessage } from 'http'
 import * as request from 'request'
 import * as winston from 'winston'
 
-import { HearthstoneJSONCard } from './card-data'
-
 const cardSoundsById = require('../database/card-sounds-by-id.json')
 
 export default class Card {
     public cardClass: string
-    public dbfId: Number
+    public dbfId: number
     public id: string
     public name: string
     public playerClass: string
@@ -24,19 +22,19 @@ export default class Card {
     public json: HearthstoneJSONCard
     public text: string
 
-    public attack?: Number
+    public attack?: number
     public collectionText?: string
-    public cost?: Number
-    public durability?: Number
+    public cost?: number
+    public durability?: number
     public elite?: boolean
     public entourage?: string[]
     public faction?: string
-    public health?: Number
+    public health?: number
     public hideStats?: boolean
     public howToEarn?: string
     public howToEarnGolden?: string
     public mechanics?: string[]
-    public playRequirements?: Object
+    public playRequirements?: object
     public race?: string
     public rarity?: string
     public referencedTags?: string[]
@@ -179,11 +177,12 @@ export default class Card {
 
             winston.debug('Generating urls for sound parts.')
             // alternate: `http://media.services.zam.com/v1/media/byName/hs/sounds/enus/${snd.name}.ogg`
-            const sndUrls: Array<{url: string, delay: Number}> = cardSoundsById[this.id][sndType]
+            const sndUrls: Array<{url: string, delay: number}> = cardSoundsById[this.id][sndType]
                 .map((snd: {name: string, delay: number}) =>
                     new Object({
                         delay: snd.delay,
-                        url: `http://media-hearth.cursecdn.com/audio/card-sounds/sound/${snd.name.replace(' ', '%20')}.ogg`
+                        url:
+                        `http://media-hearth.cursecdn.com/audio/card-sounds/sound/${snd.name.replace(' ', '%20')}.ogg`
                     })
                 )
             if (!sndUrls) {
@@ -193,7 +192,7 @@ export default class Card {
 
             winston.debug(`Creating sound file at ${filename}`)
             const ffmpegCmd = ffmpeg()
-            sndUrls.forEach((sound: {url: string, delay: Number}) => {
+            sndUrls.forEach((sound: {url: string, delay: number}) => {
                 winston.debug(`Adding sound from ${sound.url} with delay of ${sound.delay}`)
                 ffmpegCmd.input(sound.url).inputOption(`-itsoffset ${sound.delay}`)
             })

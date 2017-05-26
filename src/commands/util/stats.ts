@@ -35,7 +35,6 @@ export default class StatsCommand extends Command {
             !msg.channel.permissionsFor(this.client.user).hasPermission('EMBED_LINKS')) {
             return msg.say(stripIndents`
                 **${this.client.user.username} Statistics**
-                
                 **Uptime**
                 ${moment.duration(this.client.uptime).humanize()}
                 **Memory Usage**

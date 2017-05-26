@@ -1,5 +1,5 @@
 import { oneLine } from 'common-tags'
-import * as winston  from 'winston'
+import * as winston from 'winston'
 
 import Quest from '../database/models/quest'
 
@@ -24,7 +24,7 @@ export default class CommunityManager {
         const oneDayAgo = new Date()
         oneDayAgo.setDate(oneDayAgo.getDate() - 1)
         await Quest.destroy({ where: { createdAt: { lt: oneDayAgo } } })
-            .then((changed: Number) => winston.debug(oneLine`
+            .then((changed: number) => winston.debug(oneLine`
                 Removed ${changed} quest entr${changed === 1 ? 'y' : 'ies'} older than one day.
             `))
             .catch(winston.error)
