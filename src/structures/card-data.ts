@@ -4,42 +4,6 @@ import * as winston from 'winston'
 
 import Card from './card'
 
-export type HearthstoneJSONCard = {
-    cardClass: string,
-    dbfId: Number,
-    id: string,
-    name: string,
-    playerClass: string,
-    set: string,
-    type: string,
-
-    artist?: string,
-    attack?: Number,
-    collectible?: boolean,
-    collectionText?: string,
-    cost?: Number,
-    durability?: Number,
-    elite?: boolean,
-    entourage?: string[],
-    faction?: string,
-    flavor?: string,
-    health?: Number,
-    hideStats?: boolean,
-    howToEarn?: string,
-    howToEarnGolden?: string,
-    mechanics?: string[],
-    playRequirements?: Object,
-    race?: string,
-    rarity?: string,
-    referencedTags?: string[],
-    text?: string
-}
-
-export type CardFuseResult = {
-    item: Card,
-    score: Number
-}
-
 export default class CardData {
     public static findOne(pattern: string, keys: string[] = ['name']): Promise<Card> {
         return new Promise<Card>((resolve, reject) => {
