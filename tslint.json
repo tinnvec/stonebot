@@ -7,6 +7,7 @@
         "semicolon": [ true, "never" ],
         "prefer-const": true,
         "trailing-comma": [ true, { "multiline": "never", "singleLine": "never"} ],
-        "linebreak-style": [ true, "LF" ]
+        "linebreak-style": [ true, "LF" ],
+        "variable-name": [true, "ban-keywords", "check-format", "allow-leading-underscore"]
     }
 }

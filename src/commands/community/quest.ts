@@ -96,7 +96,7 @@ export default class QuestCommand extends Command {
                     When you're all done, just tell me \`quest complete\`.
                 `).catch(winston.error)
                 return msg.reply(oneLine`
-                    looks like someone you share a Discord server with is also looking to trade quests 
+                    looks like someone you share a Discord server with is also looking to trade quests
                     on the ${bnetServerDisplay}! They should be contacting you soon.
                 `)
             }
