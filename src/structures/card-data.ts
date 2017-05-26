@@ -10,7 +10,7 @@ export default class CardData {
             this.getLatest().then((cards: Card[]) => {
                 const uncollectibleFuse: Fuse = new Fuse(
                     cards.filter((c: Card) => !c.collectible),
-                    { keys, include: ['score'] }
+                    { keys, includeScore: true }
                 )
 
                 let uncollectibleOnly: boolean = false
@@ -20,11 +20,11 @@ export default class CardData {
                 }
 
                 const foundUncollectible: CardFuseResult[] = uncollectibleFuse.search<CardFuseResult>(pattern)
-                if (uncollectibleOnly) { return resolve(foundUncollectible[0].item || undefined) }
+                if (uncollectibleOnly) { return resolve(foundUncollectible[0].item as Card || undefined) }
 
                 const collectibleFuse = new Fuse(
                     cards.filter((c: Card) => c.collectible),
-                    { keys, include: ['score'] }
+                    { keys, includeScore: true }
                 )
                 const foundCollectible: CardFuseResult[] = collectibleFuse.search<CardFuseResult>(pattern)
 
@@ -41,7 +41,7 @@ export default class CardData {
     public static getLatest(): Promise<Card[]> {
         return new Promise<Card[]>((resolve, reject) => {
             try {
-                this.hsjson.getLatest((jsonCards: HearthstoneJSONCard[]) =>
+                this.hsjson.getLatest().then((jsonCards: HearthstoneJSONCard[]) =>
                     resolve(jsonCards.map((jCard: HearthstoneJSONCard) => new Card(jCard)))
                 )
             } catch (ex) { reject(ex) }

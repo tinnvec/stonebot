@@ -211,7 +211,7 @@ export default class Card {
         })
     }
 
-    private cardTextToMarkdown(text: string): string {
+    public cardTextToMarkdown(text: string): string {
         return text
             .replace(/\[x\]/gi, '')
             .replace(/<\/?b>/gi, '**')
@@ -221,7 +221,7 @@ export default class Card {
             .trim()
     }
 
-    private capitalizeFirstLetter(input: string): string {
+    public capitalizeFirstLetter(input: string): string {
         return `${input.charAt(0).toUpperCase()}${input.slice(1)}`
     }
 }
