@@ -25,8 +25,8 @@
   },
   "dependencies": {
     "bufferutil": "^3.0.0",
-    "discord.js": "github:hydrabolt/discord.js",
-    "discord.js-commando": "github:gawdl3y/discord.js-commando",
+    "discord.js": "^11.3.0",
+    "discord.js-commando": "discordjs/Commando#11.2",
     "erlpack": "github:hammerandchisel/erlpack",
     "fluent-ffmpeg": "^2.1.2",
     "fuse.js": "^3.0.3",
