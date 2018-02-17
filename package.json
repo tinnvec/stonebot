@@ -24,10 +24,10 @@
     "start": "node built/app.js"
   },
   "dependencies": {
-    "bufferutil": "^3.0.3",
+    "bufferutil": "^3.0.0",
     "discord.js": "^11.3.0",
-    "discord.js-commando": "gawdl3y/discord.js-commando",
-    "erlpack": "hammerandchisel/erlpack",
+    "discord.js-commando": "discordjs/Commando#11.2",
+    "erlpack": "github:hammerandchisel/erlpack",
     "fluent-ffmpeg": "^2.1.2",
     "fuse.js": "^3.0.3",
     "hearthstonejson": "^0.6.5",
