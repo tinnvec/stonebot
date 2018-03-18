@@ -108,7 +108,7 @@ client.on('debug', winston.debug)
     })
     .on('ready', () => {
         CommunityManager.start()
-        client.user.setGame('Hearthstone')
+        client.user.setActivity('Hearthstone')
         winston.info(`Client ready. Currently in ${client.guilds.size} guilds.`)
     })
 
