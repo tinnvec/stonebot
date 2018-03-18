@@ -13,7 +13,6 @@ export default class Card {
     public dbfId: number
     public id: string
     public name: string
-    public playerClass: string
     public set: string
     public type: string
 
@@ -45,7 +44,6 @@ export default class Card {
         this.dbfId = obj.dbfId
         this.id = obj.id
         this.name = obj.name
-        this.playerClass = obj.playerClass
         this.set = obj.set
         this.type = obj.type
 
@@ -85,7 +83,7 @@ export default class Card {
             ['MAGE',    '#69CCF0'],
             ['PRIEST',  '#FFFFFF'],
             ['NEUTRAL', '#808080']
-        ]).get(this.playerClass)
+        ]).get(this.cardClass)
     }
 
     public get description(): string {
@@ -94,7 +92,7 @@ export default class Card {
             ${this.attack ? `${this.attack}/${this.health || this.durability}` : ''}
             ${this.rarity ? this.rarity === 'FREE' ? 'Basic' :
                 this.capitalizeFirstLetter(this.rarity.toLowerCase()) : ''}
-            ${this.capitalizeFirstLetter(this.playerClass.toLowerCase())}
+            ${this.capitalizeFirstLetter(this.cardClass.toLowerCase())}
             ${this.capitalizeFirstLetter(this.type.toLowerCase())}
         `
     }
@@ -177,13 +175,13 @@ export default class Card {
             }
 
             winston.debug('Generating urls for sound parts.')
-            // alternate: `http://media.services.zam.com/v1/media/byName/hs/sounds/enus/${snd.name}.ogg`
+            // alternate: `http://media-hearth.cursecdn.com/audio/card-sounds/sound/${snd.name.replace(' ', '%20')}.ogg`
             const sndUrls: Array<{url: string, delay: number}> = cardSoundsById[this.id][sndType]
                 .map((snd: {name: string, delay: number}) =>
                     new Object({
                         delay: snd.delay,
-                        url:
-                        `http://media-hearth.cursecdn.com/audio/card-sounds/sound/${snd.name.replace(' ', '%20')}.ogg`
+                        url: 'http://media.services.zam.com/v1/media/byName/hs/sounds/enus/'
+                            + `${snd.name.replace(' ', '%20')}.ogg`
                     })
                 )
             if (!sndUrls) {
