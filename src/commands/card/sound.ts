@@ -117,11 +117,6 @@ export default class SoundCommand extends Command {
 
     public async run(msg: CommandMessage, args: { soundKind: string, cardName: string }):
         Promise<Message | Message[] | void> {
-        if (msg.channel instanceof TextChannel &&
-            !msg.channel.permissionsFor(this.client.user).has('SEND_MESSAGES')) {
-            return
-        }
-
         if (!['play', 'attack', 'trigger', 'death'].includes(args.soundKind)) {
             args.cardName = `${args.soundKind} ${args.cardName}`.trim()
             args.soundKind = 'play'

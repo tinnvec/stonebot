@@ -15,6 +15,8 @@ export default class TextCommand extends Command {
                 prompt: 'what card are you searching for?\n',
                 type: 'string'
             }],
+            // @ts-ignore: TypeScript reports clientPermissions as being undefined currently
+            clientPermissions: ['EMBED_LINKS'],
             description: 'Displays card information.',
             examples: [
                 'card tinyfin',
@@ -27,26 +29,14 @@ export default class TextCommand extends Command {
     }
 
     public async run(msg: CommandMessage, args: { cardName: string }): Promise<Message | Message[]> {
-        if (msg.channel instanceof TextChannel &&
-            !msg.channel.permissionsFor(this.client.user).has('SEND_MESSAGES')) {
-            return
-        }
-
         if (!msg.channel.typing) { msg.channel.startTyping() }
+
         const card: Card = await CardData.findOne(args.cardName)
+
         if (msg.channel.typing) { msg.channel.stopTyping() }
 
         if (!card) { return msg.reply(`sorry, I couldn't find a card with a name like '${args.cardName}'`) }
-        if (msg.channel instanceof TextChannel &&
-            !msg.channel.permissionsFor(this.client.user).has('EMBED_LINKS')) {
-            return msg.say(stripIndents`
-                **${card.name}**
-                ${card.description}
-                ${card.text}
-                **Flavor:** ${card.flavor}
-                ${card.wikiUrl}
-            `)
-        }
+
         return msg.embed(
             new RichEmbed()
                 .setTitle(card.name)

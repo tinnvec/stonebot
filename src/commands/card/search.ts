@@ -44,25 +44,23 @@ export default class SearchCommand extends Command {
     }
 
     public async run(msg: CommandMessage, args: string[]) {
-        if (msg.channel instanceof TextChannel &&
-            !msg.channel.permissionsFor(this.client.user).has('SEND_MESSAGES')) {
-            return
-        }
-
         if (!msg.channel.typing) { msg.channel.startTyping() }
+
         winston.debug('Fetching all cards.')
         let cards: Card[] = await CardData.getLatest()
+
         if (msg.channel.typing) { msg.channel.stopTyping() }
 
         const valueKeywords: string[] = []
         const words: string[] = []
+
         args.forEach((arg) => {
             arg = arg.toLowerCase()
             if (arg.includes(':')) {
                 valueKeywords.push(arg)
             } else {
                 words.push(arg)
-        }
+            }
         }, this)
 
         cards = cards.filter((card) => card.collectible && card.type !== 'HERO')
