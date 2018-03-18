@@ -3,7 +3,7 @@ import { Command, CommandMessage, CommandoClient } from 'discord.js-commando'
 import * as winston from 'winston'
 
 import Card from '../../models/card'
-import CardData from '../../services/card-data'
+import CardDataService from '../../services/card-data-service'
 
 export default class ImageCommand extends Command {
     constructor(client: CommandoClient) {
@@ -32,7 +32,7 @@ export default class ImageCommand extends Command {
 
         if (!msg.channel.typing) { msg.channel.startTyping() }
 
-        const card: Card = await CardData.findOne(args.cardName)
+        const card: Card = await CardDataService.findOne(args.cardName)
         if (card) { filename = await card.getImageFile() }
 
         if (msg.channel.typing) { msg.channel.stopTyping() }

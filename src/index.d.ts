@@ -3,14 +3,13 @@ interface Card {
     dbfId: number
     id: string
     name: string
-    playerClass: string
     set: string
     type: string
 
     artist: string
     collectible: boolean
     flavor: string
-    json: HearthstoneJSONCard
+    json: any // CardData
     text: string
 
     attack?: number
@@ -30,7 +29,7 @@ interface Card {
     rarity?: string
     referencedTags?: string[]
 
-    constructor(obj: HearthstoneJSONCard): Card
+    constructor(obj: any /* CardData */): Card
 
     classColor: string
     description: string
@@ -62,35 +61,4 @@ interface Config {
         password: string,
         name: string
     }
-}
-
-interface HearthstoneJSONCard {
-    cardClass: string,
-    dbfId: number,
-    id: string,
-    name: string,
-    playerClass: string,
-    set: string,
-    type: string,
-
-    artist?: string,
-    attack?: number,
-    collectible?: boolean,
-    collectionText?: string,
-    cost?: number,
-    durability?: number,
-    elite?: boolean,
-    entourage?: string[],
-    faction?: string,
-    flavor?: string,
-    health?: number,
-    hideStats?: boolean,
-    howToEarn?: string,
-    howToEarnGolden?: string,
-    mechanics?: string[],
-    playRequirements?: object,
-    race?: string,
-    rarity?: string,
-    referencedTags?: string[],
-    text?: string
 }

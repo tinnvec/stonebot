@@ -4,7 +4,7 @@ import { Command, CommandMessage, CommandoClient } from 'discord.js-commando'
 import * as winston from 'winston'
 
 import Card from '../../models/card'
-import CardData from '../../services/card-data'
+import CardDataService from '../../services/card-data-service'
 
 const SET_KEYWORDS = [ 'nax', 'naxx', 'gvg', 'brm', 'tgt', 'loe', 'tog', 'wog', 'wotog', 'kara', 'msg', 'msog']
 const MAX_RESULTS = 10
@@ -49,7 +49,7 @@ export default class SearchCommand extends Command {
         if (!msg.channel.typing) { msg.channel.startTyping() }
 
         winston.debug('Fetching all cards.')
-        let cards: Card[] = await CardData.getLatest()
+        let cards: Card[] = await CardDataService.getLatest()
 
         if (msg.channel.typing) { msg.channel.stopTyping() }
 

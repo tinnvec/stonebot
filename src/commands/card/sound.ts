@@ -4,7 +4,7 @@ import { ArgumentCollectorResult, Command, CommandMessage, CommandoClient } from
 import * as winston from 'winston'
 
 import Card from '../../models/card'
-import CardData from '../../services/card-data'
+import CardDataService from '../../services/card-data-service'
 
 export default class SoundCommand extends Command {
     public static get queue(): Array<{message: CommandMessage, card: Card, soundKind: string}> {
@@ -138,7 +138,7 @@ export default class SoundCommand extends Command {
 
         if (!msg.channel.typing) { msg.channel.startTyping() }
 
-        const card: Card = await CardData.findOne(args.cardName)
+        const card: Card = await CardDataService.findOne(args.cardName)
 
         if (msg.channel.typing) { msg.channel.stopTyping() }
 

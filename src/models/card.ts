@@ -20,7 +20,7 @@ export default class Card {
     public artist: string
     public collectible: boolean
     public flavor: string
-    public json: HearthstoneJSONCard
+    public json: CardData
     public text: string
 
     public attack?: number
@@ -40,7 +40,7 @@ export default class Card {
     public rarity?: string
     public referencedTags?: string[]
 
-    constructor(obj: HearthstoneJSONCard) {
+    constructor(obj: CardData) {
         this.cardClass = obj.cardClass
         this.dbfId = obj.dbfId
         this.id = obj.id
@@ -59,6 +59,7 @@ export default class Card {
         this.cost = obj.cost
         this.durability = obj.durability
         this.elite = obj.elite
+        // @ts-ignore: Entourage missing from hearthstonejson-client CardData definition
         this.entourage = obj.entourage
         this.faction = obj.faction
         this.health = obj.health
@@ -66,6 +67,7 @@ export default class Card {
         this.howToEarn = obj.howToEarn
         this.howToEarnGolden = obj.howToEarnGolden
         this.mechanics = obj.mechanics
+        // @ts-ignore: Entourage missing from hearthstonejson-client CardData definition
         this.playRequirements = obj.playRequirements
         this.race = obj.race
         this.rarity = obj.rarity
