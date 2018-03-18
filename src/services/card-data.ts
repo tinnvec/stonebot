@@ -1,10 +1,10 @@
 import * as Fuse from 'fuse.js'
-import HearthstoneJSON, { CardData } from 'hearthstonejson-client'
+import HearthstoneJSON from 'hearthstonejson'
 import * as winston from 'winston'
 
 import Card from '../models/card'
 
-export default class CardDataService {
+export default class CardData {
     public static findOne(pattern: string, keys: string[] = ['name']): Promise<Card> {
         return new Promise<Card>((resolve, reject) => {
             this.getLatest().then((cards: Card[]) => {
@@ -49,8 +49,8 @@ export default class CardDataService {
     public static getLatest(): Promise<Card[]> {
         return new Promise<Card[]>((resolve, reject) => {
             try {
-                this.hsjson.getLatest().then((jsonCards: CardData[]) =>
-                    resolve(jsonCards.map((jCard: CardData) => new Card(jCard)))
+                this.hsjson.getLatest().then((jsonCards: HearthstoneJSONCard[]) =>
+                    resolve(jsonCards.map((jCard: HearthstoneJSONCard) => new Card(jCard)))
                 )
             } catch (ex) { reject(ex) }
         })

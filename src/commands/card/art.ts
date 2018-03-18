@@ -5,7 +5,7 @@ import * as path from 'path'
 import * as winston from 'winston'
 
 import Card from '../../models/card'
-import CardDataService from '../../services/card-data-service'
+import CardData from '../../services/card-data'
 
 export default class ImageArtCommand extends Command {
     constructor(client: CommandoClient) {
@@ -34,7 +34,7 @@ export default class ImageArtCommand extends Command {
 
         if (!msg.channel.typing) { msg.channel.startTyping() }
 
-        const card: Card = await CardDataService.findOne(args.cardName)
+        const card: Card = await CardData.findOne(args.cardName)
         if (card) { filename = await card.getImageFile('art') }
 
         if (msg.channel.typing) { msg.channel.stopTyping() }
