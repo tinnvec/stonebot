@@ -2,8 +2,8 @@ import { Message, TextChannel } from 'discord.js'
 import { Command, CommandMessage, CommandoClient } from 'discord.js-commando'
 import * as winston from 'winston'
 
-import Card from '../../structures/card'
-import CardData from '../../structures/card-data'
+import Card from '../../models/card'
+import CardData from '../../services/card-data'
 
 export default class JSONCommand extends Command {
     constructor(client: CommandoClient) {
@@ -22,16 +22,14 @@ export default class JSONCommand extends Command {
     }
 
     public async run(msg: CommandMessage, args: { cardName: string }): Promise<Message | Message[]> {
-        if (msg.channel instanceof TextChannel &&
-            !msg.channel.permissionsFor(this.client.user).has('SEND_MESSAGES')) {
-            return
-        }
-
         if (!msg.channel.typing) { msg.channel.startTyping() }
+
         const card: Card = await CardData.findOne(args.cardName)
+
         if (msg.channel.typing) { msg.channel.stopTyping() }
 
         if (!card) { return msg.reply(`sorry, I couldn't find a card with a name like '${args.cardName}'`) }
+
         return msg.code('json', JSON.stringify(card.json, undefined, '  '))
     }
 }

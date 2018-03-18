@@ -3,8 +3,8 @@ import { Message, TextChannel, VoiceChannel, VoiceConnection } from 'discord.js'
 import { ArgumentCollectorResult, Command, CommandMessage, CommandoClient } from 'discord.js-commando'
 import * as winston from 'winston'
 
-import Card from '../../structures/card'
-import CardData from '../../structures/card-data'
+import Card from '../../models/card'
+import CardData from '../../services/card-data'
 
 export default class SoundCommand extends Command {
     public static get queue(): Array<{message: CommandMessage, card: Card, soundKind: string}> {
@@ -115,30 +115,31 @@ export default class SoundCommand extends Command {
         })
     }
 
-    public async run(msg: CommandMessage, args: { soundKind: string, cardName: string }):
-        Promise<Message | Message[] | void> {
-        if (msg.channel instanceof TextChannel &&
-            !msg.channel.permissionsFor(this.client.user).has('SEND_MESSAGES')) {
-            return
-        }
-
+    public async run(msg: CommandMessage, args: { soundKind: string, cardName: string }): Promise<Message | Message[]> {
         if (!['play', 'attack', 'trigger', 'death'].includes(args.soundKind)) {
             args.cardName = `${args.soundKind} ${args.cardName}`.trim()
             args.soundKind = 'play'
         }
 
         if (!args.cardName) {
+            // @ts-ignore: TypeScript reports argsCollector as being undefined currently
             this.argsCollector.args[1].default = null
+            // @ts-ignore: TypeScript reports argsCollector as being undefined currently
             args.cardName = await this.argsCollector
                 .obtain(msg, [args.soundKind])
-                .then((res: ArgumentCollectorResult) => res.values.cardName)
+                .then((res: ArgumentCollectorResult) =>
+                    (res.values as { soundKind: string, cardName: string }).cardName
+                )
             winston.debug(args.cardName)
+            // @ts-ignore: TypeScript reports argsCollector as being undefined currently
             this.argsCollector.args[1].default = ''
         }
         if (!args.soundKind || !args.cardName) { return msg.reply('cancelled command.') }
 
         if (!msg.channel.typing) { msg.channel.startTyping() }
+
         const card: Card = await CardData.findOne(args.cardName)
+
         if (msg.channel.typing) { msg.channel.stopTyping() }
 
         if (!card) {
@@ -150,6 +151,7 @@ export default class SoundCommand extends Command {
         ).then(() => {
             SoundCommand.queue.push({ message: msg, card, soundKind: args.soundKind })
             if (SoundCommand.queue.length === 1) { SoundCommand.playSound(this.client).catch(winston.error) }
+            return msg.message
         })
     }
 }

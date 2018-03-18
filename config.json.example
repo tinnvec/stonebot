@@ -1,6 +1,7 @@
 {
     "token": "",
     "owner": "",
+    "inviteUrl": "https://"
     "prefix": "!",
     "logLevel": "verbose",
     "database": {

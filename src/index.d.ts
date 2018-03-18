@@ -52,6 +52,7 @@ interface CardFuseResult {
 interface Config {
     token: string,
     owner: string | string[],
+    inviteUrl: string,
     prefix: string,
     logLevel: 'error' | 'warn' | 'info' | 'verbose' | 'debug' | 'silly',
     database: {

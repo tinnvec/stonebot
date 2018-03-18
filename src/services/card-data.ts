@@ -2,7 +2,7 @@ import * as Fuse from 'fuse.js'
 import HearthstoneJSON from 'hearthstonejson'
 import * as winston from 'winston'
 
-import Card from './card'
+import Card from '../models/card'
 
 export default class CardData {
     public static findOne(pattern: string, keys: string[] = ['name']): Promise<Card> {
@@ -20,7 +20,9 @@ export default class CardData {
                 }
 
                 const foundUncollectible: CardFuseResult[] = uncollectibleFuse.search<CardFuseResult>(pattern)
-                if (uncollectibleOnly) { return resolve(foundUncollectible[0].item as Card || undefined) }
+                if (uncollectibleOnly) {
+                    return resolve(foundUncollectible[0] ? foundUncollectible[0].item as Card : undefined)
+                }
 
                 const collectibleFuse = new Fuse(
                     cards.filter((c: Card) => c.collectible),
@@ -28,8 +30,14 @@ export default class CardData {
                 )
                 const foundCollectible: CardFuseResult[] = collectibleFuse.search<CardFuseResult>(pattern)
 
-                if (foundCollectible.length < 1) { return resolve(foundUncollectible[0].item || undefined) }
-                if (foundUncollectible.length < 1) { return resolve(foundCollectible[0].item || undefined) }
+                if (foundCollectible.length < 1) {
+                    return resolve(foundUncollectible[0] ? foundUncollectible[0].item as Card : undefined)
+                }
+
+                if (foundUncollectible.length < 1) {
+                    return resolve(foundCollectible[0] ? foundCollectible[0].item as Card : undefined)
+                }
+
                 if (foundUncollectible[0].score < foundCollectible[0].score) {
                     return resolve(foundUncollectible[0].item)
                 }

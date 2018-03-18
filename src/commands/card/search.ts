@@ -3,8 +3,8 @@ import { Message, RichEmbed, TextChannel} from 'discord.js'
 import { Command, CommandMessage, CommandoClient } from 'discord.js-commando'
 import * as winston from 'winston'
 
-import Card from '../../structures/card'
-import CardData from '../../structures/card-data'
+import Card from '../../models/card'
+import CardData from '../../services/card-data'
 
 const SET_KEYWORDS = [ 'nax', 'naxx', 'gvg', 'brm', 'tgt', 'loe', 'tog', 'wog', 'wotog', 'kara', 'msg', 'msog']
 const MAX_RESULTS = 10
@@ -14,6 +14,8 @@ export default class SearchCommand extends Command {
         super(client, {
             aliases: ['find'],
             argsType: 'multiple',
+            // @ts-ignore: TypeScript reports clientPermissions as being undefined currently
+            clientPermissions: ['EMBED_LINKS'],
             description: 'Searches for Hearthstone cards.',
             details: stripIndents`
                 Works like Hearthstone collection searching.
@@ -44,25 +46,23 @@ export default class SearchCommand extends Command {
     }
 
     public async run(msg: CommandMessage, args: string[]) {
-        if (msg.channel instanceof TextChannel &&
-            !msg.channel.permissionsFor(this.client.user).has('SEND_MESSAGES')) {
-            return
-        }
-
         if (!msg.channel.typing) { msg.channel.startTyping() }
+
         winston.debug('Fetching all cards.')
         let cards: Card[] = await CardData.getLatest()
+
         if (msg.channel.typing) { msg.channel.stopTyping() }
 
         const valueKeywords: string[] = []
         const words: string[] = []
+
         args.forEach((arg) => {
             arg = arg.toLowerCase()
             if (arg.includes(':')) {
                 valueKeywords.push(arg)
             } else {
                 words.push(arg)
-        }
+            }
         }, this)
 
         cards = cards.filter((card) => card.collectible && card.type !== 'HERO')
@@ -84,21 +84,25 @@ export default class SearchCommand extends Command {
                     if (value.endsWith('+')) {
                         const num: number = parseInt(value.slice(0, -1), 10)
                         winston.debug(`Filtering cards for '${key}' >= '${num}'.`)
+                        // @ts-ignore: No index defined on Card class currently
                         filter = (card: Card) => card[key] >= num
                         searchEmbed.addField(key, `${num} or more`, true)
                     } else if (value.endsWith('-')) {
                         const num: number = parseInt(value.slice(0, -1), 10)
                         winston.debug(`Filtering cards for '${key}' <= '${num}'.`)
+                        // @ts-ignore: No index defined on Card class currently
                         filter = (card: Card) => card[key] <= num
                         searchEmbed.addField(key, `${num} or less`, true)
                     } else if (value.includes('-')) {
                         const min: number = parseInt(value.split('-')[0], 10)
                         const max: number = parseInt(value.split('-')[1], 10)
                         winston.debug(`Filtering cards for '${key}' between '${min}' and '${max}'.`)
+                        // @ts-ignore: No index defined on Card class currently
                         filter = (card: Card) => card[key] >= min && card[key] <= max
                         searchEmbed.addField(key, `Between ${min} and ${max}`, true)
                     } else {
                         winston.debug(`Filtering cards for '${key}' == '${value}'.`)
+                        // @ts-ignore: No index defined on Card class currently
                         filter = (card: Card) => card[key] === parseInt(value, 10)
                         searchEmbed.addField(key, `Equal to ${value}`, true)
                     }
@@ -112,6 +116,7 @@ export default class SearchCommand extends Command {
             const searchKeys: string[] = ['name', 'playerClass', 'race', 'rarity', 'text', 'type']
             winston.debug(`Searching cards for '${searchTerm}'.`)
             cards = cards.filter((card: Card) => {
+                // @ts-ignore: No index defined on Card class currently
                 return (searchKeys.some((key: string) => card[key] && card[key].toLowerCase().includes(searchTerm)) ||
                 (card.set && this.cardSetMatches(card.set, searchTerm)))
             })
@@ -127,29 +132,6 @@ export default class SearchCommand extends Command {
             return 0
         })
 
-        if (msg.channel instanceof TextChannel &&
-            !msg.channel.permissionsFor(this.client.user).has('EMBED_LINKS')) {
-            const pluralize = cards.length !== 1
-            return msg.say(
-                valueKeywords.map((vk) => {
-                    const k: string = vk.split(':')[0]
-                    const v: string = vk.split(':')[1]
-                    if (k === 'artist') { return `**Artist**\nName contains '${v}'` }
-                    if (v.endsWith('+')) { return `**${k}**\n${v.slice(0, -1)} or more`}
-                    if (v.endsWith('-')) { return `**${k}**\n${v.slice(0, -1)} or less`}
-                    if (v.includes('-')) { return `**${k}**\nBetween ${v.split('-')[0]} and ${v.split('-')[1]}`}
-                    return `**${k}**\nEqual to ${v}`
-                }).join('\n') + '\n' +
-                (words.length > 0 ? `**Search Term**\n${words.join(' ').toLowerCase()}\n` : '') +
-                '\n**Results**\n' +
-                (cards.length > 0 ? stripIndents`
-                    _Found ${cards.length} card${pluralize ? 's' : ''} that match${pluralize ? '' : 'es'}._
-                    ${(cards.length > MAX_RESULTS ? ` _Here are the first ${MAX_RESULTS}._` : '')}
-                    ${cards.slice(0, MAX_RESULTS).map((c) => c.name).join(' | ')}
-                ` : '_Sorry, got nothing_')
-            ).catch(winston.error)
-        }
-
         let results = '_Sorry, got nothing_'
         if (cards.length > 0) {
             results = oneLine`
@@ -163,7 +145,8 @@ export default class SearchCommand extends Command {
             }).join(' | ')
         }
         searchEmbed.addField('Results', results)
-        return msg.embed(searchEmbed).catch(winston.error)
+
+        return msg.embed(searchEmbed)
     }
 
     private cardSetMatches(set: string, searchTerm: string): boolean {

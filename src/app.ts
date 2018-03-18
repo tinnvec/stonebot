@@ -8,7 +8,7 @@ import * as winston from 'winston'
 
 import PostgreSQL from './database/postgresql'
 import * as SequelizeProvider from './providers/sequelize-provider'
-import CommunityManager from './structures/community-manager'
+import CommunityManager from './services/community-manager'
 
 // Create data folder structure
 ['logs', 'sounds', 'images', 'images/art', 'images/gold'].forEach((folder: string) => {
@@ -45,6 +45,7 @@ winston.configure({
 // Instantiate commando client
 const client: CommandoClient = new CommandoClient({
     commandPrefix: config.prefix,
+    invite: config.inviteUrl,
     owner: config.owner
 })
 
@@ -108,7 +109,7 @@ client.on('debug', winston.debug)
     })
     .on('ready', () => {
         CommunityManager.start()
-        client.user.setGame('Hearthstone')
+        client.user.setActivity('Hearthstone')
         winston.info(`Client ready. Currently in ${client.guilds.size} guilds.`)
     })
 
