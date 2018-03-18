@@ -30,7 +30,7 @@
     "erlpack": "github:hammerandchisel/erlpack",
     "fluent-ffmpeg": "^2.1.2",
     "fuse.js": "^3.0.3",
-    "hearthstonejson-client": "^0.8.1",
+    "hearthstonejson": "^0.6.5",
     "libsodium-wrappers": "^0.7.3",
     "moment": "^2.18.1",
     "node-opus": "^0.2.6",

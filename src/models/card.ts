@@ -1,7 +1,6 @@
 import { oneLine } from 'common-tags'
 import ffmpeg = require('fluent-ffmpeg')
 import * as fs from 'fs'
-import { CardData } from 'hearthstonejson-client'
 import { IncomingMessage } from 'http'
 import * as request from 'request'
 import * as winston from 'winston'

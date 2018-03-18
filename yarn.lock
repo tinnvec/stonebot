@@ -1224,9 +1224,11 @@ hawk@~6.0.2:
     hoek "4.x.x"
     sntp "2.x.x"
 
-hearthstonejson-client@^0.8.1:
-  version "0.8.1"
-  resolved "https://registry.yarnpkg.com/hearthstonejson-client/-/hearthstonejson-client-0.8.1.tgz#2d2201d8b43697b53296defb4faf2101c01bbba6"
+hearthstonejson@^0.6.5:
+  version "0.6.6"
+  resolved "https://registry.yarnpkg.com/hearthstonejson/-/hearthstonejson-0.6.6.tgz#72870cd953b474c05faccb673a4716031126990b"
+  dependencies:
+    isomorphic-fetch "^2.2.1"
 
 hoek@4.x.x:
   version "4.2.1"
