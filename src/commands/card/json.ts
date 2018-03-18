@@ -2,8 +2,8 @@ import { Message, TextChannel } from 'discord.js'
 import { Command, CommandMessage, CommandoClient } from 'discord.js-commando'
 import * as winston from 'winston'
 
-import Card from '../../structures/card'
-import CardData from '../../structures/card-data'
+import Card from '../../models/card'
+import CardData from '../../services/card-data'
 
 export default class JSONCommand extends Command {
     constructor(client: CommandoClient) {

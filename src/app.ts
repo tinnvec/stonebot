@@ -8,7 +8,7 @@ import * as winston from 'winston'
 
 import PostgreSQL from './database/postgresql'
 import * as SequelizeProvider from './providers/sequelize-provider'
-import CommunityManager from './structures/community-manager'
+import CommunityManager from './services/community-manager'
 
 // Create data folder structure
 ['logs', 'sounds', 'images', 'images/art', 'images/gold'].forEach((folder: string) => {

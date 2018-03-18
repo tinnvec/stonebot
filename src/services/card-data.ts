@@ -2,7 +2,7 @@ import * as Fuse from 'fuse.js'
 import HearthstoneJSON from 'hearthstonejson'
 import * as winston from 'winston'
 
-import Card from './card'
+import Card from '../models/card'
 
 export default class CardData {
     public static findOne(pattern: string, keys: string[] = ['name']): Promise<Card> {

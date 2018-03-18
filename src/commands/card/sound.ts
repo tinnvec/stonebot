@@ -3,8 +3,8 @@ import { Message, TextChannel, VoiceChannel, VoiceConnection } from 'discord.js'
 import { ArgumentCollectorResult, Command, CommandMessage, CommandoClient } from 'discord.js-commando'
 import * as winston from 'winston'
 
-import Card from '../../structures/card'
-import CardData from '../../structures/card-data'
+import Card from '../../models/card'
+import CardData from '../../services/card-data'
 
 export default class SoundCommand extends Command {
     public static get queue(): Array<{message: CommandMessage, card: Card, soundKind: string}> {
