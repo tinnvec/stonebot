@@ -45,6 +45,7 @@ winston.configure({
 // Instantiate commando client
 const client: CommandoClient = new CommandoClient({
     commandPrefix: config.prefix,
+    invite: config.inviteUrl,
     owner: config.owner
 })
 
