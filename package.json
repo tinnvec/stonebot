@@ -1,6 +1,6 @@
 {
   "name": "stonebot",
-  "version": "2.0.5",
+  "version": "2.1.0",
   "description": "Hearthstone Bot for Discord",
   "keywords": [
     "discord",
@@ -24,29 +24,21 @@
     "start": "node built/app.js"
   },
   "dependencies": {
-    "bufferutil": "^3.0.0",
     "discord.js": "^11.3.0",
     "discord.js-commando": "discordjs/Commando#11.2",
     "erlpack": "github:hammerandchisel/erlpack",
-    "fluent-ffmpeg": "^2.1.2",
     "fuse.js": "^3.0.3",
     "hearthstonejson": "^0.6.5",
-    "libsodium-wrappers": "^0.7.3",
     "moment": "^2.18.1",
-    "node-opus": "^0.2.6",
-    "pg": "^7.4.1",
-    "pg-hstore": "^2.3.2",
     "request": "^2.81.0",
-    "sequelize": "^4.37.1",
+    "sqlite": "^2.9.1",
     "uws": "^9.14.0",
     "winston": "^2.4.1"
   },
   "devDependencies": {
     "@types/common-tags": "^1.2.5",
-    "@types/fluent-ffmpeg": "^2.1.0",
     "@types/node": "^9.4.7",
     "@types/request": "^2.47.0",
-    "@types/sequelize": "^4.0.44",
     "@types/winston": "^2.3.8",
     "del": "^3.0.0",
     "gulp": "^3.9.1",

@@ -4,7 +4,7 @@ Hearthstone Bot for Discord. Features commands for card information and communit
 
 ## Longer version
 
-Stonebot is a [node.js](https://nodejs.org/) [Discord](https://discordapp.com/) bot, built using with [discord.js](https://discord.js.org/) and [Commando](https://github.com/Gawdl3y/discord.js-commando). Hearthstone card information is obtained using the [HearthstoneJSON](http://hearthstonejson.com/) API. Sound processing is done with [FFmpeg](https://ffmpeg.org/) through the use of [node-fluent-ffmpeg](https://github.com/fluent-ffmpeg/node-fluent-ffmpeg).
+Stonebot is a [node.js](https://nodejs.org/) [Discord](https://discordapp.com/) bot, built using with [discord.js](https://discord.js.org/) and [Commando](https://github.com/Gawdl3y/discord.js-commando). Hearthstone card information is obtained using the [HearthstoneJSON](http://hearthstonejson.com/) API.
 
 ---
 
@@ -16,10 +16,10 @@ Stonebot uses a fuzzy search when matching card names and returns the highest sc
 
 ## card
 
-Displays card information.  
+Displays card information.
 
-**Format**: `!text <cardName>`  
-**Aliases**: c  
+**Format**: `!text <cardName>`
+**Aliases**: c
 **Examples**
 
 - `!card frostbolt`
@@ -29,8 +29,8 @@ Displays card information.
 
 Displays card image.
 
-**Format**: `!image <cardName>`  
-**Aliases**: img, i  
+**Format**: `!image <cardName>`
+**Aliases**: img, i
 **Examples**
 
 - `!image fiery war axe`
@@ -40,8 +40,8 @@ Displays card image.
 
 Displays golden card image.
 
-**Format**: `!gold <cardName>`  
-**Aliases**: g, gold-image, goldimage  
+**Format**: `!gold <cardName>`
+**Aliases**: g, gold-image, goldimage
 **Examples**
 
 - `!gold twisting nether`
@@ -51,8 +51,8 @@ Displays golden card image.
 
 Displays the artist and full art from the card.
 
-**Format**: `!art <cardName>`  
-**Aliases**: a, art-image, artimage  
+**Format**: `!art <cardName>`
+**Aliases**: a, art-image, artimage
 **Examples**
 
 - `!art raza`
@@ -62,20 +62,20 @@ Displays the artist and full art from the card.
 
 Searches for Hearthstone cards.
 
-Works like Hearthstone collection searching.  
-General search accross most visible card text in addition to several keywords.  
-Set keywords: `nax`, `naxx`, `gvg`, `brm`, `tgt`, `loe`, `tog`, `wog`, `wotog`, `kara`, `msg`, `msog`.  
-Value keywords: `attack`, `health`, `mana`, `artist`.  
-Value keywords take the form of `<keyword>:<value>`.  
-The `artist` keyword only accepts text without spaces.  
-All other keywords use a numeric `<value>` with range options.  
-`<value>` alone means exact value.  
-`<value>-` means value or lower.  
-`<value>+` means value or higher.  
-`<value1>-<value2>` means between value1 and value2.  
+Works like Hearthstone collection searching.
+General search accross most visible card text in addition to several keywords.
+Set keywords: `nax`, `naxx`, `gvg`, `brm`, `tgt`, `loe`, `tog`, `wog`, `wotog`, `kara`, `msg`, `msog`.
+Value keywords: `attack`, `health`, `mana`, `artist`.
+Value keywords take the form of `<keyword>:<value>`.
+The `artist` keyword only accepts text without spaces.
+All other keywords use a numeric `<value>` with range options.
+`<value>` alone means exact value.
+`<value>-` means value or lower.
+`<value>+` means value or higher.
+`<value1>-<value2>` means between value1 and value2.
 
-**Format**: `!search <terms>...`  
-**Alias**: find  
+**Format**: `!search <terms>...`
+**Alias**: find
 **Examples**
 
 - `!search thermaplugg`
@@ -85,26 +85,11 @@ All other keywords use a numeric `<value>` with range options.
 - `!search health:8+`
 - `!search attack:3-5 mana:2-4 deathrattle`
 
-## sound
-
-Plays card sound in your voice channel. (Usable only in servers)
-
-`[soundKind]` can be one of `play`, `attack`, `death` or `trigger`. Optional.
-
-**Format**: `!sound [soundKind] <cardName>`  
-**Aliases**: snd, s  
-**Examples**
-
-- `!sound tirion`
-- `!sound attack jaraxxus`
-- `!snd death refreshment vendor`
-- `!s trigger antonaidas`
-
 ## json
 
 Displays JSON inormation for card.
 
-**Format**: `!json <cardName>`  
+**Format**: `!json <cardName>`
 **Example**: `!json jade golem`
 
 # Community
@@ -113,13 +98,13 @@ Displays JSON inormation for card.
 
 Helps find other players looking to trade the Play a Friend (aka 80g) quest.
 
-Makes matches when players share a Discord server and Battle.net server region.  
-`<bnetServer>` may be one of `americas`, `na`, `europe`, `eu`, `asia`.  
-Using `!quest complete` will remove you from the pool of those looking to trade.  
+Makes matches when players share a Discord server and Battle.net server region.
+`<bnetServer>` may be one of `americas`, `na`, `europe`, `eu`, `asia`.
+Using `!quest complete` will remove you from the pool of those looking to trade.
 Quests expire after 24 hours.
 
-**Format**: `!quest <bnetServer>`  
-**Aliases**: 80g  
+**Format**: `!quest <bnetServer>`
+**Aliases**: 80g
 **Examples**
 
 - `!quest americas`
@@ -134,15 +119,15 @@ Lists all command groups. Administrators only.
 
 The argument must be the name/ID (partial or whole) of a command or command group.
 
-**Format**: `!groups`  
+**Format**: `!groups`
 **Aliases**: list-groups, show-groups, listgroups, showgroups
 
 ## enable
 
 Enables a command or command group. Administrators only.
 
-**Format**: `!enable <command/group>`  
-**Aliases**: enable-command, cmd-on, command-on, enablecommand, cmdon, commandon  
+**Format**: `!enable <command/group>`
+**Aliases**: enable-command, cmd-on, command-on, enablecommand, cmdon, commandon
 **Examples**
 
 - `!enable util`
@@ -155,8 +140,8 @@ Disables a command or command group. Administrators only.
 
 The argument must be the name/ID (partial or whole) of a command or command group.
 
-**Format**: `!disable <command/group>`  
-**Aliases**: disable-command, cmd-off, command-off, disablecommand, cmdoff, commandoff  
+**Format**: `!disable <command/group>`
+**Aliases**: disable-command, cmd-off, command-off, disablecommand, cmdoff, commandoff
 **Examples**
 
 - `!disable util`
@@ -169,8 +154,8 @@ Reloads a command or command group. Bot owner(s) only.
 
 The argument must be the name/ID (partial or whole) of a command or command group. Providing a command group will reload all of the commands in that group.
 
-**Format**: `!reload <command/group>`  
-**Aliases**: reload-command, reloadcommand  
+**Format**: `!reload <command/group>`
+**Aliases**: reload-command, reloadcommand
 **Example**: `!reload some-command`
 
 ## load
@@ -179,8 +164,8 @@ Loads a new command. Bot owner(s) only.
 
 The argument must be full name of the command in the format of `group:memberName`.
 
-**Format**: `!load <command>`  
-**Alias**: load-command, loadcommand  
+**Format**: `!load <command>`
+**Alias**: load-command, loadcommand
 **Example**: `!load some-command`
 
 ## unload
@@ -189,8 +174,8 @@ Unloads a command. Bot owner(s) only.
 
 The argument must be the name/ID (partial or whole) of a command.
 
-**Format**: `!unload <command>`  
-**Aliases**: unload-command, unloadcommand  
+**Format**: `!unload <command>`
+**Aliases**: unload-command, unloadcommand
 **Example**: `!unload some-command`
 
 # Utility
@@ -207,8 +192,8 @@ Displays a list of available commands, or detailed information for a specified c
 
 The command may be part of a command name or a whole command name. If it isn't specified, all available commands will be listed.
 
-**Format**: `!help [command]`  
-**Alias**: commands  
+**Format**: `!help [command]`
+**Alias**: commands
 **Examples**
 
 - `!help`
@@ -226,7 +211,7 @@ Shows or sets the command prefix. Administrators only.
 
 If no prefix is provided, the current prefix will be shown. If the prefix is "default", the prefix will be reset to the bot's default prefix. If the prefix is "none", the prefix will be removed entirely, only allowing mentions to run commands. Only administrators may change the prefix.
 
-**Format**: `!prefix [prefix/"default"/"none"]`  
+**Format**: `!prefix [prefix/"default"/"none"]`
 **Examples**
 
 - `!prefix`
@@ -248,5 +233,5 @@ If no prefix is provided, the current prefix will be shown. If the prefix is "de
 [discord-devserver-link]: https://discord.gg/x4TwQ6J
 [discord-devserver-badge]: https://img.shields.io/badge/Discord-Join%20Development%20Server-7289DA.svg?style=flat-square
 
-Want to add stonebot to your server? I run a public version that you can invite to your server with the button at the top of this section, or the following url:  
+Want to add stonebot to your server? I run a public version that you can invite to your server with the button at the top of this section, or the following url:
 https://discordapp.com/oauth2/authorize?client_id=181041901225377793&scope=bot&permissions=3197952

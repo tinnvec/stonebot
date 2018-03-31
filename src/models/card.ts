@@ -1,12 +1,8 @@
 import { oneLine } from 'common-tags'
-import ffmpeg = require('fluent-ffmpeg')
 import * as fs from 'fs'
 import { IncomingMessage } from 'http'
 import * as request from 'request'
 import * as winston from 'winston'
-
-// tslint:disable-next-line:no-var-requires
-const cardSoundsById = require('../database/card-sounds-by-id.json')
 
 export default class Card {
     public cardClass: string
@@ -156,56 +152,6 @@ export default class Card {
                 })
                 .pipe(writeStream)
                 .on('close', () => requestClosedClean = true)
-        })
-    }
-
-    public getSoundFile(sndType: string = 'play'): Promise<string> {
-        return new Promise<string>((resolve, reject) => {
-            const filename = `/data/sounds/${this.id}_${sndType}.ogg`
-            if (fs.existsSync(filename)) {
-                winston.debug(`${filename} found, using that.`)
-                return resolve(filename)
-            }
-
-            if (!cardSoundsById[this.id] ||
-                !cardSoundsById[this.id][sndType] ||
-                cardSoundsById[this.id][sndType].length < 1) {
-                winston.error('No sounds for card')
-                return resolve(undefined)
-            }
-
-            winston.debug('Generating urls for sound parts.')
-            // alternate: `http://media-hearth.cursecdn.com/audio/card-sounds/sound/${snd.name.replace(' ', '%20')}.ogg`
-            const sndUrls: Array<{url: string, delay: number}> = cardSoundsById[this.id][sndType]
-                .map((snd: {name: string, delay: number}) =>
-                    new Object({
-                        delay: snd.delay,
-                        url: 'http://media.services.zam.com/v1/media/byName/hs/sounds/enus/'
-                            + `${snd.name.replace(' ', '%20')}.ogg`
-                    })
-                )
-            if (!sndUrls) {
-                winston.error('No sounds for card')
-                return resolve(undefined)
-            }
-
-            winston.debug(`Creating sound file at ${filename}`)
-            const ffmpegCmd = ffmpeg()
-            sndUrls.forEach((sound: {url: string, delay: number}) => {
-                winston.debug(`Adding sound from ${sound.url} with delay of ${sound.delay}`)
-                ffmpegCmd.input(sound.url).inputOption(`-itsoffset ${sound.delay}`)
-            })
-            ffmpegCmd.complexFilter(`amix=inputs=${sndUrls.length}`, undefined)
-                .audioCodec('libvorbis')
-                .on('error', (err: Error) => {
-                    winston.error(`Error creating sound file: ${err}`)
-                    return resolve(undefined)
-                })
-                .on('end', () => {
-                    winston.debug('Successfully created sound file.')
-                    return resolve(filename)
-                })
-                .save(filename)
         })
     }
 

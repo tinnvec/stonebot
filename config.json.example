@@ -3,12 +3,5 @@
     "owner": "",
     "inviteUrl": "https://"
     "prefix": "!",
-    "logLevel": "verbose",
-    "database": {
-        "host": "",
-        "port": "5432",
-        "username": "",
-        "password": "",
-        "name": "stonebot"
-    }
+    "logLevel": "verbose"
 }

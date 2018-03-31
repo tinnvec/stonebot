@@ -38,7 +38,6 @@ interface Card {
     wikiUrl: string
 
     getImageFile(imgType?: 'art' | 'gold' | 'image'): Promise<string | undefined>
-    getSoundFile(sndType?: string): Promise<string>
 
     cardTextToMarkdown(text: string): string
     capitalizeFirstLetter(input: string): string
@@ -54,14 +53,7 @@ interface Config {
     owner: string | string[],
     inviteUrl: string,
     prefix: string,
-    logLevel: 'error' | 'warn' | 'info' | 'verbose' | 'debug' | 'silly',
-    database: {
-        host: string,
-        port: number,
-        username: string,
-        password: string,
-        name: string
-    }
+    logLevel: 'error' | 'warn' | 'info' | 'verbose' | 'debug' | 'silly'
 }
 
 interface HearthstoneJSONCard {
@@ -93,4 +85,10 @@ interface HearthstoneJSONCard {
     rarity?: string,
     referencedTags?: string[],
     text?: string
+}
+
+interface QuestEntry {
+    id: number,
+    server: string,
+    user: string
 }
