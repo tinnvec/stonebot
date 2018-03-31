@@ -12,7 +12,7 @@ import * as winston from 'winston'
 import CommunityManager from './services/community-manager'
 
 // Create data folder structure
-['logs', 'sounds', 'images', 'images/art', 'images/gold'].forEach((folder: string) => {
+['logs', 'images', 'images/art', 'images/gold'].forEach((folder: string) => {
     const fpath = `/data/${folder}`
     if (!fs.existsSync(fpath)) { fs.mkdirSync(fpath) }
 })

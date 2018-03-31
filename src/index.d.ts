@@ -38,7 +38,6 @@ interface Card {
     wikiUrl: string
 
     getImageFile(imgType?: 'art' | 'gold' | 'image'): Promise<string | undefined>
-    getSoundFile(sndType?: string): Promise<string>
 
     cardTextToMarkdown(text: string): string
     capitalizeFirstLetter(input: string): string
