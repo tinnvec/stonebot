@@ -1,13 +1,14 @@
 import { oneLine } from 'common-tags'
 import { Guild } from 'discord.js'
-import { Command, CommandGroup, CommandMessage, CommandoClient, FriendlyError } from 'discord.js-commando'
+import {
+    Command, CommandGroup, CommandMessage, CommandoClient, FriendlyError, SQLiteProvider
+} from 'discord.js-commando'
 import * as fs from 'fs'
 import * as moment from 'moment'
 import * as path from 'path'
+import * as sqlite from 'sqlite'
 import * as winston from 'winston'
 
-import PostgreSQL from './database/postgresql'
-import * as SequelizeProvider from './providers/sequelize-provider'
 import CommunityManager from './services/community-manager'
 
 // Create data folder structure
@@ -48,11 +49,6 @@ const client: CommandoClient = new CommandoClient({
     invite: config.inviteUrl,
     owner: config.owner
 })
-
-// Start db connection
-PostgreSQL.start()
-// Use db as client settings provider
-client.setProvider(new SequelizeProvider(PostgreSQL.db)).catch(winston.error)
 
 // Listen to client events
 client.on('debug', winston.debug)
@@ -123,6 +119,9 @@ client.registry
     .registerDefaultGroups()
     .registerCommandsIn(path.join(__dirname, 'commands'))
     .registerDefaultCommands({ eval_: false })
+
+// Set settings database
+sqlite.open('/data/settings.sqlite3').then((db: sqlite.Database) => client.setProvider(new SQLiteProvider(db)))
 
 // Connect to Discord
 client.login(config.token)

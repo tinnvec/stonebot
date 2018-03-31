@@ -3,7 +3,8 @@ import { Message } from 'discord.js'
 import { Command, CommandMessage, CommandoClient } from 'discord.js-commando'
 import * as winston from 'winston'
 
-import Quest from '../../database/models/quest'
+// import Quest from '../../database/models/quest'
+import CommunityDatabase from '../../services/community-database'
 
 export default class QuestCommand extends Command {
     constructor(client: CommandoClient) {
@@ -47,17 +48,13 @@ export default class QuestCommand extends Command {
     }
 
     public async run(msg: CommandMessage, args: { bnetServer: string }): Promise<Message | Message[]> {
-        let result = await Quest
-            .findOne({ where: { userId: msg.author.id } })
-            .catch(winston.error) as { bnetServer: string }
+        const result = await CommunityDatabase.getQuestForUser(msg.author.id)
 
         // Are they completing?
         if (args.bnetServer === 'complete') {
             if (result) {
-                await Quest
-                    .destroy({ where: { userId: msg.author.id } })
-                    .catch(winston.error)
-                return msg.reply('congratulations! Removed your entry from those looking to trade quests.')
+                return await CommunityDatabase.removeQuestsForUser(msg.author.id)
+                    .then(() => msg.reply('congratulations! Removed your entry from those looking to trade quests.'))
             }
             return msg.reply('sorry, don\'t have you as looking to trade quests.')
         }
@@ -65,30 +62,28 @@ export default class QuestCommand extends Command {
         const bnetServerDisplay = `Battle.net ${args.bnetServer} server`
         // Check if they're on the list
         if (result) {
-            if (result.bnetServer === args.bnetServer) {
+            if (result.server === args.bnetServer) {
                 return msg.reply(`already have you as looking to trade quests on the ${bnetServerDisplay}.`)
             }
             // Update entry to new server if different
-            await Quest
-                .update({ bnetServer: args.bnetServer }, { where: { userId: msg.author.id } })
-                .catch(winston.error)
-            return msg.reply(`updated your entry, now have you as looking to trade quests on the ${bnetServerDisplay}.`)
+            return await CommunityDatabase.updateQuestsForUser(msg.author.id, args.bnetServer)
+                .then(() => msg.reply(
+                    `updated your entry, now have you as looking to trade quests on the ${bnetServerDisplay}.`
+                ))
         }
 
         // Check if another on the list shares a bnet and discord server
-        let results = await Quest
-            .findAll({ where: { bnetServer: args.bnetServer } })
-            .catch(winston.error) as Array<{ userId: string, bnetServer: string }>
+        let results = await CommunityDatabase.getQuestsForServer(args.bnetServer)
         if (results) {
             // Get only quests where users share a guild
-            results = results.filter((q) => {
+            results = results.filter((q: any) => {
                 return this.client.guilds.some((g) => {
                     return g.members.has(msg.author.id) && g.members.has(q.userId)
                 })
             })
             if (results && results.length > 0) {
                 const requestor = this.client.users.get(msg.author.id)
-                const questHaver = this.client.users.get(results[0].userId)
+                const questHaver = this.client.users.get(results[0].user)
                 await questHaver.send(oneLine`
                     Hello! I have you on my list of people looking to trade Hearthstone quests.
                     ${requestor} just told me they are also looking to trade on the ${bnetServerDisplay}.
@@ -103,12 +98,10 @@ export default class QuestCommand extends Command {
         }
 
         // Add them to the list
-        result = await Quest
-            .create({ userId: msg.author.id, bnetServer: args.bnetServer })
-            .catch(winston.error) as { userId: string, bnetServer: string }
-        return msg.reply(oneLine`
-            can't find a match for you right now, but will let you know as soon as
-            someone you share a Discord server with is also looking to trade quests on the ${bnetServerDisplay}.
-        `)
+        return await CommunityDatabase.addQuestForUserOnServer(msg.author.id, args.bnetServer)
+            .then(() => msg.reply(oneLine`
+                can't find a match for you right now, but will let you know as soon as
+                someone you share a Discord server with is also looking to trade quests on the ${bnetServerDisplay}.
+            `))
     }
 }
