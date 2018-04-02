@@ -1,5 +1,7 @@
 theme: jekyll-theme-minimal
 title: stonebot
 description: Hearthstone Bot for Discord
-show_downloads: true
+show_links: true
+invite_url: https://discordapp.com/oauth2/authorize?client_id=181041901225377793&scope=bot&permissions=3197952
+discord_server_url: https://discord.gg/5DUe2Qn
 google_analytics: UA-47261670-1
