@@ -4,5 +4,10 @@
 @import '{{ site.theme }}';
 
 a:hover, a:focus {
+  font-weight: normal;
   text-decoration: underline;
+}
+
+dt a:hover, dt a:focus {
+  font-weight:700;
 }
