@@ -1,6 +1,6 @@
 # Community
 
-## quest
+## <a name="quest"></a>quest
 
 Helps find other players looking to trade the Play a Friend (aka 80g) quest.
 
