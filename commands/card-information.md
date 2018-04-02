@@ -2,7 +2,7 @@
 
 Stonebot uses a fuzzy search when matching card names and returns the highest scoring result, favoring collectible cards over uncollectible ones. Using `@` before `<cardName>` will search uncollectible cards only.
 
-## card
+## <a name="card"></a>card
 
 Displays card information.
 
@@ -13,7 +13,7 @@ Displays card information.
 - `!card frostbolt`
 - `!c tinyfin`
 
-## image
+## <a name="image"></a>image
 
 Displays card image.
 
@@ -24,7 +24,7 @@ Displays card image.
 - `!image fiery war axe`
 - `!i brawl`
 
-## gold
+## <a name="gold"></a>gold
 
 Displays golden card image.
 
@@ -35,7 +35,7 @@ Displays golden card image.
 - `!gold twisting nether`
 - `!g dragonfire potion`
 
-## art
+## <a name="art"></a>art
 
 Displays the artist and full art from the card.
 
@@ -46,7 +46,7 @@ Displays the artist and full art from the card.
 - `!art raza`
 - `!a secretkeeper`
 
-## search
+## <a name="search"></a>search
 
 Searches for Hearthstone cards.
 
@@ -73,7 +73,7 @@ All other keywords use a numeric `<value>` with range options.
 - `!search health:8+`
 - `!search attack:3-5 mana:2-4 deathrattle`
 
-## json
+## <a name="json"></a>json
 
 Displays JSON inormation for card.
 
