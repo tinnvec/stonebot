@@ -1,12 +1,12 @@
 # Utility
 
-## stats
+## <a name="stats"></a>stats
 
 Displays bot statistics. Bot owner(s) only.
 
 **Format**: `!stats`
 
-## help
+## <a name="help"></a>help
 
 Displays a list of available commands, or detailed information for a specified command.
 
@@ -19,13 +19,13 @@ The command may be part of a command name or a whole command name. If it isn't s
 - `!help`
 - `!help prefix`
 
-## ping
+## <a name="ping"></a>ping
 
 Checks the bot's ping to the Discord server.
 
 **Format**: `!ping`
 
-## prefix
+## <a name="prefix"></a>prefix
 
 Shows or sets the command prefix. Administrators only.
 
