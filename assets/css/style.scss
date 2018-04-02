@@ -9,5 +9,9 @@ a:hover, a:focus {
 }
 
 dt a:hover, dt a:focus {
-  font-weight:700;
+  font-weight: 700;
+}
+
+header ul a:hover, header ul a:focus {
+  font-weight: normal;
 }
