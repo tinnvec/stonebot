@@ -1,2 +1,5 @@
 theme: jekyll-theme-minimal
+title: stonebot
+description: Hearthstone Bot for Discord
+show_downloads: true
 google_analytics: UA-47261670-1
