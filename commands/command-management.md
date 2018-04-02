@@ -1,6 +1,6 @@
 # Command Management
 
-## groups
+## <a name="groups"></a>groups
 
 Lists all command groups. Administrators only.
 
@@ -9,7 +9,7 @@ The argument must be the name/ID (partial or whole) of a command or command grou
 **Format**: `!groups`  
 **Aliases**: list-groups, show-groups, listgroups, showgroups
 
-## enable
+## <a name="enable"></a>enable
 
 Enables a command or command group. Administrators only.
 
@@ -21,7 +21,7 @@ Enables a command or command group. Administrators only.
 - `!enable Utility`
 - `!enable prefix`
 
-## disable
+## <a name="disable"></a>disable
 
 Disables a command or command group. Administrators only.
 
@@ -35,7 +35,7 @@ The argument must be the name/ID (partial or whole) of a command or command grou
 - `!disable Utility`
 - `!disable prefix`
 
-## reload
+## <a name="reload"></a>reload
 
 Reloads a command or command group. Bot owner(s) only.
 
@@ -45,7 +45,7 @@ The argument must be the name/ID (partial or whole) of a command or command grou
 **Aliases**: reload-command, reloadcommand  
 **Example**: `!reload some-command`
 
-## load
+## <a name="load"></a>load
 
 Loads a new command. Bot owner(s) only.
 
@@ -55,7 +55,7 @@ The argument must be full name of the command in the format of `group:memberName
 **Alias**: load-command, loadcommand  
 **Example**: `!load some-command`
 
-## unload
+## <a name="unload"></a>unload
 
 Unloads a command. Bot owner(s) only.
 
