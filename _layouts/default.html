@@ -18,13 +18,15 @@
         <a href="{{ site.github.url }}"> <h1>{{ site.title | default: site.github.repository_name }}</h1> </a>
         <p>{{ site.description | default: site.github.project_tagline }}</p>
         
-        <ol>
-          <li>Commands
-            <ol>
-              <li><a href="/commands/card-information">Card Information<a></li>
-            </ol>
-          </li>
-        </ol>
+        <dl>
+          <dt>Commands</dt>
+          <dd>
+            <dl>
+              <dt><a href="/commands/card-information">Card Information</a></dt>
+              <dd>abc</dd>
+            </dl>
+          </dd>
+        </dl>
 
         {% if site.show_downloads %}
           <ul>
