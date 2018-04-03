@@ -3,7 +3,7 @@
 [![Add Stonebot to your Server][discord-add-badge]][discord-oauth-link]
 [![Join the development Server][discord-devserver-badge]][discord-devserver-link]
 
-[Hearthstone](https://playhearthstone.com) Bot for [Discord](https://discordapp.com/), built using with [discord.js](https://discord.js.org/) and [Commando](https://github.com/discordjs/Commando). Hearthstone card information is obtained using the [HearthstoneJSON](http://hearthstonejson.com/).
+[Hearthstone](https://playhearthstone.com) Bot for [Discord](https://discordapp.com/), built using with [discord.js](https://discord.js.org/) and [Commando](https://github.com/discordjs/Commando). Hearthstone card information is obtained using [HearthstoneJSON](http://hearthstonejson.com/).
 
 ## Commands
 
